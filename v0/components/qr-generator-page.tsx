@@ -3,453 +3,536 @@
 import { useState } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { Home, ArrowLeft, ArrowRight, Check, ChevronDown, Sparkles, Zap, Shield, Download, Palette, QrCode } from "lucide-react"
-import { QRGeneratorModal } from "@/components/qr-generator-modal"
+import {
+  Link as LinkIcon, FileText, Image as ImageIcon, Smartphone,
+  Type, MessageSquare, Youtube, Instagram, User, MapPin,
+  Wifi, Music, Facebook, Send, Mail, Calendar, Phone,
+  Globe, Search, ChevronDown, Check, ArrowRight, X,
+  HelpCircle, MoreHorizontal, ShoppingCart, Ticket,
+  Laptop
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Footer } from "@/components/footer"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
-// QR Code Examples for Gallery
-const qrExamples = [
-    { id: 1, title: "Restaurant Menu", color: "from-purple-500/20 to-pink-500/20" },
-    { id: 2, title: "Business Card", color: "from-blue-500/20 to-cyan-500/20" },
-    { id: 3, title: "Event Ticket", color: "from-green-500/20 to-emerald-500/20" },
-    { id: 4, title: "Product Link", color: "from-orange-500/20 to-red-500/20" },
-    { id: 5, title: "WiFi Access", color: "from-indigo-500/20 to-purple-500/20" },
-    { id: 6, title: "Payment UPI", color: "from-yellow-500/20 to-orange-500/20" },
+// Custom Icon for Snapchat - User Provided Filled Image
+const SnapchatIcon = ({ className }: { className?: string }) => (
+  <div className={`${className} relative flex items-center justify-center`}>
+    <img
+      src="/snapchat-filled.png"
+      alt="Snapchat"
+      className="w-full h-full object-contain invert opacity-60 group-hover:opacity-100 transition-opacity"
+    />
+  </div>
+)
+
+// Custom Icon for WhatsApp - User Provided Filled Image
+const WhatsAppIcon = ({ className }: { className?: string }) => (
+  <div className={`${className} relative flex items-center justify-center`}>
+    <img
+      src="/whatsapp-filled.png"
+      alt="WhatsApp"
+      className="w-full h-full object-contain invert opacity-60 group-hover:opacity-100 transition-opacity"
+    />
+  </div>
+)
+
+// Google Suite Data - Kept for reference or filtering logic if needed
+const googleTypes = [
+  { id: "gforms", label: "Forms", icon: FileText },
+  { id: "gdoc", label: "Example Doc", icon: FileText },
+  { id: "gsheets", label: "Sheets", icon: FileText },
+  { id: "greview", label: "Review", icon: MessageSquare },
 ]
 
-// Features
-const features = [
-    {
-        icon: Palette,
-        title: "Full Customization",
-        description: "Customize colors, add logos, choose frames, and create unique QR codes that match your brand perfectly."
-    },
-    {
-        icon: Download,
-        title: "Multiple Formats",
-        description: "Download your QR codes in JPG, PNG, SVG, or PDF formats for any use case."
-    },
-    {
-        icon: Zap,
-        title: "Instant Generation",
-        description: "Create professional QR codes in seconds with our lightning-fast generator."
-    },
-    {
-        icon: Shield,
-        title: "Secure & Reliable",
-        description: "Your data is safe with us. All QR codes are generated securely and reliably."
-    },
+// QR Types - Featured Layout Data
+const featuredTypes = [
+  { id: "url", label: "URL / Link", icon: LinkIcon, colSpan: "col-span-1 md:col-span-2", type: "wide" },
+  { id: "pdf", label: "PDF", icon: FileText, colSpan: "col-span-1", type: "standard" },
+  { id: "image", label: "Image", icon: ImageIcon, colSpan: "col-span-1", type: "standard" },
+
+  { id: "app", label: "Play Market / App Store", icon: Smartphone, colSpan: "col-span-1", type: "standard" },
+  { id: "text", label: "Text", icon: Type, colSpan: "col-span-1", type: "standard" },
+  { id: "whatsapp", label: "WhatsApp", icon: WhatsAppIcon, colSpan: "col-span-1", type: "vertical" }, // Changed to Vertical
+
+  // Google items ungrouped
+  { id: "gforms", label: "Forms", icon: FileText, colSpan: "col-span-1", type: "standard" },
+  { id: "gdoc", label: "Docs", icon: FileText, colSpan: "col-span-1", type: "standard" },
+
+  { id: "map", label: "Map", icon: MapPin, colSpan: "col-span-1", type: "standard" },
+  { id: "wifi", label: "Wi-Fi", icon: Wifi, colSpan: "col-span-1", type: "standard" },
+
+  { id: "booking", label: "Booking", icon: Calendar, colSpan: "col-span-1", type: "standard" },
+  { id: "phone", label: "Phone Call", icon: Phone, colSpan: "col-span-1", type: "standard" },
+  { id: "facebook", label: "Facebook", icon: Facebook, colSpan: "col-span-1", type: "icon-only" },
+  { id: "instagram", label: "Instagram", icon: Instagram, colSpan: "col-span-1", type: "icon-only" },
+
+  { id: "ppt", label: "PPTX", icon: FileText, colSpan: "col-span-1", type: "standard" },
+  { id: "custom", label: "Custom URL", icon: Globe, colSpan: "col-span-1", type: "standard" },
+  { id: "telegram", label: "Telegram", icon: Send, colSpan: "col-span-1", type: "icon-only" },
+  { id: "snapchat", label: "Snapchat", icon: SnapchatIcon, colSpan: "col-span-1", type: "icon-only" },
+
+  // Remaining Google items
+  { id: "gsheets", label: "Sheets", icon: FileText, colSpan: "col-span-1", type: "standard" },
+  { id: "greview", label: "Review", icon: MessageSquare, colSpan: "col-span-1", type: "standard" },
 ]
 
-// Pricing Plans
-const pricingPlans = [
-    {
-        name: "Free",
-        price: "₹0",
-        period: "/month",
-        description: "Perfect for trying out",
-        features: ["5 QR codes/month", "Basic customization", "PNG & JPG downloads", "Standard support"],
-        popular: false,
-    },
-    {
-        name: "Pro",
-        price: "₹499",
-        period: "/month",
-        description: "Best for businesses",
-        features: ["Unlimited QR codes", "Full customization", "All formats (PNG, JPG, SVG, PDF)", "Priority support", "Analytics dashboard", "Custom branding"],
-        popular: true,
-    },
-    {
-        name: "Enterprise",
-        price: "Custom",
-        period: "",
-        description: "For large organizations",
-        features: ["Everything in Pro", "API access", "White-label solution", "Dedicated support", "Custom integrations", "SLA guarantee"],
-        popular: false,
-    },
+// Remaining types (flat list)
+const otherTypes = [
+  { id: "email", label: "E-mail", icon: Mail },
+  { id: "vcard", label: "vCard", icon: User },
+  { id: "links", label: "List of Links", icon: LinkIcon },
+  { id: "twitter", label: "X (Twitter)", icon: MessageSquare },
+  { id: "sms", label: "SMS", icon: MessageSquare },
+  { id: "logo", label: "Logo", icon: ImageIcon },
+  { id: "office365", label: "Office 365", icon: FileText },
+  { id: "shaped", label: "Shaped", icon: ImageIcon },
+  { id: "png", label: "PNG", icon: ImageIcon },
+  { id: "linkedin", label: "LinkedIn", icon: User },
+  { id: "calendar", label: "Calendar", icon: Calendar },
+  { id: "social", label: "Social Media", icon: MessageSquare },
+  { id: "reddit", label: "Reddit", icon: MessageSquare },
+  { id: "file", label: "File", icon: FileText },
+  { id: "excel", label: "Excel", icon: FileText },
+  { id: "amazon", label: "Amazon", icon: ShoppingCart },
+  { id: "barcode", label: "2D-Barcode", icon: FileText },
+  { id: "upi", label: "UPI", icon: ShoppingCart },
+  { id: "attendance", label: "Attendance", icon: Calendar },
+]
+
+// Landing Page Templates - Dark Mode
+const templates = [
+  {
+    id: 1,
+    title: "PDF",
+    image: "https://placehold.co/200x300/111/ccc?text=PDF",
+    color: "bg-zinc-900"
+  },
+  {
+    id: 2,
+    title: "List Of Links",
+    image: "https://placehold.co/200x300/222/ccc?text=Links",
+    color: "bg-zinc-800"
+  },
+  {
+    id: 3,
+    title: "Website",
+    image: "https://placehold.co/200x300/333/ccc?text=Web",
+    color: "bg-zinc-900"
+  },
+  {
+    id: 4,
+    title: "Apps",
+    image: "https://placehold.co/200x300/444/ccc?text=Apps",
+    color: "bg-zinc-800"
+  },
 ]
 
 // FAQs
 const faqs = [
-    {
-        question: "What types of QR codes can I create?",
-        answer: "You can create QR codes for websites, UPI payments, WiFi access, business cards, event tickets, and much more. Our generator supports all standard QR code types."
-    },
-    {
-        question: "Can I customize the design of my QR codes?",
-        answer: "Yes! You can customize colors, add your logo, choose different frames, adjust corner styles, and more to create QR codes that perfectly match your brand."
-    },
-    {
-        question: "What formats can I download QR codes in?",
-        answer: "You can download your QR codes in JPG, PNG, SVG, and PDF formats. SVG and PDF are perfect for printing at any size without quality loss."
-    },
-    {
-        question: "Are the QR codes permanent?",
-        answer: "Yes, all generated QR codes are permanent and will work forever. They contain the data directly, so they don't rely on our servers."
-    },
-    {
-        question: "Can I track scans of my QR codes?",
-        answer: "With our Pro and Enterprise plans, you get access to analytics that show you how many times your QR codes have been scanned, when, and from where."
-    },
+  {
+    question: "What types of QR codes can I create with ME-QR?",
+    answer: "You can generate URL, PDF, Image, Text, WiFi, WhatsApp, vCard, Email, Audio, App Store links, Booking, Maps, Phone Call, PPTX, Custom URL, and many other QR code types."
+  },
+  {
+    question: "Are the QR code templates free to use?",
+    answer: "Yes, our basic templates are free to use. Premium templates with advanced customization options are available in our paid plans."
+  },
+  {
+    question: "Can I edit my QR code after it's created?",
+    answer: "Yes, if you create a dynamic QR code (available for all types except pure text), you can edit the content securely without changing the QR code itself."
+  },
+  {
+    question: "Do I need an account to create a QR code?",
+    answer: "No, you don't need an account to create basic QR codes. However, creating an account allows you to save, manage, and track your QR codes."
+  },
+  {
+    question: "Does ME-QR support business and enterprise use?",
+    answer: "Absolutely. We offer tailored plans for businesses and potential enterprise solutions with features like bulk generation, advanced analytics, and team management."
+  },
 ]
 
 export function QRGeneratorPage() {
-    const [isModalOpen, setIsModalOpen] = useState(false)
-    const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
+  const [activeTab, setActiveTab] = useState("choose-type")
+  const [searchQuery, setSearchQuery] = useState("")
+  const [showAllTypes, setShowAllTypes] = useState(false)
 
-    const toggleFAQ = (index: number) => {
-        setOpenFaqIndex(openFaqIndex === index ? null : index)
-    }
+  // Filter logic
+  const filteredFeatured = featuredTypes.filter(t => t.label.toLowerCase().includes(searchQuery.toLowerCase()))
+  const filteredOther = otherTypes.filter(t => t.label.toLowerCase().includes(searchQuery.toLowerCase()))
 
-    return (
-        <div className="min-h-screen bg-black text-white">
-            {/* Header */}
-            <header className="border-b border-gray-800 bg-black/50 backdrop-blur-md sticky top-0 z-50">
-                <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                        <Link href="/" className="flex items-center gap-2 hover:text-gray-300 transition-colors">
-                            <ArrowLeft className="w-5 h-5" />
-                            <span className="text-sm">Back to Home</span>
-                        </Link>
-                        <div className="h-6 w-px bg-gray-700" />
-                        <h1 className="text-2xl font-bold">QR Code Generator</h1>
-                    </div>
-                    <Link href="/" className="p-2 hover:bg-gray-800 rounded-lg transition-colors">
-                        <Home className="w-5 h-5" />
-                    </Link>
-                </div>
-            </header>
+  const isSearching = searchQuery.length > 0
 
-            {/* Hero Section */}
-            <section className="relative py-20 px-4 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-800">
-                    <div className="absolute inset-0 opacity-20">
-                        <div className="absolute top-0 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse" />
-                        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
-                    </div>
-                </div>
+  return (
+    <div className="min-h-screen bg-black font-sans text-gray-300">
 
-                <div className="relative z-10 container mx-auto text-center max-w-4xl">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                    >
-                        <h2 className="text-5xl md:text-6xl font-bold mb-6" style={{ fontFamily: "var(--font-playfair)" }}>
-                            Create Stunning QR Codes
-                            <br />
-                            <span className="text-gray-400">In Seconds</span>
-                        </h2>
-                        <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                            Generate professional, customizable QR codes for your business. Add logos, choose colors, and download in multiple formats.
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <Button
-                                size="lg"
-                                className="bg-white text-black hover:bg-white/90 group"
-                                onClick={() => setIsModalOpen(true)}
-                            >
-                                <Sparkles className="mr-2 h-5 w-5" />
-                                Generate QR Code Now
-                                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                            </Button>
-                            <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 bg-transparent">
-                                View Examples
-                            </Button>
-                        </div>
-                    </motion.div>
-                </div>
-            </section>
+      {/* Top Navbar */}
+      <header className="bg-black border-b border-gray-800 sticky top-0 z-50 backdrop-blur-sm bg-opacity-80">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-8">
+            <Link href="/" className="flex items-center gap-2">
+              <div className="text-2xl font-bold text-white">
+                ME<span className="text-gray-400">QR</span>
+              </div>
+            </Link>
+            <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-400">
+              <Link href="#" className="hover:text-white transition-colors">About Me-QR</Link>
+              <Link href="#" className="hover:text-white transition-colors">QR Scanner</Link>
+              <Link href="#" className="hover:text-white transition-colors">Pricing</Link>
+              <Link href="#" className="hover:text-white transition-colors">Compare</Link>
+              <Link href="#" className="hover:text-white transition-colors">Industries</Link>
+              <Link href="#" className="hover:text-white transition-colors">Support</Link>
+            </nav>
+          </div>
 
-            {/* Features Section */}
-            <section className="py-20 px-4 bg-black">
-                <div className="container mx-auto">
-                    <div className="text-center mb-16">
-                        <motion.h2
-                            className="text-4xl font-bold mb-4"
-                            style={{ fontFamily: "var(--font-playfair)" }}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6 }}
-                            viewport={{ once: true }}
-                        >
-                            Powerful Features
-                        </motion.h2>
-                        <motion.p
-                            className="text-xl text-gray-300 max-w-2xl mx-auto"
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: 0.2 }}
-                            viewport={{ once: true }}
-                        >
-                            Everything you need to create professional QR codes
-                        </motion.p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {features.map((feature, index) => (
-                            <motion.div
-                                key={index}
-                                className="bg-card/50 border border-border/20 rounded-lg p-6 hover:bg-white/5 transition-all hover:scale-105"
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.6, delay: index * 0.1 }}
-                                viewport={{ once: true }}
-                            >
-                                <feature.icon className="w-12 h-12 mb-4 text-white" />
-                                <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-                                <p className="text-gray-400">{feature.description}</p>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* QR Gallery Section */}
-            <section className="py-20 px-4 bg-gradient-to-b from-black to-gray-900">
-                <div className="container mx-auto">
-                    <div className="text-center mb-16">
-                        <motion.h2
-                            className="text-4xl font-bold mb-4"
-                            style={{ fontFamily: "var(--font-playfair)" }}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6 }}
-                            viewport={{ once: true }}
-                        >
-                            QR Code Gallery
-                        </motion.h2>
-                        <motion.p
-                            className="text-xl text-gray-300 max-w-2xl mx-auto"
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: 0.2 }}
-                            viewport={{ once: true }}
-                        >
-                            See what's possible with our QR code generator
-                        </motion.p>
-                    </div>
-
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-                        {qrExamples.map((example, index) => (
-                            <motion.div
-                                key={example.id}
-                                className="relative group"
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                transition={{ duration: 0.5, delay: index * 0.1 }}
-                                viewport={{ once: true }}
-                            >
-                                <div className={`aspect-square rounded-lg bg-gradient-to-br ${example.color} border border-white/10 flex items-center justify-center group-hover:scale-105 transition-transform`}>
-                                    <QrCode className="w-16 h-16 text-white/80" />
-                                </div>
-                                <p className="text-center mt-2 text-sm text-gray-400">{example.title}</p>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* Pricing Section */}
-            <section className="py-20 px-4 bg-black">
-                <div className="container mx-auto">
-                    <div className="text-center mb-16">
-                        <motion.h2
-                            className="text-4xl font-bold mb-4"
-                            style={{ fontFamily: "var(--font-playfair)" }}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6 }}
-                            viewport={{ once: true }}
-                        >
-                            Simple, Transparent Pricing
-                        </motion.h2>
-                        <motion.p
-                            className="text-xl text-gray-300 max-w-2xl mx-auto"
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: 0.2 }}
-                            viewport={{ once: true }}
-                        >
-                            Choose the perfect plan for your needs
-                        </motion.p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                        {pricingPlans.map((plan, index) => (
-                            <motion.div
-                                key={plan.name}
-                                className={`relative bg-card border rounded-lg p-8 ${plan.popular ? "border-white/30 bg-white/5 scale-105" : "border-border/20 bg-background/50"
-                                    }`}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.6, delay: index * 0.1 }}
-                                viewport={{ once: true }}
-                                whileHover={{ y: -5 }}
-                            >
-                                {plan.popular && (
-                                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                                        <span className="bg-white text-black px-4 py-1 rounded-full text-sm font-medium">Most Popular</span>
-                                    </div>
-                                )}
-
-                                <div className="text-center mb-8">
-                                    <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
-                                    <div className="mb-4">
-                                        <span className="text-4xl font-bold">{plan.price}</span>
-                                        <span className="text-gray-400">{plan.period}</span>
-                                    </div>
-                                    <p className="text-gray-300">{plan.description}</p>
-                                </div>
-
-                                <ul className="space-y-4 mb-8">
-                                    {plan.features.map((feature, featureIndex) => (
-                                        <li key={featureIndex} className="flex items-center text-gray-300">
-                                            <Check className="h-5 w-5 text-white mr-3 flex-shrink-0" />
-                                            {feature}
-                                        </li>
-                                    ))}
-                                </ul>
-
-                                <Button
-                                    className={`w-full ${plan.popular
-                                            ? "bg-white text-black hover:bg-white/90"
-                                            : "bg-transparent border border-white/20 text-white hover:bg-white/10"
-                                        } group`}
-                                    size="lg"
-                                    onClick={() => setIsModalOpen(true)}
-                                >
-                                    {plan.name === "Enterprise" ? "Contact Sales" : "Get Started"}
-                                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                                </Button>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* FAQ Section */}
-            <section className="py-20 px-4 bg-gradient-to-b from-black to-gray-900">
-                <div className="container mx-auto max-w-4xl">
-                    <div className="text-center mb-16">
-                        <motion.h2
-                            className="text-4xl font-bold mb-4"
-                            style={{ fontFamily: "var(--font-playfair)" }}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6 }}
-                            viewport={{ once: true }}
-                        >
-                            Frequently Asked Questions
-                        </motion.h2>
-                        <motion.p
-                            className="text-xl text-gray-300 max-w-2xl mx-auto"
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: 0.2 }}
-                            viewport={{ once: true }}
-                        >
-                            Everything you need to know about our QR code generator
-                        </motion.p>
-                    </div>
-
-                    <div className="space-y-4">
-                        {faqs.map((faq, index) => (
-                            <motion.div
-                                key={index}
-                                className="border border-border/20 rounded-lg bg-card/50 backdrop-blur-sm"
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5, delay: index * 0.1 }}
-                                viewport={{ once: true }}
-                            >
-                                <button
-                                    className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-white/5 transition-colors rounded-lg"
-                                    onClick={() => toggleFAQ(index)}
-                                >
-                                    <span className="text-lg font-medium pr-4">{faq.question}</span>
-                                    <ChevronDown
-                                        className={`h-5 w-5 text-gray-400 transition-transform flex-shrink-0 ${openFaqIndex === index ? "rotate-180" : ""
-                                            }`}
-                                    />
-                                </button>
-
-                                <motion.div
-                                    initial={false}
-                                    animate={{
-                                        height: openFaqIndex === index ? "auto" : 0,
-                                        opacity: openFaqIndex === index ? 1 : 0,
-                                    }}
-                                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                                    className="overflow-hidden"
-                                >
-                                    <div className="px-6 pb-4">
-                                        <p className="text-gray-300 leading-relaxed">{faq.answer}</p>
-                                    </div>
-                                </motion.div>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* CTA Section */}
-            <section className="relative py-20 px-4 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-800">
-                    <div className="absolute inset-0 opacity-20">
-                        <div className="absolute top-0 left-1/4 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse" />
-                        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
-                    </div>
-                </div>
-
-                <div className="relative z-10 container mx-auto text-center">
-                    <motion.h2
-                        className="text-4xl font-bold mb-4"
-                        style={{ fontFamily: "var(--font-playfair)" }}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                        viewport={{ once: true }}
-                    >
-                        Ready to Create Your QR Code?
-                    </motion.h2>
-                    <motion.p
-                        className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto"
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                        viewport={{ once: true }}
-                    >
-                        Join thousands of businesses using our QR code generator to grow their reach
-                    </motion.p>
-                    <motion.div
-                        className="flex flex-col sm:flex-row gap-4 justify-center"
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.4 }}
-                        viewport={{ once: true }}
-                    >
-                        <Button
-                            size="lg"
-                            className="bg-white text-black hover:bg-white/90 group"
-                            onClick={() => setIsModalOpen(true)}
-                        >
-                            Start Generating Free
-                            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                        </Button>
-                        <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 bg-transparent">
-                            Contact Sales
-                        </Button>
-                    </motion.div>
-                </div>
-            </section>
-
-            {/* Footer */}
-            <Footer />
-
-            {/* QR Generator Modal */}
-            <QRGeneratorModal isOpen={isModalOpen} onOpenChange={setIsModalOpen} />
+          <div className="flex items-center gap-4">
+            <Button className="bg-gray-200 hover:bg-white text-black rounded-md px-6 border border-transparent font-medium transition-all">
+              Create QR Code
+            </Button>
+            <Button variant="ghost" className="text-gray-400 hover:text-white hover:bg-gray-900">
+              Login
+            </Button>
+            <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white">
+              EN <ChevronDown className="ml-1 w-3 h-3" />
+            </Button>
+          </div>
         </div>
-    )
+      </header>
+
+      {/* Main Content */}
+      <main className="container mx-auto px-4 py-8 max-w-6xl">
+
+        {/* Choose Type Section */}
+        <section className="mb-16">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+            <h1 className="text-3xl font-bold text-white">All Types Of QR Codes</h1>
+
+            <div className="relative w-full md:w-auto">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Input
+                placeholder="Insert Type"
+                className="pl-9 pr-24 w-full md:w-80 bg-zinc-900 text-gray-200 border border-gray-800 h-11 rounded-lg focus-visible:ring-1 focus-visible:ring-gray-500 placeholder:text-gray-500"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <Button className="absolute right-1 top-1 bottom-1 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-md px-4 h-auto border border-gray-700">Search</Button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[minmax(80px,auto)]">
+
+            {/* Show featured grid only if not searching, or filter them */}
+            {(!isSearching ? featuredTypes : [...featuredTypes, ...otherTypes].filter(t => t.label.toLowerCase().includes(searchQuery.toLowerCase()))).map((type) => (
+              <motion.button
+                key={type.id}
+                whileHover={{ y: -2 }}
+                className={`
+                  relative group overflow-hidden rounded-xl border bg-black text-left transition-all hover:bg-zinc-900 border-gray-800
+                  ${(type as any).colSpan || 'col-span-1'} 
+                  ${(type as any).rowSpan || ''}
+                  ${(type as any).type === 'featured' ? 'bg-zinc-900 border-none flex flex-col items-center justify-center p-6 gap-4' : ''}
+                  ${(type as any).type === 'google-grid' ? 'bg-zinc-950 border-gray-800 flex flex-col p-4' : ''}
+                  ${(type as any).type === 'standard' || (type as any).type === 'wide' ? 'p-5 flex items-center justify-between' : ''}
+                  ${(type as any).type === 'icon-only' ? 'flex items-center justify-center p-5' : ''}
+                  ${(type as any).type === 'vertical' ? 'flex flex-col items-center justify-center p-5 gap-2' : ''}
+                `}
+              >
+                {(type as any).type === 'featured' ? (
+                  // WhatsApp / Featured Layout
+                  <>
+                    <div className="bg-gray-200 p-4 rounded-full text-black shadow-lg mb-2 group-hover:bg-white transition-colors">
+                      <type.icon className="w-8 h-8" />
+                    </div>
+                    <span className="font-semibold text-gray-200 text-lg">{type.label}</span>
+                  </>
+                ) : (type as any).type === 'google-grid' ? (
+                  // Google Suite 2x2 Grid (Render kept in case we revert, but type not present in data)
+                  <div className="w-full h-full flex flex-col">
+                    <div className="text-gray-400 font-semibold mb-3 text-sm flex items-center gap-2">
+                      <type.icon className="w-4 h-4 text-gray-500" />
+                      {type.label}
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 flex-grow">
+                      {googleTypes.map(gType => (
+                        <div key={gType.id} className="bg-zinc-900 rounded-lg flex flex-col items-center justify-center p-2 gap-1 hover:bg-zinc-800 transition-colors border border-gray-800">
+                          <gType.icon className="w-5 h-5 text-gray-400" />
+                          <span className="text-[10px] text-gray-500 text-center">{gType.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (type as any).type === 'vertical' ? (
+                  // Vertical Icon + Label (Standard 1x1)
+                  <>
+                    <type.icon className="w-8 h-8 text-gray-500 group-hover:scale-110 group-hover:text-white transition-all" />
+                    <span className="text-sm font-medium text-gray-300 group-hover:text-white">{type.label}</span>
+                  </>
+                ) : (type as any).type === 'icon-only' ? (
+                  // Small Social Card
+                  <type.icon className="w-8 h-8 text-gray-500 group-hover:scale-110 group-hover:text-white transition-all" />
+                ) : (
+                  // Standard Card (Horizontal)
+                  <>
+                    <div className="flex items-center gap-3">
+                      <type.icon className="w-5 h-5 text-gray-500 group-hover:text-white transition-colors" />
+                      <span className="font-medium text-gray-300 group-hover:text-white transition-colors">{type.label}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <HelpCircle className="w-4 h-4 text-gray-700 group-hover:text-gray-500" />
+                      <ArrowRight className="w-4 h-4 text-gray-700 group-hover:text-gray-400 transition-colors" />
+                    </div>
+                  </>
+                )}
+              </motion.button>
+            ))}
+
+            {/* View More Expander */}
+            {!isSearching && !showAllTypes && (
+              <div className="col-span-2 md:col-span-4 flex justify-center mt-8">
+                <Button
+                  variant="ghost"
+                  onClick={() => setShowAllTypes(true)}
+                  className="text-gray-500 hover:text-white hover:bg-transparent gap-2"
+                >
+                  View More Types <ChevronDown className="w-4 h-4" />
+                </Button>
+              </div>
+            )}
+
+            {/* Expanded List */}
+            {showAllTypes && !isSearching && otherTypes.map((type) => (
+              <motion.button
+                key={type.id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                whileHover={{ y: -2 }}
+                className="col-span-1 rounded-xl border border-gray-800 bg-black p-5 flex items-center justify-between hover:bg-zinc-900 hover:border-gray-600 transition-all text-left"
+              >
+                <div className="flex items-center gap-3">
+                  <type.icon className="w-5 h-5 text-gray-500 group-hover:text-white transition-colors" />
+                  <span className="font-medium text-gray-300 group-hover:text-white transition-colors">{type.label}</span>
+                </div>
+                <ArrowRight className="w-4 h-4 text-gray-700 group-hover:text-gray-400 transition-colors" />
+              </motion.button>
+            ))}
+          </div>
+        </section>
+
+        {/* QR Code Landing Page Section */}
+        <section className="mb-16">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-2xl font-bold text-white">QR Code landing page</h2>
+            <div className="flex gap-4">
+              <div className="bg-black border border-gray-800 rounded-md px-4 py-2 flex items-center gap-2 text-sm text-gray-400 min-w-[200px] justify-between cursor-pointer hover:border-gray-500 transition-colors">
+                <span>Same Funky Templates</span>
+                <X className="w-3 h-3 text-gray-600" />
+              </div>
+              <Button className="bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700">Search</Button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {templates.map((template) => (
+              <div key={template.id} className="bg-zinc-950 p-6 rounded-2xl border border-gray-800 hover:shadow-lg hover:shadow-gray-900/50 transition-all hover:border-gray-600">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="font-semibold text-gray-200">{template.title}</h3>
+                  <ArrowRight className="w-4 h-4 text-gray-500" />
+                </div>
+                <div className={`aspect-[2/3] rounded-xl overflow-hidden relative group ${template.color}`}>
+                  <img
+                    src={template.image}
+                    alt={template.title}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 opacity-80 group-hover:opacity-100"
+                  />
+                  <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Button size="sm" className="w-full bg-gray-200 text-black hover:bg-white border-none font-medium">
+                      Use Template
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 flex justify-center">
+            <div className="flex justify-center gap-2">
+              {[1, 2, 3, 4, 5].map(i => (
+                <div key={i} className={`w-2 h-2 rounded-full ${i === 1 ? 'bg-white' : 'bg-gray-800'}`} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="mb-16 bg-zinc-950 rounded-3xl p-8 md:p-12 shadow-sm border border-gray-800">
+          <h2 className="text-3xl font-bold text-white text-center mb-12">Frequently Asked Questions</h2>
+
+          <Accordion type="single" collapsible className="w-full max-w-3xl mx-auto space-y-4">
+            {faqs.map((faq, index) => (
+              <AccordionItem key={index} value={`item-${index}`} className="border rounded-xl px-4 data-[state=open]:bg-zinc-900 border-gray-800">
+                <AccordionTrigger className="text-lg font-medium py-6 hover:no-underline text-gray-200 hover:text-white transition-colors">
+                  {faq.question}
+                </AccordionTrigger>
+                <AccordionContent className="text-gray-400 pb-6 leading-relaxed">
+                  {faq.answer}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </section>
+
+        {/* Support & Promo Cards */}
+        <section className="grid md:grid-cols-2 gap-8 mb-16">
+          <div className="bg-zinc-950 p-8 rounded-2xl flex items-center justify-between border border-gray-800 group hover:border-gray-600 transition-colors">
+            <div className="flex items-center gap-6">
+              <div className="p-4 bg-black rounded-full shadow-sm border border-gray-800">
+                <HelpCircle className="w-8 h-8 text-white" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">Need Help?</h3>
+                <p className="text-gray-400 text-sm max-w-[250px]">
+                  Get help choosing the types of QR Code if you don't know which one to use?
+                </p>
+              </div>
+            </div>
+            <Button variant="outline" className="border-gray-700 text-gray-300 hover:bg-white hover:text-black transition-all">
+              Contact Us
+            </Button>
+          </div>
+
+          <div className="bg-zinc-950 p-8 rounded-2xl flex items-center justify-between border border-gray-800 group hover:border-gray-600 transition-colors">
+            <div className="flex items-center gap-6">
+              <div className="p-4 bg-black rounded-full shadow-sm border border-gray-800">
+                <MoreHorizontal className="w-8 h-8 text-white" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">Different QR Code Types</h3>
+                <p className="text-gray-400 text-sm max-w-[300px]">
+                  A QR code is a matrix barcode readable by mobile devices.
+                </p>
+              </div>
+            </div>
+            <Button variant="outline" className="border-gray-700 text-gray-300 hover:bg-white hover:text-black transition-all">
+              Read More
+            </Button>
+          </div>
+        </section>
+
+        {/* Business Promo Section */}
+        <section className="grid md:grid-cols-2 gap-8 mb-20">
+          {/* Me-Pos Card */}
+          <div className="bg-zinc-950 rounded-3xl p-8 border border-gray-800 shadow-sm overflow-hidden relative">
+            <div className="relative z-10">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="w-3 h-3 rounded-full border border-white flex items-center justify-center">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white" />
+                </span>
+                <span className="font-bold text-gray-200">Me-Pos</span>
+              </div>
+              <h3 className="text-3xl font-bold text-white mb-4 leading-tight">
+                Me-Pos: Run Your Business Easy and Free
+              </h3>
+              <p className="text-gray-400 mb-8 max-w-sm">
+                Our vision is to build solutions for businesses of sales, retail, no one personnel in usage fees.
+              </p>
+              <div className="flex gap-4 mb-12">
+                <Button className="bg-white hover:bg-gray-200 px-8 text-black font-semibold">Try For Free</Button>
+                <Button variant="link" className="text-white underline decoration-gray-500 hover:decoration-white">Generate QR for Menu</Button>
+              </div>
+            </div>
+
+            <div className="mt-8 border border-gray-800 rounded-t-xl bg-black shadow-xl mx-auto max-w-[90%] overflow-hidden">
+              <div className="h-4 bg-zinc-900 border-b border-gray-800 flex items-center gap-1 px-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-gray-600" />
+                <div className="w-1.5 h-1.5 rounded-full bg-gray-600" />
+                <div className="w-1.5 h-1.5 rounded-full bg-gray-600" />
+              </div>
+              <div className="p-4 grid grid-cols-3 gap-2 bg-black">
+                {/* Mock UI Elements */}
+                {[1, 2, 3, 4, 5, 6].map(i => (
+                  <div key={i} className="bg-zinc-900 h-20 rounded shadow-sm border border-gray-800"></div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Ticket Card */}
+          <div className="bg-zinc-950 rounded-3xl p-8 border border-gray-800 shadow-sm overflow-hidden relative">
+            <div className="relative z-10">
+              <div className="flex items-center gap-2 mb-4 text-white">
+                <Ticket className="w-5 h-5" />
+                <span className="font-bold">ME-TICKET</span>
+              </div>
+              <h3 className="text-3xl font-bold text-white mb-4 leading-tight">
+                Upgrade Your Tickets with QR Code for Easy Check-in
+              </h3>
+              <p className="text-gray-400 mb-8 max-w-sm">
+                ME-Ticket is a platform for selling tickets. Create an event, generate tickets with QR codes and enjoy refunds.
+              </p>
+              <div className="flex gap-4 mb-12">
+                <Button className="bg-white hover:bg-gray-200 px-8 text-black font-semibold">Create Event</Button>
+                <Button variant="link" className="text-white underline decoration-gray-500 hover:decoration-white">Generate QR for Ticket</Button>
+              </div>
+            </div>
+
+            <div className="mt-8 border border-gray-800 rounded-t-xl bg-black shadow-xl mx-auto max-w-[90%] overflow-hidden">
+              <div className="h-4 bg-zinc-900 border-b border-gray-800 flex items-center leading-none px-2 text-[8px] text-gray-500">
+                Smart Ticket Sales
+              </div>
+              <img
+                src="https://placehold.co/500x300/111/444?text=Ticket+UI"
+                alt="Ticket Dashboard"
+                className="w-full opacity-80"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Bottom Feature Links */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+          <div className="bg-zinc-950 p-6 rounded-xl border border-gray-800 flex gap-4 hover:border-gray-500 transition-colors cursor-pointer group">
+            <div className="w-12 h-16 border border-gray-800 rounded bg-black flex-shrink-0 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-colors">
+              <FileText className="text-gray-500 group-hover:text-black" />
+            </div>
+            <div>
+              <h4 className="font-bold text-white">Landing Page</h4>
+              <p className="text-sm text-gray-500 mt-1">Make landing page for apps, sites, blog, etc. Add hosting with QR Code</p>
+              <span className="text-gray-300 font-medium text-sm mt-2 block group-hover:underline">Create Landing Page</span>
+            </div>
+          </div>
+
+          <div className="bg-zinc-950 p-6 rounded-xl border border-gray-800 flex gap-4 hover:border-gray-500 transition-colors cursor-pointer group">
+            <div className="w-12 h-16 border border-gray-800 rounded bg-black flex-shrink-0 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-colors">
+              <span className="text-2xl font-bold text-gray-500 group-hover:text-black">%</span>
+            </div>
+            <div>
+              <h4 className="font-bold text-white">Frames</h4>
+              <p className="text-sm text-gray-500 mt-1">Save money on designing, using community tested frames</p>
+              <span className="text-gray-300 font-medium text-sm mt-2 block group-hover:underline">Add Your Frame</span>
+            </div>
+          </div>
+
+          <div className="bg-zinc-950 p-6 rounded-xl border border-gray-800 flex gap-4 hover:border-gray-500 transition-colors cursor-pointer group">
+            <div className="w-12 h-16 border border-gray-800 rounded bg-black flex-shrink-0 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-colors">
+              <LinkIcon className="text-gray-500 group-hover:text-black" />
+            </div>
+            <div>
+              <h4 className="font-bold text-white">Short Link</h4>
+              <p className="text-sm text-gray-500 mt-1">Free tool for creating short links for any URL</p>
+              <span className="text-gray-300 font-medium text-sm mt-2 block group-hover:underline">Create Short Link</span>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <Footer />
+    </div>
+  )
 }
