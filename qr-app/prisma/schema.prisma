@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Link {
+  id          String   @id @default(cuid())
+  originalUrl String
+  shortCode   String   @unique
+  createdAt   DateTime @default(now())
+  scans       Scan[]
+}
+
+model Scan {
+  id         String   @id @default(cuid())
+  linkId     String
+  link       Link     @relation(fields: [linkId], references: [id])
+  timestamp  DateTime @default(now())
+  deviceType String?
+  ipHash     String?  // Anonymized IP for unique scan counting
+  country    String?
+  city       String?
+}
+
+model QRCode {
+  id          String   @id @default(cuid())
+  businessId  String
+  businessName String
+  productSummary String?
+  metadata    String?  // JSON for additional info
+  createdAt   DateTime @default(now())
+  tempReviews TempReview[]
+  reviews     Review[]
+  scanLogs    ScanLog[]
+}
+
+model TempReview {
+  id          String   @id @default(cuid())
+  jobId       String   @unique
+  qrCodeId    String
+  qrCode      QRCode   @relation(fields: [qrCodeId], references: [id])
+  reviewText  String
+  language    String
+  rating      Int
+  hash        String   @unique
+  embedding   String?  // JSON array of embedding vector
+  sessionId   String?
+  createdAt   DateTime @default(now())
+  expiresAt   DateTime
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  qrCodeId    String
+  qrCode      QRCode   @relation(fields: [qrCodeId], references: [id])
+  reviewText  String
+  language    String
+  rating      Int
+  source      String   @default("auto-gemini")
+  metadata    String?  // JSON for additional info
+  createdAt   DateTime @default(now())
+}
+
+model ScanLog {
+  id          String   @id @default(cuid())
+  qrCodeId    String
+  qrCode      QRCode   @relation(fields: [qrCodeId], references: [id])
+  jobId       String?
+  deviceType  String?
+  ipHash      String?
+  userAgent   String?
+  action      String   // e.g., "scan", "review_generated", "review_submitted"
+  timestamp   DateTime @default(now())
+}
