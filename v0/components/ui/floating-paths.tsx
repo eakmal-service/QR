@@ -1,28 +1,32 @@
 "use client"
 
-function FloatingPaths({ position }: { position: number }) {
-  const paths = Array.from({ length: 24 }, (_, i) => {
-    const randomDashLength = 60 + Math.random() * 80 // 60-140px long dashes
-    const randomGap = 150 + Math.random() * 100 // 150-250px gaps
-    const randomDuration = 8 + Math.random() * 12 // 8-20s duration
-    const randomDelay = Math.random() * 10 // 0-10s delay
+import { useEffect, useState } from "react"
 
-    return {
-      id: i,
-      d: `M-${380 - i * 5 * position} -${189 + i * 6}C-${
-        380 - i * 5 * position
-      } -${189 + i * 6} -${312 - i * 5 * position} ${216 - i * 6} ${
-        152 - i * 5 * position
-      } ${343 - i * 6}C${616 - i * 5 * position} ${470 - i * 6} ${
-        684 - i * 5 * position
-      } ${875 - i * 6} ${684 - i * 5 * position} ${875 - i * 6}`,
-      width: 0.8 + i * 0.02,
-      dashLength: randomDashLength,
-      dashGap: randomGap,
-      duration: randomDuration,
-      delay: randomDelay,
-    }
-  })
+function FloatingPaths({ position }: { position: number }) {
+  const [paths, setPaths] = useState<any[]>([])
+
+  useEffect(() => {
+    const newPaths = Array.from({ length: 15 }, (_, i) => {
+      const randomDashLength = 60 + Math.random() * 80
+      const randomGap = 150 + Math.random() * 100
+      const randomDuration = 8 + Math.random() * 12
+      const randomDelay = Math.random() * 10
+
+      return {
+        id: i,
+        d: `M-${380 - i * 5 * position} -${189 + i * 6}C-${380 - i * 5 * position
+          } -${189 + i * 6} -${312 - i * 5 * position} ${216 - i * 6} ${152 - i * 5 * position
+          } ${343 - i * 6}C${616 - i * 5 * position} ${470 - i * 6} ${684 - i * 5 * position
+          } ${875 - i * 6} ${684 - i * 5 * position} ${875 - i * 6}`,
+        width: 0.8 + i * 0.02,
+        dashLength: randomDashLength,
+        dashGap: randomGap,
+        duration: randomDuration,
+        delay: randomDelay,
+      }
+    })
+    setPaths(newPaths)
+  }, [position])
 
   return (
     <div className="absolute inset-0 pointer-events-none">
@@ -40,6 +44,7 @@ function FloatingPaths({ position }: { position: number }) {
                 opacity: 0.6 + path.id * 0.02,
                 animation: `travelPath-${path.id} ${path.duration}s linear infinite`,
                 animationDelay: `${path.delay}s`,
+                willChange: "stroke-dashoffset",
               }}
             />
           </g>
@@ -67,23 +72,28 @@ function FloatingPaths({ position }: { position: number }) {
 }
 
 function FlippedFloatingPaths({ position }: { position: number }) {
-  const paths = Array.from({ length: 24 }, (_, i) => {
-    const randomDashLength = 60 + Math.random() * 80 // 60-140px long dashes
-    const randomGap = 150 + Math.random() * 100 // 150-250px gaps
-    const randomDuration = 8 + Math.random() * 12 // 8-20s duration
-    const randomDelay = Math.random() * 10 // 0-10s delay
+  const [paths, setPaths] = useState<any[]>([])
 
-    return {
-      id: i,
-      // Flipped path: starts from right side and flows to bottom
-      d: `M${696 + 380 - i * 5 * position} ${-189 - i * 6}C${696 + 380 - i * 5 * position} ${-189 - i * 6} ${696 + 312 - i * 5 * position} ${216 - i * 6} ${696 - 152 + i * 5 * position} ${343 - i * 6}C${696 - 616 + i * 5 * position} ${470 - i * 6} ${696 - 684 + i * 5 * position} ${875 - i * 6} ${696 - 684 + i * 5 * position} ${875 - i * 6}`,
-      width: 0.8 + i * 0.02,
-      dashLength: randomDashLength,
-      dashGap: randomGap,
-      duration: randomDuration,
-      delay: randomDelay,
-    }
-  })
+  useEffect(() => {
+    const newPaths = Array.from({ length: 15 }, (_, i) => {
+      const randomDashLength = 60 + Math.random() * 80
+      const randomGap = 150 + Math.random() * 100
+      const randomDuration = 8 + Math.random() * 12
+      const randomDelay = Math.random() * 10
+
+      return {
+        id: i,
+        // Flipped path: starts from right side and flows to bottom
+        d: `M${696 + 380 - i * 5 * position} ${-189 - i * 6}C${696 + 380 - i * 5 * position} ${-189 - i * 6} ${696 + 312 - i * 5 * position} ${216 - i * 6} ${696 - 152 + i * 5 * position} ${343 - i * 6}C${696 - 616 + i * 5 * position} ${470 - i * 6} ${696 - 684 + i * 5 * position} ${875 - i * 6} ${696 - 684 + i * 5 * position} ${875 - i * 6}`,
+        width: 0.8 + i * 0.02,
+        dashLength: randomDashLength,
+        dashGap: randomGap,
+        duration: randomDuration,
+        delay: randomDelay,
+      }
+    })
+    setPaths(newPaths)
+  }, [position])
 
   return (
     <div className="absolute inset-0 pointer-events-none">
@@ -101,6 +111,7 @@ function FlippedFloatingPaths({ position }: { position: number }) {
                 opacity: 0.6 + path.id * 0.02,
                 animation: `travelPathFlipped-${path.id} ${path.duration}s linear infinite`,
                 animationDelay: `${path.delay}s`,
+                willChange: "stroke-dashoffset",
               }}
             />
           </g>

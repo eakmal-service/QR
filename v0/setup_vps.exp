@@ -1,0 +1,46 @@
+#!/usr/bin/expect -f
+
+set timeout 600
+set host "72.61.229.171"
+set user "root"
+set password ")vbofQi/lHXSMqF?Nk8E"
+
+spawn ssh -o StrictHostKeyChecking=no $user@$host
+
+expect {
+    "password:" {
+        send "$password\r"
+    }
+    timeout {
+        puts "Connection timed out"
+        exit 1
+    }
+}
+
+expect "#"
+send "export DEBIAN_FRONTEND=noninteractive\r"
+
+expect "#"
+send "apt-get update && apt-get upgrade -y\r"
+
+expect "#"
+send "apt-get install -y curl git python3 python3-pip python3-venv nginx certbot python3-certbot-nginx rsync build-essential\r"
+
+expect "#"
+# Install Node.js 20
+send "curl -fsSL https://deb.nodesource.com/setup_20.x | bash -\r"
+
+expect "#"
+send "apt-get install -y nodejs\r"
+
+expect "#"
+# Install PM2
+send "npm install -g pm2\r"
+
+expect "#"
+send "echo 'System Setup Complete'\r"
+expect "#"
+send "exit\r"
+
+expect eof
+exit 0

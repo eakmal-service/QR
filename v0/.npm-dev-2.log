@@ -1,0 +1,55 @@
+
+> my-v0-project@0.1.0 dev
+> next dev
+
+  ▲ Next.js 14.2.25
+  - Local:        http://localhost:3000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1992ms
+ ✓ Compiled /api/qr/image/[qrId] in 343ms (122 modules)
+ GET /api/qr/image/dummy-id 404 in 668ms
+ ○ Compiling /smart-review ...
+ ✓ Compiled /smart-review in 1854ms (762 modules)
+ GET /smart-review 200 in 1979ms
+ ✓ Compiled /api/admin/qr-codes/create in 141ms (367 modules)
+ POST /api/admin/qr-codes/create 200 in 216ms
+ ✓ Compiled /api/qr/image/[qrId] in 42ms (433 modules)
+ GET /api/qr/image/qr-vXlmLCGIyC 200 in 117ms
+ ✓ Compiled /visit/[qrId] in 254ms (672 modules)
+ ✓ Compiled /api/qr/scan in 138ms (374 modules)
+Attempting generation with model: gemini-2.5-flash-lite
+Attempting generation with model: gemini-2.5-flash-lite
+ POST /api/qr/scan 200 in 1448ms
+ ✓ Compiled /api/reviews/stream in 50ms (376 modules)
+ POST /api/qr/scan 200 in 1522ms
+ GET /api/reviews/stream?jobId=di3z2UtSh-Pc9k5uR-_yp 200 in 86ms
+ GET /api/reviews/stream?jobId=XKy27d2jPbjl757ciAmJH 200 in 1005ms
+ ✓ Compiled /api/admin/qr-codes/create in 386ms (371 modules)
+ POST /api/admin/qr-codes/create 200 in 588ms
+ ✓ Compiled /api/qr/image/[qrId] in 144ms (437 modules)
+ GET /api/qr/image/qr-PcNTx3amDw 200 in 217ms
+ GET /visit/qr-PcNTx3amDw 200 in 223ms
+ ✓ Compiled /api/qr/scan in 84ms (442 modules)
+Attempting generation with model: gemini-2.5-flash-lite
+Attempting generation with model: gemini-2.5-flash-lite
+ POST /api/qr/scan 200 in 1114ms
+ ✓ Compiled /api/reviews/stream in 52ms (444 modules)
+ POST /api/qr/scan 200 in 1572ms
+ GET /api/reviews/stream?jobId=TKcmyje2JEQI9KqrkOcjU 200 in 472ms
+ GET /api/reviews/stream?jobId=sEHGfDkW2QZJW15gHqJs4 200 in 1009ms
+ ✓ Compiled /api/reviews/regenerate in 199ms (446 modules)
+Attempting generation with model: gemini-2.5-flash-lite
+ POST /api/reviews/regenerate 200 in 993ms
+Attempting generation with model: gemini-2.5-flash-lite
+ POST /api/reviews/regenerate 200 in 1657ms
+Attempting generation with model: gemini-2.5-flash-lite
+ POST /api/reviews/regenerate 200 in 1992ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1817ms (2047 modules)
+ GET / 200 in 1996ms
+ ✓ Compiled in 995ms (2047 modules)
+ ✓ Compiled in 278ms (2047 modules)
+   Reload env: .env.local
+ ✓ Compiled in 5.9s (2088 modules)

@@ -1,4 +1,5 @@
 import { Button } from "./ui/button"
+import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { AnimatedQRCode } from "./animated-qr-code"
 import { GenerateQRButton } from "./ui/generate-qr-button"
@@ -7,7 +8,7 @@ import { ProgressiveBlur } from "./ui/progressive-blur"
 
 export function HeroSection() {
   return (
-    <section className="relative overflow-hidden min-h-screen flex items-end justify-center pb-16">
+    <section className="relative overflow-hidden min-h-screen flex items-end justify-center pb-8">
       {/* QR Code Background - covers entire section */}
       <div className="absolute inset-0">
         <AnimatedQRCode />
@@ -21,9 +22,11 @@ export function HeroSection() {
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <GenerateQRButton />
-          <Button size="lg" variant="outline" className="border-gray-600 text-white hover:bg-gray-800 bg-transparent backdrop-blur-sm shadow-2xl">
-            Watch Demo
-          </Button>
+          <Link href="/smart-review">
+            <Button size="lg" variant="outline" className="border-gray-600 text-white hover:bg-gray-800 bg-transparent backdrop-blur-sm shadow-2xl">
+              Smart Review QR
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

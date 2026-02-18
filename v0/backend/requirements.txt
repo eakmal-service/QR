@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+prisma
+google-generativeai
+pydantic
+python-dotenv
+nanoid
+qrcode[pil]

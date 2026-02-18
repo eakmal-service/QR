@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
                 businessName: qr.businessName,
                 productSummary: qr.productSummary,
                 createdAt: qr.createdAt,
-                visitUrl: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/visit/${qr.id}`,
+                visitUrl: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://qr.akmal.in'}/visit/${qr.id}`,
                 analytics: {
                     totalScans: scans,
                     totalReviews: qr._count.reviews,

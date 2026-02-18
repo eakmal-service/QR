@@ -74,28 +74,22 @@ export default function AdminQRCodesPage() {
         }
     };
 
-    const downloadQR = (qrId: string, businessName: string) => {
-        const svg = document.getElementById(`qr-${qrId}`)?.querySelector("svg");
-        if (!svg) return;
-
-        const svgData = new XMLSerializer().serializeToString(svg);
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        const img = new Image();
-
-        img.onload = () => {
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx?.drawImage(img, 0, 0);
-            const pngFile = canvas.toDataURL("image/png");
-
-            const downloadLink = document.createElement("a");
-            downloadLink.download = `${businessName.replace(/\s+/g, "-")}-qr.png`;
-            downloadLink.href = pngFile;
-            downloadLink.click();
-        };
-
-        img.src = "data:image/svg+xml;base64," + btoa(svgData);
+    const downloadQR = async (qrId: string, businessName: string) => {
+        try {
+            const response = await fetch(`/api/qr/image/${qrId}`);
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `${businessName.replace(/\s+/g, "-")}-qr.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error("Download failed:", error);
+            alert("Failed to download QR code");
+        }
     };
 
     if (loading) {
@@ -188,7 +182,11 @@ export default function AdminQRCodesPage() {
 
                             {/* QR Code */}
                             <div className="bg-gray-50 p-4 rounded-lg mb-4 flex justify-center" id={`qr-${qr.id}`}>
-                                <QRCodeSVG value={qr.visitUrl} size={200} level="H" includeMargin />
+                                <img
+                                    src={`/api/qr/image/${qr.id}`}
+                                    alt={`QR code for ${qr.businessName}`}
+                                    className="w-48 h-48"
+                                />
                             </div>
 
                             {/* Analytics */}

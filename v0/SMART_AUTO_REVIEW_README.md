@@ -2,8 +2,9 @@
 
 ## ✨ Features Implemented
 
-- 🤖 **AI-Powered Review Generation**: Uses Google Gemini to create unique, human-like reviews
-- 🌍 **Multi-Language Support**: Generates reviews in English, Hindi, Gujarati, and Hinglish
+- 🤖 **AI-Powered Review Generation**: Uses **Gemini 2.5 Flash Lite** (with fallback to 2.0 Flash) to create unique, human-like reviews
+- 🌍 **Multi-Language Support & Regeneration**: Generates reviews in English, Hindi, Gujarati, and Hinglish with instant language switching
+- 🖼️ **Dynamic QR Generation**: On-the-fly QR code image generation via API
 - 🔄 **Real-time Delivery**: Server-Sent Events (SSE) push reviews to clients instantly
 - 🚫 **Deduplication**: Prevents duplicate and similar reviews using hash + Jaccard similarity
 - 📋 **Clipboard Integration**: Easy copy-paste functionality
@@ -40,10 +41,13 @@ Click on any QR code to see the Smart Auto-Review feature in action!
 v0/
 ├── app/
 │   ├── api/
-│   │   ├── qr/scan/route.ts          # QR scan endpoint
+│   │   ├── qr/
+│   │   │   ├── scan/route.ts         # QR scan endpoint
+│   │   │   └── image/[qrId]/route.ts # Dynamic QR image generation
 │   │   └── reviews/
 │   │       ├── stream/route.ts       # SSE endpoint
-│   │       └── submit/route.ts       # Review submission
+│   │       ├── submit/route.ts       # Review submission
+│   │       └── regenerate/route.ts   # Language regeneration endpoint
 │   ├── visit/[qrId]/page.tsx         # Landing page
 │   └── test-review/page.tsx          # Test page
 ├── lib/
@@ -84,7 +88,8 @@ v0/
 4. Deduplication checks prevent repeats
 5. Review stored in `TempReview` table
 6. SSE pushes review to client in real-time
-7. User edits (if needed) and submits
+7. **User can change language** → triggers instant regeneration via `/api/reviews/regenerate`
+8. User edits (if needed) and submits
 8. Review saved to permanent `Review` table
 
 ## 🔒 Security Features

@@ -1,0 +1,24 @@
+#!/usr/bin/expect -f
+
+set timeout -1
+set host "72.61.229.171"
+set user "root"
+set password ")vbofQi/lHXSMqF?Nk8E"
+
+# Create directory first
+spawn ssh -o StrictHostKeyChecking=no $user@$host "mkdir -p /var/www/qr.akmal.in"
+expect {
+    "password:" {
+        send "$password\r"
+    }
+}
+expect eof
+
+# Rsync files
+spawn rsync -avz -e "ssh -o StrictHostKeyChecking=no" --exclude ".next" --exclude "node_modules" --exclude ".git" --exclude ".DS_Store" --exclude "venv" --exclude "__pycache__" ./ $user@$host:/var/www/qr.akmal.in
+expect {
+    "password:" {
+        send "$password\r"
+    }
+}
+expect eof

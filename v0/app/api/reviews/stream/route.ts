@@ -15,13 +15,39 @@ export async function GET(request: NextRequest) {
     const encoder = new TextEncoder();
 
     // Create a stream
+    // Create a stream
     const stream = new ReadableStream({
         async start(controller) {
+            const encoder = new TextEncoder();
+            let isStreamClosed = false;
+            let timeoutId: NodeJS.Timeout;
+
+            // Helper to close stream safely
+            const closeStream = () => {
+                if (!isStreamClosed) {
+                    isStreamClosed = true;
+                    clearInterval(pollInterval);
+                    clearTimeout(timeoutId);
+                    try {
+                        controller.close();
+                    } catch (e) {
+                        // Ignore if already closed
+                    }
+                }
+            };
+
             // Send initial connection message
-            controller.enqueue(encoder.encode(`: connected\n\n`));
+            try {
+                controller.enqueue(encoder.encode(`: connected\n\n`));
+            } catch (e) {
+                closeStream();
+                return;
+            }
 
             // Poll for review
             const pollInterval = setInterval(async () => {
+                if (isStreamClosed) return;
+
                 try {
                     const review = await prisma.tempReview.findUnique({
                         where: { jobId },
@@ -36,25 +62,33 @@ export async function GET(request: NextRequest) {
                             rating: review.rating,
                         });
 
-                        controller.enqueue(encoder.encode(`data: ${data}\n\n`));
-                        clearInterval(pollInterval);
-                        controller.close();
+                        if (!isStreamClosed) {
+                            controller.enqueue(encoder.encode(`data: ${data}\n\n`));
+                            closeStream();
+                        }
                     }
                 } catch (error) {
                     console.error("Error polling for review:", error);
-                    clearInterval(pollInterval);
-                    controller.close();
+                    closeStream();
                 }
             }, 1000); // Poll every second
 
             // Timeout after 30 seconds
-            setTimeout(() => {
-                clearInterval(pollInterval);
-                controller.enqueue(
-                    encoder.encode(`data: ${JSON.stringify({ type: "timeout" })}\n\n`)
-                );
-                controller.close();
+            timeoutId = setTimeout(() => {
+                if (!isStreamClosed) {
+                    try {
+                        controller.enqueue(
+                            encoder.encode(`data: ${JSON.stringify({ type: "timeout" })}\n\n`)
+                        );
+                    } catch (e) { }
+                    closeStream();
+                }
             }, 30000);
+
+            // Handle client disconnect (if supported by runtime, usually request.signal)
+            request.signal.addEventListener("abort", () => {
+                closeStream();
+            });
         },
     });
 

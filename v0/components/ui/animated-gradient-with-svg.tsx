@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useMemo, useRef } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { cn } from "@/lib/utils"
 import { useDimensions } from "@/components/hooks/use-debounced-dimensions"
 
@@ -19,22 +19,26 @@ const AnimatedGradient: React.FC<AnimatedGradientProps> = ({ colors, speed = 5, 
   const containerRef = useRef<HTMLDivElement>(null)
   const dimensions = useDimensions(containerRef)
 
-  const randomValues = useMemo(() => {
-    return colors.map(() => ({
-      top: Math.random() * 50,
-      left: Math.random() * 50,
-      tx1: Math.random() - 0.5,
-      ty1: Math.random() - 0.5,
-      tx2: Math.random() - 0.5,
-      ty2: Math.random() - 0.5,
-      tx3: Math.random() - 0.5,
-      ty3: Math.random() - 0.5,
-      tx4: Math.random() - 0.5,
-      ty4: Math.random() - 0.5,
-      widthMultiplier: randomInt(0.5, 1.5),
-      heightMultiplier: randomInt(0.5, 1.5),
-    }))
-  }, [colors.length])
+  const [randomValues, setRandomValues] = useState<any[]>([])
+
+  useEffect(() => {
+    setRandomValues(
+      colors.map(() => ({
+        top: Math.random() * 50,
+        left: Math.random() * 50,
+        tx1: Math.random() - 0.5,
+        ty1: Math.random() - 0.5,
+        tx2: Math.random() - 0.5,
+        ty2: Math.random() - 0.5,
+        tx3: Math.random() - 0.5,
+        ty3: Math.random() - 0.5,
+        tx4: Math.random() - 0.5,
+        ty4: Math.random() - 0.5,
+        widthMultiplier: randomInt(0.5, 1.5),
+        heightMultiplier: randomInt(0.5, 1.5),
+      })),
+    )
+  }, [colors])
 
   const circleSize = useMemo(() => {
     if (dimensions.width === 0 && dimensions.height === 0) {

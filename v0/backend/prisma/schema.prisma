@@ -1,0 +1,69 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator py {
+  provider = "prisma-client-py"
+  interface = "asyncio"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model QRCode {
+  id          String   @id @default(cuid())
+  businessId  String
+  businessName String
+  productSummary String?
+  googleMapsLink String?
+  businessType String?
+  location    String?
+  metadata    String?  // JSON for additional info
+  createdAt   DateTime @default(now())
+  tempReviews TempReview[]
+  reviews     Review[]
+  scanLogs    ScanLog[]
+}
+
+model TempReview {
+  id          String   @id @default(cuid())
+  jobId       String   @unique
+  qrCodeId    String
+  qrCode      QRCode   @relation(fields: [qrCodeId], references: [id])
+  reviewText  String
+  language    String
+  rating      Int
+  hash        String   @unique
+  embedding   String?  // JSON array of embedding vector
+  sessionId   String?
+  createdAt   DateTime @default(now())
+  expiresAt   DateTime
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  qrCodeId    String
+  qrCode      QRCode   @relation(fields: [qrCodeId], references: [id])
+  reviewText  String
+  language    String
+  rating      Int
+  source      String   @default("auto-gemini")
+  metadata    String?  // JSON for additional info
+  createdAt   DateTime @default(now())
+}
+
+model ScanLog {
+  id          String   @id @default(cuid())
+  qrCodeId    String
+  qrCode      QRCode   @relation(fields: [qrCodeId], references: [id])
+  jobId       String?
+  deviceType  String?
+  ipHash      String?
+  userAgent   String?
+  action      String   // e.g., "scan", "review_generated", "review_submitted"
+  timestamp   DateTime @default(now())
+}

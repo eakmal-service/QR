@@ -53,40 +53,39 @@ const googleTypes = [
 
 // QR Types - Featured Layout Data
 const featuredTypes = [
-  { id: "url", label: "URL / Link", icon: LinkIcon, colSpan: "col-span-1 md:col-span-2", type: "wide" },
-  { id: "pdf", label: "PDF", icon: FileText, colSpan: "col-span-1", type: "standard" },
-  { id: "image", label: "Image", icon: ImageIcon, colSpan: "col-span-1", type: "standard" },
+  // Row 1
+  { id: "url", label: "URL / Link", icon: LinkIcon, colSpan: "col-span-2 md:col-span-6", type: "wide" },
+  { id: "pdf", label: "PDF", icon: FileText, colSpan: "col-span-1 md:col-span-3", type: "standard" },
+  { id: "image", label: "Image", icon: ImageIcon, colSpan: "col-span-1 md:col-span-3", type: "standard" },
 
-  { id: "app", label: "Play Market / App Store", icon: Smartphone, colSpan: "col-span-1", type: "standard" },
-  { id: "text", label: "Text", icon: Type, colSpan: "col-span-1", type: "standard" },
-  { id: "whatsapp", label: "WhatsApp", icon: WhatsAppIcon, colSpan: "col-span-1", type: "vertical" }, // Changed to Vertical
+  // Row 2
+  { id: "app", label: "Play Market / App Store", icon: Smartphone, colSpan: "col-span-2 md:col-span-3", type: "standard" },
+  { id: "text", label: "Text", icon: Type, colSpan: "col-span-1 md:col-span-2", type: "standard" },
+  { id: "snapchat", label: "Snapchat", icon: SnapchatIcon, colSpan: "col-span-1 md:col-span-1", type: "icon-only" },
+  { id: "whatsapp", label: "WhatsApp", icon: WhatsAppIcon, colSpan: "col-span-2 md:col-span-2 row-span-2", type: "featured" }, // Centerpiece
 
-  // Google items ungrouped
-  { id: "gforms", label: "Forms", icon: FileText, colSpan: "col-span-1", type: "standard" },
-  { id: "gdoc", label: "Docs", icon: FileText, colSpan: "col-span-1", type: "standard" },
+  { id: "youtube", label: "YouTube", icon: Youtube, colSpan: "col-span-1 md:col-span-1", type: "icon-only" },
+  { id: "instagram", label: "Instagram", icon: Instagram, colSpan: "col-span-1 md:col-span-1", type: "icon-only" },
+  { id: "vcard", label: "vCard", icon: User, colSpan: "col-span-1 md:col-span-2", type: "standard" },
 
-  { id: "map", label: "Map", icon: MapPin, colSpan: "col-span-1", type: "standard" },
-  { id: "wifi", label: "Wi-Fi", icon: Wifi, colSpan: "col-span-1", type: "standard" },
+  // Row 3 (WhatsApp continues here)
+  { id: "map", label: "Map", icon: MapPin, colSpan: "col-span-1 md:col-span-2", type: "standard" },
+  { id: "wifi", label: "Wi-Fi", icon: Wifi, colSpan: "col-span-1 md:col-span-2", type: "standard" },
+  { id: "audio", label: "Audio", icon: Music, colSpan: "col-span-1 md:col-span-2", type: "standard" },
 
-  { id: "booking", label: "Booking", icon: Calendar, colSpan: "col-span-1", type: "standard" },
-  { id: "phone", label: "Phone Call", icon: Phone, colSpan: "col-span-1", type: "standard" },
-  { id: "facebook", label: "Facebook", icon: Facebook, colSpan: "col-span-1", type: "icon-only" },
-  { id: "instagram", label: "Instagram", icon: Instagram, colSpan: "col-span-1", type: "icon-only" },
+  { id: "facebook", label: "Facebook", icon: Facebook, colSpan: "col-span-1 md:col-span-1", type: "icon-only" },
+  { id: "telegram", label: "Telegram", icon: Send, colSpan: "col-span-1 md:col-span-1", type: "icon-only" },
+  { id: "email", label: "E-mail", icon: Mail, colSpan: "col-span-1 md:col-span-2", type: "standard" },
 
-  { id: "ppt", label: "PPTX", icon: FileText, colSpan: "col-span-1", type: "standard" },
-  { id: "custom", label: "Custom URL", icon: Globe, colSpan: "col-span-1", type: "standard" },
-  { id: "telegram", label: "Telegram", icon: Send, colSpan: "col-span-1", type: "icon-only" },
-  { id: "snapchat", label: "Snapchat", icon: SnapchatIcon, colSpan: "col-span-1", type: "icon-only" },
-
-  // Remaining Google items
-  { id: "gsheets", label: "Sheets", icon: FileText, colSpan: "col-span-1", type: "standard" },
-  { id: "greview", label: "Review", icon: MessageSquare, colSpan: "col-span-1", type: "standard" },
+  // Row 4
+  { id: "booking", label: "Booking", icon: Calendar, colSpan: "col-span-1 md:col-span-3", type: "standard" },
+  { id: "phone", label: "Phone Call", icon: Phone, colSpan: "col-span-1 md:col-span-3", type: "standard" },
+  { id: "ppt", label: "PPTX", icon: FileText, colSpan: "col-span-1 md:col-span-3", type: "standard" },
+  { id: "custom", label: "Custom URL", icon: Globe, colSpan: "col-span-1 md:col-span-3", type: "standard" },
 ]
 
 // Remaining types (flat list)
 const otherTypes = [
-  { id: "email", label: "E-mail", icon: Mail },
-  { id: "vcard", label: "vCard", icon: User },
   { id: "links", label: "List of Links", icon: LinkIcon },
   { id: "twitter", label: "X (Twitter)", icon: MessageSquare },
   { id: "sms", label: "SMS", icon: MessageSquare },
@@ -103,7 +102,6 @@ const otherTypes = [
   { id: "amazon", label: "Amazon", icon: ShoppingCart },
   { id: "barcode", label: "2D-Barcode", icon: FileText },
   { id: "upi", label: "UPI", icon: ShoppingCart },
-  { id: "attendance", label: "Attendance", icon: Calendar },
 ]
 
 // Landing Page Templates - Dark Mode
@@ -158,10 +156,15 @@ const faqs = [
   },
 ]
 
+import { useRouter } from "next/navigation"
+
 export function QRGeneratorPage() {
+  const router = useRouter()
   const [activeTab, setActiveTab] = useState("choose-type")
   const [searchQuery, setSearchQuery] = useState("")
   const [showAllTypes, setShowAllTypes] = useState(false)
+
+
 
   // Filter logic
   const filteredFeatured = featuredTypes.filter(t => t.label.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -225,34 +228,35 @@ export function QRGeneratorPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[minmax(80px,auto)]">
+          <div className="grid grid-cols-2 md:grid-cols-12 gap-4 auto-rows-[minmax(80px,auto)]">
 
             {/* Show featured grid only if not searching, or filter them */}
             {(!isSearching ? featuredTypes : [...featuredTypes, ...otherTypes].filter(t => t.label.toLowerCase().includes(searchQuery.toLowerCase()))).map((type) => (
               <motion.button
                 key={type.id}
                 whileHover={{ y: -2 }}
+                onClick={() => router.push(`/generate/${type.id}`)}
                 className={`
                   relative group overflow-hidden rounded-xl border bg-black text-left transition-all hover:bg-zinc-900 border-gray-800
-                  ${(type as any).colSpan || 'col-span-1'} 
+                  ${(type as any).colSpan || 'col-span-1 md:col-span-3'} 
                   ${(type as any).rowSpan || ''}
-                  ${(type as any).type === 'featured' ? 'bg-zinc-900 border-none flex flex-col items-center justify-center p-6 gap-4' : ''}
+                  ${(type as any).type === 'featured' ? 'bg-zinc-900 border-none flex flex-col items-center justify-center p-6 gap-4 h-full' : ''}
                   ${(type as any).type === 'google-grid' ? 'bg-zinc-950 border-gray-800 flex flex-col p-4' : ''}
-                  ${(type as any).type === 'standard' || (type as any).type === 'wide' ? 'p-5 flex items-center justify-between' : ''}
-                  ${(type as any).type === 'icon-only' ? 'flex items-center justify-center p-5' : ''}
-                  ${(type as any).type === 'vertical' ? 'flex flex-col items-center justify-center p-5 gap-2' : ''}
+                  ${(type as any).type === 'standard' || (type as any).type === 'wide' ? 'p-4 flex items-center justify-between h-20' : ''}
+                  ${(type as any).type === 'icon-only' ? 'flex items-center justify-center p-4 h-20' : ''}
+                  ${(type as any).type === 'vertical' ? 'flex flex-col items-center justify-center p-4 gap-2 h-full' : ''}
                 `}
               >
                 {(type as any).type === 'featured' ? (
-                  // WhatsApp / Featured Layout
+                  // WhatsApp / Featured Layout (Centerpiece)
                   <>
-                    <div className="bg-gray-200 p-4 rounded-full text-black shadow-lg mb-2 group-hover:bg-white transition-colors">
-                      <type.icon className="w-8 h-8" />
+                    <div className="bg-[#25D366] p-4 rounded-full text-white shadow-lg mb-2 group-hover:scale-110 transition-transform">
+                      <type.icon className="w-10 h-10 text-white" />
                     </div>
                     <span className="font-semibold text-gray-200 text-lg">{type.label}</span>
                   </>
                 ) : (type as any).type === 'google-grid' ? (
-                  // Google Suite 2x2 Grid (Render kept in case we revert, but type not present in data)
+                  // Google Suite 2x2 Grid
                   <div className="w-full h-full flex flex-col">
                     <div className="text-gray-400 font-semibold mb-3 text-sm flex items-center gap-2">
                       <type.icon className="w-4 h-4 text-gray-500" />
@@ -274,18 +278,20 @@ export function QRGeneratorPage() {
                     <span className="text-sm font-medium text-gray-300 group-hover:text-white">{type.label}</span>
                   </>
                 ) : (type as any).type === 'icon-only' ? (
-                  // Small Social Card
+                  // Small Social Card (Square)
                   <type.icon className="w-8 h-8 text-gray-500 group-hover:scale-110 group-hover:text-white transition-all" />
                 ) : (
                   // Standard Card (Horizontal)
                   <>
                     <div className="flex items-center gap-3">
                       <type.icon className="w-5 h-5 text-gray-500 group-hover:text-white transition-colors" />
-                      <span className="font-medium text-gray-300 group-hover:text-white transition-colors">{type.label}</span>
+                      <span className="font-medium text-gray-300 group-hover:text-white transition-colors whitespace-nowrap">{type.label}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <HelpCircle className="w-4 h-4 text-gray-700 group-hover:text-gray-500" />
-                      <ArrowRight className="w-4 h-4 text-gray-700 group-hover:text-gray-400 transition-colors" />
+                      <HelpCircle className="w-4 h-4 text-gray-800 group-hover:text-gray-600 transition-colors" />
+                      <div className="w-6 h-6 rounded-full bg-zinc-900 flex items-center justify-center group-hover:bg-zinc-800 transition-colors">
+                        <ArrowRight className="w-3 h-3 text-gray-500 group-hover:text-white" />
+                      </div>
                     </div>
                   </>
                 )}
@@ -294,7 +300,7 @@ export function QRGeneratorPage() {
 
             {/* View More Expander */}
             {!isSearching && !showAllTypes && (
-              <div className="col-span-2 md:col-span-4 flex justify-center mt-8">
+              <div className="col-span-2 md:col-span-12 flex justify-center mt-8">
                 <Button
                   variant="ghost"
                   onClick={() => setShowAllTypes(true)}
@@ -312,13 +318,16 @@ export function QRGeneratorPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 whileHover={{ y: -2 }}
-                className="col-span-1 rounded-xl border border-gray-800 bg-black p-5 flex items-center justify-between hover:bg-zinc-900 hover:border-gray-600 transition-all text-left"
+                onClick={() => router.push(`/generate/${type.id}`)}
+                className="col-span-2 md:col-span-3 rounded-xl border border-gray-800 bg-black p-4 h-20 flex items-center justify-between hover:bg-zinc-900 hover:border-gray-600 transition-all text-left"
               >
                 <div className="flex items-center gap-3">
                   <type.icon className="w-5 h-5 text-gray-500 group-hover:text-white transition-colors" />
                   <span className="font-medium text-gray-300 group-hover:text-white transition-colors">{type.label}</span>
                 </div>
-                <ArrowRight className="w-4 h-4 text-gray-700 group-hover:text-gray-400 transition-colors" />
+                <div className="w-6 h-6 rounded-full bg-zinc-900 flex items-center justify-center group-hover:bg-zinc-800 transition-colors">
+                  <ArrowRight className="w-3 h-3 text-gray-500 group-hover:text-white" />
+                </div>
               </motion.button>
             ))}
           </div>

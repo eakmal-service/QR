@@ -1,0 +1,40 @@
+#!/usr/bin/expect -f
+
+set timeout 300
+set host "72.61.229.171"
+set user "root"
+set password ")vbofQi/lHXSMqF?Nk8E"
+set app_dir "/var/www/qr.akmal.in"
+
+# Copy nginx.conf
+spawn scp -o StrictHostKeyChecking=no ./nginx.conf $user@$host:/etc/nginx/sites-available/qr.akmal.in
+expect {
+    "password:" {
+        send "$password\r"
+    }
+}
+expect eof
+
+# Enable site & Certbot
+spawn ssh -o StrictHostKeyChecking=no $user@$host
+expect {
+    "password:" {
+        send "$password\r"
+    }
+}
+expect "#"
+
+send "ln -s /etc/nginx/sites-available/qr.akmal.in /etc/nginx/sites-enabled/ || true\r"
+expect "#"
+send "nginx -t\r"
+expect "#"
+send "systemctl reload nginx\r"
+expect "#"
+
+# Run Certbot - SKIP due to DNS mismatch
+# send "certbot --nginx -d qr.akmal.in --non-interactive --agree-tos --register-unsafely-without-email\r"
+# expect "#"
+
+send "exit\r"
+expect eof
+exit 0

@@ -5,7 +5,7 @@ import { nanoid } from "nanoid";
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { businessName, productSummary, businessId, metadata } = body;
+        const { businessName, productSummary, businessId, metadata, googleMapsLink, businessType, location } = body;
 
         if (!businessName) {
             return NextResponse.json(
@@ -24,12 +24,15 @@ export async function POST(request: NextRequest) {
                 businessId: businessId || qrId,
                 businessName,
                 productSummary: productSummary || businessName,
+                googleMapsLink,
+                businessType,
+                location,
                 metadata: metadata ? JSON.stringify(metadata) : null,
             },
         });
 
         // Generate the visit URL
-        const visitUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/visit/${qrCode.id}`;
+        const visitUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'https://qr.akmal.in'}/visit/${qrCode.id}`;
 
         return NextResponse.json({
             success: true,

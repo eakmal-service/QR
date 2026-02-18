@@ -4,11 +4,10 @@ import { useRef, useState } from "react"
 import { Button } from "./ui/button"
 import { ArrowRight } from "lucide-react"
 import { BackgroundPaths } from "./ui/floating-paths"
-import { QRGeneratorModal } from "./qr-generator-modal"
+import Link from "next/link"
 
 export function AnimatedCTASection() {
   const contentRef = useRef<HTMLDivElement>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
     <section className="relative py-20 px-4 overflow-hidden">
@@ -16,13 +15,13 @@ export function AnimatedCTASection() {
         <div className="h-full w-full bg-gradient-to-br from-gray-900 via-black to-gray-800">
           <BackgroundPaths />
           <div className="absolute inset-0 opacity-20">
-            <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
+            <div className="absolute top-0 left-1/4 w-96 h-96 bg-zinc-500/10 rounded-full blur-3xl animate-pulse" />
             <div
-              className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"
+              className="absolute bottom-0 right-1/4 w-96 h-96 bg-gray-500/10 rounded-full blur-3xl animate-pulse"
               style={{ animationDelay: "1s" }}
             />
             <div
-              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-pulse"
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-white/5 rounded-full blur-3xl animate-pulse"
               style={{ animationDelay: "2s" }}
             />
           </div>
@@ -62,10 +61,12 @@ export function AnimatedCTASection() {
             className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up"
             style={{ animationDelay: "0.9s" }}
           >
-            <Button size="lg" className="bg-white text-black hover:bg-white/90 group" onClick={() => setIsModalOpen(true)}>
-              Start Your Free Trial
-              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
+            <Link href="/generate/url">
+              <Button size="lg" className="bg-white text-black hover:bg-white/90 group">
+                Start Your Free Trial
+                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
             <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 bg-transparent">
               Contact Sales
             </Button>
@@ -92,7 +93,6 @@ export function AnimatedCTASection() {
           opacity: 0;
         }
       `}</style>
-      <QRGeneratorModal isOpen={isModalOpen} onOpenChange={setIsModalOpen} />
     </section>
   )
 }

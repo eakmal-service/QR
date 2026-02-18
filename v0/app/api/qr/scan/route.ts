@@ -121,6 +121,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({
             status: "accepted",
             jobId,
+            googleMapsLink: qrCode.googleMapsLink,
         });
     } catch (error) {
         console.error("Error in /api/qr/scan:", error);

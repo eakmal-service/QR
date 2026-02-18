@@ -14,6 +14,9 @@ model QRCode {
   businessId  String
   businessName String
   productSummary String?
+  googleMapsLink String?
+  businessType String?
+  location    String?
   metadata    String?  // JSON for additional info
   createdAt   DateTime @default(now())
   tempReviews TempReview[]
