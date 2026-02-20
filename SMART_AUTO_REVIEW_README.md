@@ -17,10 +17,12 @@
 Create a `.env.local` file in the `v0` directory:
 
 ```bash
-GEMINI_API_KEY=your_api_key_here
+GOOGLE_API_KEY=your_api_key_here
 ```
 
-Get your API key from: https://makersuite.google.com/app/apikey
+Get your API key from: https://aistudio.google.com/app/apikey
+
+> ⚠️ **SECURITY WARNING**: Never commit your `.env.local` file to a public repository like GitHub. Ensure `.env.local` is listed in your `.gitignore` file to prevent leaking your API keys.
 
 ### 2. Start the Development Server
 
@@ -110,8 +112,8 @@ v0/
 
 ## ⚠️ Important Notes
 
-- Make sure to add `GEMINI_API_KEY` to `.env.local` before testing
-- The `.env.local` file is gitignored for security
+- Make sure to add `GOOGLE_API_KEY` to `.env.local` before testing
+- The `.env.local` file is gitignored for security (do not remove it from `.gitignore`!)
 - Test QR codes are already seeded in the database
 - Reviews expire after 30 minutes if not submitted
 
