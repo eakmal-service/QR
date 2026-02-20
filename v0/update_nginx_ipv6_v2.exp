@@ -1,0 +1,57 @@
+#!/usr/bin/expect -f
+
+set timeout 30
+set host "72.61.229.171"
+set user "root"
+set password ")vbofQi/lHXSMqF?Nk8E"
+
+spawn ssh -o StrictHostKeyChecking=no $user@$host
+
+expect {
+    "password:" {
+        send "$password\r"
+    }
+}
+expect "#"
+
+# Update config to include IPv6 listeners - escaping brackets for Expect/Tcl
+send "cat > /etc/nginx/sites-available/qr.akmal.in <<EOF
+server {
+    server_name qr.akmal.in;
+
+    listen 443 ssl; 
+    listen \[::\]:443 ssl; 
+    ssl_certificate /etc/letsencrypt/live/qr.akmal.in/fullchain.pem; 
+    ssl_certificate_key /etc/letsencrypt/live/qr.akmal.in/privkey.pem; 
+    include /etc/letsencrypt/options-ssl-nginx.conf; 
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; 
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \\\$http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host \\\$host;
+        proxy_cache_bypass \\\$http_upgrade;
+    }
+}
+
+server {
+    if (\\\$host = qr.akmal.in) {
+        return 301 https://\\\$host\\\$request_uri;
+    } 
+
+    listen 80;
+    listen \[::\]:80;
+    server_name qr.akmal.in;
+    return 404; 
+}
+EOF
+\r"
+expect "#"
+
+send "nginx -t && systemctl reload nginx\r"
+expect "#"
+
+send "exit\r"
+expect eof

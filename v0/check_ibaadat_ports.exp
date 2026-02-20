@@ -1,0 +1,34 @@
+#!/usr/bin/expect -f
+
+set timeout 30
+set host "72.61.229.171"
+set user "root"
+set password ")vbofQi/lHXSMqF?Nk8E"
+
+spawn ssh -o StrictHostKeyChecking=no $user@$host
+
+expect {
+    "password:" {
+        send "$password\r"
+    }
+}
+expect "#"
+
+send "echo '--- LISTENING PORTS ---'\r"
+send "ss -tulnp | grep LISTEN\r"
+expect "#"
+
+send "echo '--- IBAADAT FILES ---'\r"
+send "ls /var/www/ | grep ibaadat\r"
+expect "#"
+
+send "echo '--- IBAADAT NGINX SITES ---'\r"
+send "ls /etc/nginx/sites-available/\r"
+expect "#"
+
+send "echo '--- ENABLED SITES ---'\r"
+send "ls -la /etc/nginx/sites-enabled/\r"
+expect "#"
+
+send "exit\r"
+expect eof

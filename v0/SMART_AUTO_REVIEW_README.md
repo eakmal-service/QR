@@ -122,4 +122,4 @@ v0/
 
 ## 🎉 Ready to Test!
 
-Everything is set up and ready to go. Just add your Gemini API key and start the dev server!
+Everything is set up and ready to go. Just add your Gemini API ke

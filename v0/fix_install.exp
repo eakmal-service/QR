@@ -1,0 +1,54 @@
+#!/usr/bin/expect -f
+
+set timeout 600
+set host "72.61.229.171"
+set user "root"
+set password ")vbofQi/lHXSMqF?Nk8E"
+
+spawn ssh -o StrictHostKeyChecking=no $user@$host
+
+expect {
+    "password:" {
+        send "$password\r"
+    }
+}
+expect "#"
+
+send "cd /var/www/qr.akmal.in\r"
+expect "#"
+
+# 1. Install dependencies with legacy-peer-deps
+send "echo '--- INSTALLING WITH LEGACY PEER DEPS ---'\r"
+send "npm install --omit=dev --legacy-peer-deps\r"
+expect "#"
+
+# 2. Build
+send "echo '--- BUILDING APP ---'\r"
+send "NEXT_PUBLIC_BASE_URL=https://qr.akmal.in npm run build\r"
+expect "#"
+
+# 3. Restart PM2 on correct port
+# Since we deleted the process earlier, we might need to start it again if it's not running
+# Check if running
+send "pm2 list\r"
+expect "#"
+
+# If stopped or errored, restart. If deleted, start.
+# Safest is delete and start again to be sure of Environment vars
+send "pm2 delete qr-frontend || true\r"
+expect "#"
+
+send "pm2 start npm --name \"qr-frontend\" -- start -- -p 3002\r"
+expect "#"
+
+send "pm2 save\r"
+expect "#"
+
+# Check logs
+send "sleep 5\r"
+expect "#"
+send "pm2 logs qr-frontend --lines 20 --nostream\r"
+expect "#"
+
+send "exit\r"
+expect eof

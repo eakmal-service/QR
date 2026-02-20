@@ -62,12 +62,33 @@ export function AnimatedCTASection() {
             style={{ animationDelay: "0.9s" }}
           >
             <Link href="/generate/url">
-              <Button size="lg" className="bg-white text-black hover:bg-white/90 group">
+              <Button
+                size="lg"
+                className="text-white group border-0 hover:scale-105 transition-all duration-300"
+                style={{
+                  background: "linear-gradient(135deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.10))",
+                  backdropFilter: "blur(20px)",
+                  WebkitBackdropFilter: "blur(20px)",
+                  border: "1px solid rgba(255, 255, 255, 0.3)",
+                  boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 4px 16px rgba(0,0,0,0.3)",
+                }}
+              >
                 Start Your Free Trial
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 bg-transparent">
+            <Button
+              size="lg"
+              variant="outline"
+              className="text-white border-0 hover:scale-105 transition-all duration-300"
+              style={{
+                background: "linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05))",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 4px 16px rgba(0,0,0,0.2)",
+              }}
+            >
               Contact Sales
             </Button>
           </div>

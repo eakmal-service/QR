@@ -1,0 +1,33 @@
+#!/usr/bin/expect -f
+
+set timeout 30
+set host "72.61.229.171"
+set user "root"
+set password ")vbofQi/lHXSMqF?Nk8E"
+
+spawn ssh -o StrictHostKeyChecking=no $user@$host
+
+expect {
+    "password:" {
+        send "$password\r"
+    }
+}
+expect "#"
+
+send "cd /var/www/qr.akmal.in\r"
+expect "#"
+
+send "echo '--- FIND NEXT ---'\r"
+send "find node_modules -name next -type f -path '*/bin/next'\r"
+expect "#"
+
+send "echo '--- LS .BIN ---'\r"
+send "ls -la node_modules/.bin\r"
+expect "#"
+
+send "echo '--- TRY EXECUTION ---'\r"
+send "./node_modules/.bin/next --version\r"
+expect "#"
+
+send "exit\r"
+expect eof

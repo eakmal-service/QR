@@ -1,0 +1,35 @@
+#!/usr/bin/expect -f
+
+set timeout 300
+set host "72.61.229.171"
+set user "root"
+set password ")vbofQi/lHXSMqF?Nk8E"
+
+spawn ssh -o StrictHostKeyChecking=no $user@$host
+
+expect {
+    "password:" {
+        send "$password\r"
+    }
+}
+expect "#"
+
+send "cd /var/www/qr.akmal.in\r"
+expect "#"
+
+send "echo '--- RUNNING BUILD ---'\r"
+# Need plenty of memory for build, hopefully 10GB is enough
+send "NEXT_PUBLIC_BASE_URL=https://qr.akmal.in npm run build > /tmp/npm_build_debug.log 2>&1\r"
+send "echo \"EXIT COD: \$?\"\r"
+expect "#"
+
+# Check if .next exists
+send "ls -d .next\r"
+expect "#"
+
+# Show log if failed (or always show last lines)
+send "tail -n 50 /tmp/npm_build_debug.log\r"
+expect "#"
+
+send "exit\r"
+expect eof

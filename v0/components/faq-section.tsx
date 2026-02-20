@@ -85,7 +85,12 @@ export function FAQSection() {
           {faqs.map((faq, index) => (
             <motion.div
               key={index}
-              className="border border-border/20 rounded-lg bg-card/50 backdrop-blur-sm"
+              className="rounded-lg backdrop-blur-xl"
+              style={{
+                background: "linear-gradient(135deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.04))",
+                border: "1px solid rgba(255, 255, 255, 0.15)",
+                boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 4px 16px rgba(0,0,0,0.15)",
+              }}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}

@@ -80,26 +80,36 @@ import {
     type LocationParams,
 } from "@/lib/qr-generator-utils"
 import Link from "next/link"
-import { AIGeneratorButton } from "@/components/ai-generator-button"
+
 import { CustomQRRenderer } from "@/components/custom-qr-renderer"
 import { CUSTOM_PATTERNS, QRPattern, CORNER_SQUARE_PATHS, CORNER_DOT_PATHS } from "@/lib/qr-patterns"
+// Brand icons from react-icons
+import { FaWhatsapp, FaFilePdf } from "react-icons/fa"
+import { TbWorldWww } from "react-icons/tb"
+import { MdEmail, MdWifi, MdContactPhone, MdSms } from "react-icons/md"
+import { SiGooglemaps } from "react-icons/si"
+import { FaQrcode } from "react-icons/fa"
+import { BsCreditCard2Front } from "react-icons/bs"
 
 type QRType = "url" | "upi" | "vcard" | "email" | "wifi" | "location" | "phone" | "sms" | "text" | "whatsapp" | "pdf"
+    | "instagram" | "facebook" | "youtube" | "snapchat" | "telegram" | "linkedin" | "twitter" | "reddit"
+    | "app" | "gbusiness" | "image" | "audio" | "booking" | "calendar" | "ppt" | "custom" | "links"
+    | "logo" | "office365" | "shaped" | "png" | "social" | "file" | "excel" | "amazon" | "barcode" | "map"
 type GradientType = "linear" | "radial"
 type GradientRotation = number
 
 const QR_TYPES = [
-    { value: "url", label: "Website URL", icon: LinkIcon },
-    { value: "whatsapp", label: "WhatsApp", icon: MessageCircle },
-    { value: "vcard", label: "vCard", icon: User },
-    { value: "email", label: "Email", icon: Mail },
-    { value: "wifi", label: "WiFi", icon: Wifi },
-    { value: "location", label: "Location", icon: MapPin },
+    { value: "url", label: "Website URL", icon: TbWorldWww },
+    { value: "whatsapp", label: "WhatsApp", icon: FaWhatsapp },
+    { value: "vcard", label: "vCard", icon: MdContactPhone },
+    { value: "email", label: "Email", icon: MdEmail },
+    { value: "wifi", label: "WiFi", icon: MdWifi },
+    { value: "location", label: "Location", icon: SiGooglemaps },
     { value: "phone", label: "Phone", icon: Phone },
-    { value: "sms", label: "SMS", icon: MessageSquare },
-    { value: "text", label: "Text", icon: FileText },
-    { value: "pdf", label: "PDF Document", icon: FileUp },
-    { value: "upi", label: "UPI Payment", icon: CreditCard },
+    { value: "sms", label: "SMS", icon: MdSms },
+    { value: "text", label: "Text", icon: Type },
+    { value: "pdf", label: "PDF Document", icon: FaFilePdf },
+    { value: "upi", label: "UPI Payment", icon: BsCreditCard2Front },
 ]
 
 const DOTS_PATTERNS = [
@@ -151,6 +161,12 @@ const PRESET_TEMPLATES = [
     { id: "eco", label: "Eco", color: "#059669", bg: "#ecfdf5", dots: "classy" },
     { id: "dark", label: "Dark", color: "#ffffff", bg: "#000000", dots: "square" },
     { id: "luxury", label: "Luxury", color: "#d97706", bg: "#fffbeb", dots: "extra-rounded" },
+    { id: "ocean", label: "Ocean", color: "#0891b2", bg: "#ecfeff", dots: "rounded" },
+    { id: "sunset", label: "Sunset", color: "#ea580c", bg: "#fff7ed", dots: "dots" },
+    { id: "royal", label: "Royal", color: "#7c3aed", bg: "#f5f3ff", dots: "classy-rounded" },
+    { id: "neon", label: "Neon", color: "#10b981", bg: "#000000", dots: "extra-rounded" },
+    { id: "forest", label: "Forest", color: "#166534", bg: "#f0fdf4", dots: "square" },
+    { id: "minimal", label: "Minimal", color: "#6b7280", bg: "#f9fafb", dots: "rounded" },
 ]
 
 const ERROR_LEVELS = [
@@ -172,10 +188,16 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
     const [frameText, setFrameText] = useState("SCAN ME")
     const [selectedFrameCategory, setSelectedFrameCategory] = useState("All")
     const [isDownloading, setIsDownloading] = useState(false)
+    const [showAllTemplates, setShowAllTemplates] = useState(false)
+    const [showAllFrames, setShowAllFrames] = useState(false)
 
     // Check if type changed via URL
+    const ALL_VALID_TYPES = ["url", "upi", "vcard", "email", "wifi", "location", "phone", "sms", "text", "whatsapp", "pdf",
+        "instagram", "facebook", "youtube", "snapchat", "telegram", "linkedin", "twitter", "reddit",
+        "app", "gbusiness", "image", "audio", "booking", "calendar", "ppt", "custom", "links",
+        "logo", "office365", "shaped", "png", "social", "file", "excel", "amazon", "barcode", "map"]
     useEffect(() => {
-        if (params.type && QR_TYPES.some(t => t.value === params.type)) {
+        if (params.type && ALL_VALID_TYPES.includes(params.type)) {
             setQRType(params.type as QRType)
         }
     }, [params.type])
@@ -241,6 +263,9 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
     const [text, setText] = useState("")
     const [whatsapp, setWhatsapp] = useState({ phone: "", message: "" })
     const [pdfFile, setPdfFile] = useState<string | null>(null)
+
+    // Generic URL state (for social media, services, etc.)
+    const [genericUrl, setGenericUrl] = useState("")
 
     // Styling States
     const [dotsType, setDotsType] = useState<DotType | string>("square")
@@ -331,12 +356,43 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                 case "pdf":
                     if (pdfFile) return pdfFile
                     break
+                // Social media — all URL-based
+                case "instagram":
+                case "facebook":
+                case "youtube":
+                case "snapchat":
+                case "telegram":
+                case "linkedin":
+                case "twitter":
+                case "reddit":
+                case "social":
+                // Services — all URL-based
+                case "app":
+                case "gbusiness":
+                case "image":
+                case "audio":
+                case "booking":
+                case "calendar":
+                case "ppt":
+                case "custom":
+                case "links":
+                case "logo":
+                case "office365":
+                case "shaped":
+                case "png":
+                case "file":
+                case "excel":
+                case "amazon":
+                case "barcode":
+                case "map":
+                    if (genericUrl) return genericUrl
+                    break
             }
         } catch (err) {
             console.error("Error generating QR data", err)
         }
         return "https://me-qr.com" // Default placeholder
-    }, [qrType, protocol, url, upiId, upiName, upiAmount, vcard, emailData, wifi, location, phoneNumber, sms, text, whatsapp, pdfFile])
+    }, [qrType, protocol, url, upiId, upiName, upiAmount, vcard, emailData, wifi, location, phoneNumber, sms, text, whatsapp, pdfFile, genericUrl])
 
     useEffect(() => {
         const qrOptions: QRCodeOptions = {
@@ -395,6 +451,7 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
         }
 
     }, [
+        step, // Re-render when step changes (content -> customize makes qrRef available)
         qrType, qrData, // Depend on qrData instead of all individual fields
         dotColor, dotsType, dotOptions, cornerSquareColor, cornerSquareType, cornerDotColor, cornerDotType,
         dotsGradientType, dotsGradientColor1, dotsGradientColor2, dotsGradientRotation,
@@ -559,31 +616,31 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
 
     // --- Styling Helpers ---
     // --- Styling Helpers ---
-    const inputBg = step === "content" ? "bg-zinc-900" : "bg-gray-900"
-    const inputBorder = step === "content" ? "border-zinc-800 focus:border-white" : "border-gray-700 focus:border-gray-500"
-    const inputText = step === "content" ? "text-white" : "text-white"
-    const labelText = step === "content" ? "text-gray-300 font-medium" : "text-gray-300"
-    const placeholderText = step === "content" ? "placeholder:text-gray-500" : "placeholder:text-gray-600"
+    const inputBg = "bg-transparent"
+    const inputBorder = "border-white/10 focus:border-white/30"
+    const inputText = "text-white"
+    const labelText = "text-gray-300 font-medium"
+    const placeholderText = "placeholder:text-gray-500"
 
-    const inputClasses = `mt-1.5 w-full px-3 py-2 rounded-md outline-none border transition-all ${inputBg} ${inputBorder} ${inputText} ${placeholderText}`
+    const inputClasses = `mt-1.5 w-full px-3 py-2 rounded-xl outline-none border transition-all ${inputText} ${placeholderText}`
     const labelClasses = `block text-sm mb-1 ${labelText}`
-    const infoBoxClasses = step === "content" ? "bg-zinc-900 border-zinc-800" : "bg-zinc-900 border-zinc-700"
-    const infoTextClasses = step === "content" ? "text-gray-400" : "text-gray-400"
+    const infoBoxClasses = "border-white/10"
+    const infoTextClasses = "text-gray-400"
 
     const renderContentFields = () => {
         switch (qrType) {
             case "url":
                 return (
-                    <div className="space-y-3">.
+                    <div className="space-y-3">
                         <Label className={labelClasses}>Website URL</Label>
-                        <div className={`relative flex items-center rounded-lg border transition-all ${inputBg} ${inputBorder} focus-within:ring-1 focus-within:ring-black`}>
+                        <div className="relative flex items-center rounded-xl border transition-all border-white/10 focus-within:ring-1 focus-within:ring-white/20" style={{ background: 'rgba(255,255,255,0.04)' }}>
                             <select
-                                className={`text-sm outline-none rounded-l-lg h-10 px-3 cursor-pointer border-r ${step === "content" ? "bg-gray-50 text-gray-900 border-gray-200 hover:bg-gray-100" : "bg-gray-800 text-gray-300 border-gray-700 hover:bg-gray-700"}`}
+                                className="text-sm outline-none rounded-l-xl h-10 px-3 cursor-pointer border-r border-white/10 bg-transparent text-gray-300 hover:text-white transition-colors"
                                 value={protocol}
                                 onChange={(e) => setProtocol(e.target.value)}
                             >
-                                <option value="https://">https://</option>
-                                <option value="http://">http://</option>
+                                <option value="https://" className="bg-black">https://</option>
+                                <option value="http://" className="bg-black">http://</option>
                             </select>
                             <input
                                 className={`flex-1 px-3 py-2 bg-transparent outline-none ${inputText} ${placeholderText}`}
@@ -632,13 +689,7 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                         <div><Label className={labelClasses}>Email Address *</Label><Input type="email" value={emailData.email} onChange={(e) => setEmailData({ ...emailData, email: e.target.value })} className={inputClasses} /></div>
                         <div><Label className={labelClasses}>Subject</Label><Input value={emailData.subject} onChange={(e) => setEmailData({ ...emailData, subject: e.target.value })} className={inputClasses} /></div>
                         <div>
-                            <div className="flex justify-between items-center mb-1">
-                                <Label className={labelClasses}>Body</Label>
-                                <AIGeneratorButton
-                                    context="email body"
-                                    onContentGenerated={(content) => setEmailData({ ...emailData, body: content })}
-                                />
-                            </div>
+                            <Label className={labelClasses}>Body</Label>
                             <textarea
                                 value={emailData.body}
                                 onChange={(e) => setEmailData({ ...emailData, body: e.target.value })}
@@ -659,13 +710,7 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                 return (
                     <div className="space-y-3">
                         <div>
-                            <div className="flex justify-between items-center mb-1">
-                                <Label className={labelClasses}>Text Content *</Label>
-                                <AIGeneratorButton
-                                    context="text message"
-                                    onContentGenerated={(content) => setText(content)}
-                                />
-                            </div>
+                            <Label className={labelClasses}>Text Content *</Label>
                             <textarea placeholder="Enter any text..." value={text} onChange={(e) => setText(e.target.value)} rows={4} className={inputClasses + " min-h-[100px]"} />
                         </div>
                     </div>
@@ -676,13 +721,7 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                         <div className="space-y-3">
                             <div><Label className={labelClasses}>Phone Number *</Label><Input placeholder="+1234567890" value={whatsapp.phone} onChange={(e) => setWhatsapp({ ...whatsapp, phone: e.target.value })} className={inputClasses} /><p className="text-xs text-gray-500 mt-1">Include country code without +</p></div>
                             <div>
-                                <div className="flex justify-between items-center mb-1">
-                                    <Label className={labelClasses}>Message</Label>
-                                    <AIGeneratorButton
-                                        context="whatsapp message"
-                                        onContentGenerated={(content) => setWhatsapp({ ...whatsapp, message: content })}
-                                    />
-                                </div>
+                                <Label className={labelClasses}>Message</Label>
                                 <textarea placeholder="Hi..." value={whatsapp.message} onChange={(e) => setWhatsapp({ ...whatsapp, message: e.target.value })} rows={3} className={inputClasses + " min-h-[80px]"} />
                             </div>
                         </div>
@@ -695,9 +734,358 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                         <div><Label className={labelClasses}>PDF URL *</Label><Input placeholder="https://..." value={pdfFile || ""} onChange={(e) => setPdfFile(e.target.value)} className={inputClasses} /></div>
                     </div>
                 )
-            // Add other cases as needed (phone, sms, location) - simplistic versions for brevity in this initial write
+            case "phone":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>Phone Number *</Label>
+                            <Input
+                                placeholder="+1234567890"
+                                value={phoneNumber}
+                                onChange={(e) => setPhoneNumber(e.target.value)}
+                                className={inputClasses}
+                                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }}
+                            />
+                            <p className="text-xs text-gray-500 mt-1">Include country code (e.g. +91, +1)</p>
+                        </div>
+                    </div>
+                )
+            case "sms":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>Phone Number *</Label>
+                            <Input
+                                placeholder="+1234567890"
+                                value={sms.phone}
+                                onChange={(e) => setSms({ ...sms, phone: e.target.value })}
+                                className={inputClasses}
+                                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }}
+                            />
+                            <p className="text-xs text-gray-500 mt-1">Include country code (e.g. +91, +1)</p>
+                        </div>
+                        <div>
+                            <Label className={labelClasses}>Message</Label>
+                            <textarea
+                                placeholder="Enter your message..."
+                                value={sms.message}
+                                onChange={(e) => setSms({ ...sms, message: e.target.value })}
+                                rows={3}
+                                className={inputClasses + " min-h-[80px]"}
+                                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }}
+                            />
+                        </div>
+                    </div>
+                )
+            case "location":
+                return (
+                    <div className="space-y-4">
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => setLocation({ ...location, searchType: "maps" })}
+                                className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${location.searchType === "maps" ? "bg-white text-black" : "text-gray-400"}`}
+                                style={location.searchType !== "maps" ? { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' } : { border: '1px solid transparent' }}
+                            >
+                                Search by Place
+                            </button>
+                            <button
+                                onClick={() => setLocation({ ...location, searchType: "address" })}
+                                className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${location.searchType === "address" ? "bg-white text-black" : "text-gray-400"}`}
+                                style={location.searchType !== "address" ? { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' } : { border: '1px solid transparent' }}
+                            >
+                                Coordinates
+                            </button>
+                        </div>
+                        {location.searchType === "maps" ? (
+                            <div>
+                                <Label className={labelClasses}>Search Place / Address *</Label>
+                                <Input
+                                    placeholder="e.g. Eiffel Tower, Paris"
+                                    value={location.query}
+                                    onChange={(e) => setLocation({ ...location, query: e.target.value })}
+                                    className={inputClasses}
+                                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }}
+                                />
+                                <p className="text-xs text-gray-500 mt-1">Enter a place name, landmark, or full address</p>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                    <Label className={labelClasses}>Latitude *</Label>
+                                    <Input
+                                        placeholder="48.8584"
+                                        type="number"
+                                        step="any"
+                                        value={location.latitude}
+                                        onChange={(e) => setLocation({ ...location, latitude: e.target.value })}
+                                        className={inputClasses}
+                                        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }}
+                                    />
+                                </div>
+                                <div>
+                                    <Label className={labelClasses}>Longitude *</Label>
+                                    <Input
+                                        placeholder="2.2945"
+                                        type="number"
+                                        step="any"
+                                        value={location.longitude}
+                                        onChange={(e) => setLocation({ ...location, longitude: e.target.value })}
+                                        className={inputClasses}
+                                        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }}
+                                    />
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )
+            // --- Social Media Types ---
+            case "instagram":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>Instagram Profile URL *</Label>
+                            <Input placeholder="https://instagram.com/username" value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Enter your full Instagram profile URL</p>
+                        </div>
+                    </div>
+                )
+            case "facebook":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>Facebook Page / Profile URL *</Label>
+                            <Input placeholder="https://facebook.com/yourpage" value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Enter your Facebook page or profile URL</p>
+                        </div>
+                    </div>
+                )
+            case "youtube":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>YouTube Channel / Video URL *</Label>
+                            <Input placeholder="https://youtube.com/@channel or video URL" value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Enter a YouTube channel or video link</p>
+                        </div>
+                    </div>
+                )
+            case "snapchat":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>Snapchat Profile URL *</Label>
+                            <Input placeholder="https://snapchat.com/add/username" value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Enter your Snapchat profile or add-me URL</p>
+                        </div>
+                    </div>
+                )
+            case "telegram":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>Telegram Link *</Label>
+                            <Input placeholder="https://t.me/username" value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Enter your Telegram profile or group link</p>
+                        </div>
+                    </div>
+                )
+            case "linkedin":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>LinkedIn Profile URL *</Label>
+                            <Input placeholder="https://linkedin.com/in/username" value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Enter your LinkedIn profile or company page URL</p>
+                        </div>
+                    </div>
+                )
+            case "twitter":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>X (Twitter) Profile URL *</Label>
+                            <Input placeholder="https://x.com/username" value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Enter your X/Twitter profile URL</p>
+                        </div>
+                    </div>
+                )
+            case "reddit":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>Reddit URL *</Label>
+                            <Input placeholder="https://reddit.com/r/subreddit" value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Enter a subreddit, post, or profile URL</p>
+                        </div>
+                    </div>
+                )
+            case "social":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>Social Media URL *</Label>
+                            <Input placeholder="https://your-social-profile.com" value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Enter any social media profile URL</p>
+                        </div>
+                    </div>
+                )
+            // --- Service / App Types ---
+            case "app":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>App Store / Play Store URL *</Label>
+                            <Input placeholder="https://apps.apple.com/... or https://play.google.com/..." value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Enter the app download link from App Store or Play Store</p>
+                        </div>
+                    </div>
+                )
+            case "gbusiness":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>Google Business URL *</Label>
+                            <Input placeholder="https://g.page/your-business" value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Enter your Google Business profile or review URL</p>
+                        </div>
+                    </div>
+                )
+            case "map":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>Google Maps URL *</Label>
+                            <Input placeholder="https://maps.google.com/..." value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Paste a Google Maps share link</p>
+                        </div>
+                    </div>
+                )
+            case "amazon":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>Amazon Product URL *</Label>
+                            <Input placeholder="https://amazon.com/dp/..." value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Enter an Amazon product or store URL</p>
+                        </div>
+                    </div>
+                )
+            case "booking":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>Booking / Appointment URL *</Label>
+                            <Input placeholder="https://calendly.com/... or booking link" value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Enter your booking or appointment scheduling URL</p>
+                        </div>
+                    </div>
+                )
+            case "calendar":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>Calendar Event URL *</Label>
+                            <Input placeholder="https://calendar.google.com/event?..." value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Enter a Google Calendar or iCal event link</p>
+                        </div>
+                    </div>
+                )
+            // --- Document / File Types ---
+            case "image":
+            case "png":
+            case "logo":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>Image URL *</Label>
+                            <Input placeholder="https://example.com/image.png" value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Enter a direct link to your image file</p>
+                        </div>
+                    </div>
+                )
+            case "audio":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>Audio URL *</Label>
+                            <Input placeholder="https://soundcloud.com/... or audio file URL" value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Enter a link to your audio file or music profile</p>
+                        </div>
+                    </div>
+                )
+            case "ppt":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>Presentation URL *</Label>
+                            <Input placeholder="https://docs.google.com/presentation/..." value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Enter a link to your PowerPoint or Google Slides</p>
+                        </div>
+                    </div>
+                )
+            case "excel":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>Spreadsheet URL *</Label>
+                            <Input placeholder="https://docs.google.com/spreadsheets/..." value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Enter a link to your Excel file or Google Sheet</p>
+                        </div>
+                    </div>
+                )
+            case "office365":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>Office 365 Document URL *</Label>
+                            <Input placeholder="https://onedrive.live.com/..." value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Enter a link to your Office 365 or OneDrive document</p>
+                        </div>
+                    </div>
+                )
+            case "file":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>File URL *</Label>
+                            <Input placeholder="https://example.com/document.pdf" value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Enter a direct link to your file (hosted on cloud storage)</p>
+                        </div>
+                    </div>
+                )
+            case "custom":
+            case "links":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>URL *</Label>
+                            <Input placeholder="https://example.com" value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Enter any URL you want to encode</p>
+                        </div>
+                    </div>
+                )
+            case "shaped":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>Content URL *</Label>
+                            <Input placeholder="https://example.com" value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Enter the URL the shaped QR code should link to</p>
+                        </div>
+                    </div>
+                )
+            case "barcode":
+                return (
+                    <div className="space-y-3">
+                        <div>
+                            <Label className={labelClasses}>Barcode Data *</Label>
+                            <Input placeholder="Enter text or number to encode" value={genericUrl} onChange={(e) => setGenericUrl(e.target.value)} className={inputClasses} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }} />
+                            <p className="text-xs text-gray-500 mt-1">Enter the data you want encoded as a 2D barcode</p>
+                        </div>
+                    </div>
+                )
             default:
-                return <div className={step === "content" ? "text-gray-500" : "text-gray-400"}>Coming soon...</div>
+                return null
         }
     }
 
@@ -705,7 +1093,7 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
     const renderCustomizeStep = () => {
         const FrameComponent = getFrameComponent(selectedFrame)
         const frameData = FRAMES.find(f => f.id === selectedFrame)
-        const isFluidFrame = frameData?.id.startsWith('frame') || frameData?.category === 'Mr. QR' || false
+        const isFluidFrame = frameData?.id.startsWith('frame') || false
 
         return (
             <div className="flex flex-col lg:flex-row gap-8 max-w-[1200px] mx-auto px-4 py-8">
@@ -722,13 +1110,12 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                     </div>
 
                     {/* Pre-Made Templates */}
-                    <section className="bg-zinc-900 rounded-2xl p-6 shadow-sm border border-zinc-800">
+                    <section className="rounded-2xl p-6 shadow-[0_4px_24px_rgba(0,0,0,0.4)] backdrop-blur-xl border border-white/10" style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)' }}>
                         <div className="flex items-center justify-between mb-4">
                             <h3 className="font-semibold text-lg text-white">Pre-Made Templates</h3>
-                            <Button variant="link" className="text-white font-medium">View All</Button>
                         </div>
                         <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
-                            {PRESET_TEMPLATES.map(t => (
+                            {PRESET_TEMPLATES.slice(0, 6).map(t => (
                                 <button
                                     key={t.id}
                                     onClick={() => applyTemplate(t)}
@@ -741,14 +1128,37 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                                 </button>
                             ))}
                         </div>
+                        {showAllTemplates && (
+                            <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide pt-4 border-t border-zinc-800 mt-2">
+                                {PRESET_TEMPLATES.slice(6).map(t => (
+                                    <button
+                                        key={t.id}
+                                        onClick={() => applyTemplate(t)}
+                                        className="flex flex-col items-center gap-2 group min-w-[80px]"
+                                    >
+                                        <div className="w-16 h-16 rounded-xl border border-zinc-700 group-hover:border-white group-hover:ring-2 group-hover:ring-zinc-600 transition-all flex items-center justify-center bg-zinc-800">
+                                            <div className="w-8 h-8 rounded" style={{ backgroundColor: t.color }}></div>
+                                        </div>
+                                        <span className="text-xs font-medium text-white group-hover:text-gray-200">{t.label}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                        <button
+                            onClick={() => setShowAllTemplates(!showAllTemplates)}
+                            className="w-full mt-3 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors rounded-xl"
+                            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+                        >
+                            {showAllTemplates ? 'Show Less' : 'View More'}
+                        </button>
                     </section>
 
                     {/* Frames */}
-                    <section className="bg-zinc-900 rounded-2xl p-6 shadow-sm border border-zinc-800">
+                    <section className="rounded-2xl p-6 shadow-[0_4px_24px_rgba(0,0,0,0.4)] backdrop-blur-xl border border-white/10" style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)' }}>
                         <h3 className="font-semibold text-lg text-white mb-6">Frames</h3>
 
                         <div className="flex gap-4 mb-6 overflow-x-auto border-b border-zinc-800">
-                            {['All', 'Basic'].map((cat) => (
+                            {['All', 'Standard Frames'].map((cat) => (
                                 <button
                                     key={cat}
                                     onClick={() => setSelectedFrameCategory(cat)}
@@ -763,18 +1173,40 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                         </div>
 
                         <div className="grid grid-cols-4 md:grid-cols-6 gap-4 mb-6 max-h-96 overflow-y-auto pr-2">
-                            {FRAMES.filter(f => selectedFrameCategory === 'All' || f.category === selectedFrameCategory).map(frame => (
-                                <button
-                                    key={frame.id}
-                                    onClick={() => setSelectedFrame(frame.id)}
-                                    className={`aspect-square rounded-xl border-2 flex items-center justify-center transition-all p-2 ${selectedFrame === frame.id ? 'border-white bg-zinc-800' : 'border-zinc-800 hover:border-zinc-600 bg-zinc-900'}`}
-                                >
-                                    <div className="w-full h-full border-2 border-dashed border-zinc-700 rounded flex items-center justify-center">
-                                        <span className="text-[10px] text-white font-medium">{frame.label}</span>
-                                    </div>
-                                </button>
-                            ))}
+                            {FRAMES.filter(f => selectedFrameCategory === 'All' || f.category === selectedFrameCategory)
+                                .slice(0, showAllFrames ? undefined : 6)
+                                .map(frame => (
+                                    <button
+                                        key={frame.id}
+                                        onClick={() => setSelectedFrame(frame.id)}
+                                        className={`aspect-square rounded-xl border-2 flex flex-col items-center justify-center transition-all p-2 ${selectedFrame === frame.id ? 'border-white bg-zinc-800' : 'border-zinc-800 hover:border-zinc-600 bg-zinc-900'}`}
+                                    >
+                                        <div className="w-12 h-12 mb-2 rounded flex items-center justify-center relative overflow-hidden bg-white/5 group-hover:bg-white/10 transition-colors">
+                                            {frame.id !== 'none' ? (
+                                                <div className="scale-[0.25] origin-center opacity-90 pointer-events-none absolute inset-0 flex items-center justify-center w-[400%] h-[400%] left-[-150%] top-[-150%]">
+                                                    <frame.component color="#71717a" textColor="#ffffff" text="">
+                                                        <div className="w-full h-full bg-black/40 rounded-xl"></div>
+                                                    </frame.component>
+                                                </div>
+                                            ) : (
+                                                <span className="text-[10px] text-zinc-500">None</span>
+                                            )}
+                                        </div>
+                                        <span className="text-[10px] text-zinc-400 font-medium text-center leading-tight">{frame.label}</span>
+                                    </button>
+                                ))}
                         </div>
+
+                        {FRAMES.filter(f => selectedFrameCategory === 'All' || f.category === selectedFrameCategory).length > 6 && (
+                            <button
+                                onClick={() => setShowAllFrames(!showAllFrames)}
+                                className="w-full mb-6 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors rounded-xl flex items-center justify-center gap-2"
+                                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+                            >
+                                {showAllFrames ? 'Show Less' : 'View More'}
+                                <ChevronRight className={`w-4 h-4 transition-transform ${showAllFrames ? '-rotate-90' : 'rotate-90'}`} />
+                            </button>
+                        )}
 
                         {selectedFrame !== 'none' && (
                             <div className="space-y-4 pt-4 border-t border-gray-100">
@@ -784,7 +1216,7 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                                         <Input
                                             value={frameText}
                                             onChange={(e) => setFrameText(e.target.value)}
-                                            className="bg-zinc-950 border-zinc-800 text-white focus:ring-white focus:border-white"
+                                            className="bg-white/5 border-white/10 text-white focus:ring-white/50 focus:border-white/50"
                                         />
                                     </div>
                                     <div className="space-y-2">
@@ -793,7 +1225,7 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                                             <div className="relative w-10 h-10 overflow-hidden rounded-lg border border-zinc-800 shadow-sm cursor-pointer">
                                                 <input type="color" value={frameColor} onChange={(e) => setFrameColor(e.target.value)} className="absolute -top-2 -left-2 w-16 h-16 cursor-pointer p-0 border-0" />
                                             </div>
-                                            <Input value={frameColor} onChange={(e) => setFrameColor(e.target.value)} className="flex-1 bg-zinc-950 border-zinc-800 text-white" />
+                                            <Input value={frameColor} onChange={(e) => setFrameColor(e.target.value)} className="flex-1 bg-white/5 border-white/10 text-white" />
                                         </div>
                                     </div>
                                 </div>
@@ -802,7 +1234,7 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                     </section>
 
                     {/* Body Patterns */}
-                    <section className="bg-zinc-900 rounded-2xl p-6 shadow-sm border border-zinc-800">
+                    <section className="rounded-2xl p-6 shadow-[0_4px_24px_rgba(0,0,0,0.4)] backdrop-blur-xl border border-white/10" style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)' }}>
                         <h3 className="font-semibold text-lg text-white mb-4">Body Patterns</h3>
                         <div className="grid grid-cols-4 md:grid-cols-6 gap-4">
                             {DOTS_PATTERNS.map((pattern) => (
@@ -832,7 +1264,7 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
 
                     {/* Eye Patterns (Split) */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <section className="bg-zinc-900 rounded-2xl p-6 shadow-sm border border-zinc-800">
+                        <section className="rounded-2xl p-6 shadow-[0_4px_24px_rgba(0,0,0,0.4)] backdrop-blur-xl border border-white/10" style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)' }}>
                             <h3 className="font-semibold text-lg text-white mb-4">External Eye Patterns</h3>
                             <div className="grid grid-cols-3 gap-3">
                                 {CORNER_SQUARE_PATTERNS.map(p => (
@@ -869,7 +1301,7 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                             </div>
                         </section>
 
-                        <section className="bg-zinc-900 rounded-2xl p-6 shadow-sm border border-zinc-800">
+                        <section className="rounded-2xl p-6 shadow-[0_4px_24px_rgba(0,0,0,0.4)] backdrop-blur-xl border border-white/10" style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)' }}>
                             <h3 className="font-semibold text-lg text-white mb-4">Internal Eye Patterns</h3>
                             <div className="grid grid-cols-3 gap-3">
                                 {CORNER_DOT_PATTERNS.map(p => {
@@ -910,7 +1342,7 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                     </div>
 
                     {/* Colors & Background */}
-                    <section className="bg-zinc-900 rounded-2xl p-6 shadow-sm border border-zinc-800">
+                    <section className="rounded-2xl p-6 shadow-[0_4px_24px_rgba(0,0,0,0.4)] backdrop-blur-xl border border-white/10" style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)' }}>
                         <h3 className="font-semibold text-lg text-white mb-4">Colors</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-4">
@@ -1018,7 +1450,7 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                     </section>
 
                     {/* Scannability Level */}
-                    <section className="bg-zinc-900 rounded-2xl p-6 shadow-sm border border-zinc-800">
+                    <section className="rounded-2xl p-6 shadow-[0_4px_24px_rgba(0,0,0,0.4)] backdrop-blur-xl border border-white/10" style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)' }}>
                         <h3 className="font-semibold text-lg text-white mb-4">Scannability Level <span className="text-sm font-normal text-white">(Error Correction)</span></h3>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                             {ERROR_LEVELS.map((level) => (
@@ -1037,7 +1469,7 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                     </section>
 
                     {/* Logo */}
-                    <section className="bg-zinc-900 rounded-2xl p-6 shadow-sm border border-zinc-800">
+                    <section className="rounded-2xl p-6 shadow-[0_4px_24px_rgba(0,0,0,0.4)] backdrop-blur-xl border border-white/10" style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)' }}>
                         <h3 className="font-semibold text-lg text-white mb-4">Logo</h3>
                         <div className="flex flex-col gap-6">
                             <div className="flex items-center gap-6">
@@ -1107,25 +1539,25 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                     <div className="py-8">
                         <h3 className="text-xl font-bold text-white mb-6 text-center">Frequently Asked Questions about Customize your QR code</h3>
                         <div className="space-y-4">
-                            <div className="bg-zinc-900 p-4 rounded-xl border border-zinc-800 shadow-sm hover:shadow-md transition-all cursor-pointer">
+                            <div className="bg-white/5 p-4 rounded-xl border border-white/10 shadow-sm hover:bg-white/10 transition-all cursor-pointer">
                                 <div className="flex justify-between items-center font-medium text-gray-300">
                                     What are QR code frames and why should I use them?
                                     <ChevronRight className="w-5 h-5 text-gray-500" />
                                 </div>
                             </div>
-                            <div className="bg-zinc-900 p-4 rounded-xl border border-zinc-800 shadow-sm hover:shadow-md transition-all cursor-pointer">
+                            <div className="bg-white/5 p-4 rounded-xl border border-white/10 shadow-sm hover:bg-white/10 transition-all cursor-pointer">
                                 <div className="flex justify-between items-center font-medium text-gray-300">
                                     Do decorative designs affect QR code scannability?
                                     <ChevronRight className="w-5 h-5 text-gray-500" />
                                 </div>
                             </div>
-                            <div className="bg-zinc-900 p-4 rounded-xl border border-zinc-800 shadow-sm hover:shadow-md transition-all cursor-pointer">
+                            <div className="bg-white/5 p-4 rounded-xl border border-white/10 shadow-sm hover:bg-white/10 transition-all cursor-pointer">
                                 <div className="flex justify-between items-center font-medium text-gray-300">
                                     How do body patterns and shapes improve QR code performance?
                                     <ChevronRight className="w-5 h-5 text-gray-500" />
                                 </div>
                             </div>
-                            <div className="bg-zinc-900 p-4 rounded-xl border border-zinc-800 shadow-sm hover:shadow-md transition-all cursor-pointer">
+                            <div className="bg-white/5 p-4 rounded-xl border border-white/10 shadow-sm hover:bg-white/10 transition-all cursor-pointer">
                                 <div className="flex justify-between items-center font-medium text-gray-300">
                                     Which colors work best for custom QR codes?
                                     <ChevronRight className="w-5 h-5 text-gray-500" />
@@ -1143,7 +1575,7 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                         {/* Preview Card */}
                         <h2 className="text-2xl font-bold text-white text-center">Preview</h2>
                         <div className="bg-white rounded-3xl p-8 shadow-xl shadow-black/10 border border-zinc-200 flex flex-col items-center">
-                            <div className="relative group" id="qr-preview-container" style={isFluidFrame ? { width: '300px' } : {}}>
+                            <div className="relative group" id="qr-preview-container" style={isFluidFrame ? { width: '380px' } : {}}>
                                 <FrameComponent color={frameColor} textColor={"#fff"} text={frameText}>
                                     {(CUSTOM_PATTERNS.some(p => p.id === dotsType) || CORNER_SQUARE_PATHS.some(p => p.id === cornerSquareType) || CORNER_DOT_PATHS.some(p => p.id === cornerDotType) || logoFile) ? (
                                         <CustomQRRenderer
@@ -1182,12 +1614,12 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                         </div>
 
                         {/* Download Actions */}
-                        <div className="bg-zinc-900 rounded-2xl p-6 text-white shadow-lg shadow-black/50 border border-zinc-800">
+                        <div className="rounded-2xl p-6 text-white shadow-[0_4px_24px_rgba(0,0,0,0.4)] backdrop-blur-xl border border-white/10" style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)' }}>
                             <div className="flex items-center gap-4 mb-6">
                                 <div className="flex-1">
                                     <div className="text-sm font-medium text-gray-400 mb-1.5">Format</div>
                                     <Select value={downloadFormat} onValueChange={(v: any) => setDownloadFormat(v)}>
-                                        <SelectTrigger className="bg-zinc-950 border-zinc-800 text-white h-10">
+                                        <SelectTrigger className="bg-white/5 border-white/10 text-white h-10">
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -1202,7 +1634,7 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                                 <div className="flex-1">
                                     <div className="text-sm font-medium text-gray-300 mb-1.5">Size (px)</div>
                                     <Select value={downloadSize} onValueChange={setDownloadSize}>
-                                        <SelectTrigger className="bg-slate-800 border-slate-700 text-white h-10">
+                                        <SelectTrigger className="bg-white/5 border-white/10 text-white h-10">
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -1216,14 +1648,28 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                                 </div>
                             </div>
 
-                            <Button
-                                className="w-full h-14 bg-white hover:bg-gray-200 text-black rounded-xl text-lg font-bold shadow-lg shadow-white/5 transition-all hover:scale-[1.02]"
+                            <button
+                                className="w-full h-14 generate-qr-btn relative flex items-center justify-center gap-2 rounded-xl text-lg font-bold text-white transition-all duration-300"
+                                style={{
+                                    background: "linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.08))",
+                                    backdropFilter: "blur(20px)",
+                                    border: "1px solid rgba(255, 255, 255, 0.25)",
+                                    boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 4px 16px rgba(0,0,0,0.3)",
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.transform = "scale(1.02)"
+                                    e.currentTarget.style.boxShadow = "inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 0 0 0.375rem rgba(255, 255, 255, 0.3)"
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.transform = "scale(1)"
+                                    e.currentTarget.style.boxShadow = "inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 4px 16px rgba(0,0,0,0.3)"
+                                }}
                                 onClick={handleDownload}
                                 disabled={isDownloading}
                             >
-                                {isDownloading ? <Loader2 className="w-6 h-6 animate-spin mr-2" /> : <Download className="w-6 h-6 mr-2" />}
+                                {isDownloading ? <Loader2 className="w-6 h-6 animate-spin mr-2 text-white" /> : <Download className="w-6 h-6 mr-2 text-white" />}
                                 Download QR Code
-                            </Button>
+                            </button>
                         </div>
 
                     </div>
@@ -1239,39 +1685,39 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
             {step === "content" && (
                 <div className="min-h-screen flex flex-col items-center">
                     {/* Header */}
-                    <div className="w-full bg-black border-b border-zinc-800 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
+                    <div className="w-full px-6 py-4 flex items-center justify-between sticky top-0 z-10" style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
                         <div className="flex items-center gap-4">
                             <Link href="/">
-                                <Button variant="ghost" size="icon" className="hover:bg-zinc-900 rounded-full h-8 w-8">
+                                <button className="rounded-full h-8 w-8 flex items-center justify-center transition-all" style={{ background: 'rgba(255,255,255,0.06)' }}>
                                     <ArrowLeft className="w-5 h-5 text-white" />
-                                </Button>
+                                </button>
                             </Link>
                             <div className="text-sm font-medium text-white flex items-center gap-2">
-                                <span className="opacity-60 text-gray-400">ME-QR</span>
-                                <ChevronRight className="w-4 h-4 opacity-40 text-gray-400" />
-                                <span className="opacity-60 text-gray-400">Type</span>
-                                <ChevronRight className="w-4 h-4 opacity-40 text-gray-400" />
+                                <span className="text-gray-500">ME-QR</span>
+                                <ChevronRight className="w-4 h-4 text-gray-600" />
+                                <span className="text-gray-500">Type</span>
+                                <ChevronRight className="w-4 h-4 text-gray-600" />
                                 <span className="font-semibold text-white">{QR_TYPES.find(t => t.value === qrType)?.label}</span>
                             </div>
                         </div>
                     </div>
 
                     {/* Progress Bar */}
-                    <div className="w-full bg-black border-b border-zinc-800 flex justify-center py-8">
+                    <div className="w-full flex justify-center py-8" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
                         <div className="flex items-center gap-2">
                             <div className="flex flex-col items-center">
-                                <div className="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center font-bold shadow-sm ring-2 ring-zinc-800">1</div>
+                                <div className="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center font-bold shadow-sm" style={{ boxShadow: '0 0 20px rgba(255,255,255,0.15)' }}>1</div>
                                 <span className="text-xs mt-1.5 font-semibold text-white">Type</span>
                             </div>
-                            <div className="w-20 h-1 bg-black rounded-full mx-2"></div>
+                            <div className="w-20 h-[2px] rounded-full mx-2" style={{ background: 'rgba(255,255,255,0.15)' }}></div>
                             <div className="flex flex-col items-center">
-                                <div className="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center font-bold shadow-lg ring-4 ring-zinc-900">2</div>
+                                <div className="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center font-bold" style={{ boxShadow: '0 0 30px rgba(255,255,255,0.2)' }}>2</div>
                                 <span className="text-xs mt-1.5 font-bold text-white">Content</span>
                             </div>
-                            <div className="w-20 h-1 bg-zinc-800 rounded-full mx-2"></div>
+                            <div className="w-20 h-[2px] rounded-full mx-2" style={{ background: 'rgba(255,255,255,0.06)' }}></div>
                             <div className="flex flex-col items-center">
-                                <div className="w-8 h-8 rounded-full bg-zinc-800 text-gray-500 flex items-center justify-center font-bold">3</div>
-                                <span className="text-xs mt-1.5 text-gray-400 font-medium">Customize</span>
+                                <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-gray-600" style={{ background: 'rgba(255,255,255,0.06)' }}>3</div>
+                                <span className="text-xs mt-1.5 text-gray-500 font-medium">Customize</span>
                             </div>
                         </div>
                     </div>
@@ -1280,14 +1726,15 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                     <div className="w-full max-w-4xl p-6">
                         <h1 className="text-3xl font-bold text-center mb-10 text-white">Enter Content</h1>
 
-                        <div className="bg-zinc-950 rounded-3xl shadow-xl shadow-black/50 border border-zinc-800 p-8">
+                        <div className="rounded-3xl p-8" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', backdropFilter: 'blur(12px)', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }}>
                             {/* Tabs / Type Selector */}
-                            <div className="flex gap-3 overflow-x-auto pb-6 scrollbar-hide mb-6 border-b border-zinc-800">
+                            <div className="flex gap-3 overflow-x-auto pb-6 scrollbar-hide mb-6" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
                                 {QR_TYPES.map(t => (
                                     <button
                                         key={t.value}
                                         onClick={() => handleTypeChange(t.value as QRType)}
-                                        className={`px-5 py-3 rounded-xl text-sm font-medium transition-all whitespace-nowrap flex items-center gap-2.5 border ${qrType === t.value ? 'bg-white text-black border-white shadow-lg shadow-zinc-900' : 'bg-zinc-900 text-gray-400 border-zinc-800 hover:bg-zinc-800 hover:border-zinc-700'}`}
+                                        className={`px-5 py-3 rounded-xl text-sm font-medium transition-all whitespace-nowrap flex items-center gap-2.5 ${qrType === t.value ? 'bg-white text-black shadow-lg' : 'text-gray-400 hover:text-white'}`}
+                                        style={qrType !== t.value ? { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' } : { border: '1px solid transparent' }}
                                     >
                                         <t.icon className={`w-4 h-4 ${qrType === t.value ? 'text-black' : 'text-gray-400'}`} />
                                         {t.label}
@@ -1301,24 +1748,20 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                             </div>
 
                             {/* Action Button */}
-                            <div className="mt-8 pt-6 border-t border-zinc-800 flex justify-end">
-                                <Button
-                                    size="lg"
-                                    className="bg-white hover:bg-gray-200 text-black px-8 h-12 text-base shadow-lg shadow-black/20 hover:shadow-xl transition-all rounded-xl"
+                            <div className="mt-8 pt-6 flex justify-end" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+                                <button
+                                    className="px-8 h-12 text-base font-semibold text-black rounded-xl transition-all duration-200 flex items-center gap-2"
+                                    style={{ background: 'rgba(255,255,255,0.9)', boxShadow: '0 4px 20px rgba(255,255,255,0.1)' }}
                                     onClick={() => setStep("customize")}
+                                    onMouseEnter={(e) => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.transform = 'scale(1.02)' }}
+                                    onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.9)'; e.currentTarget.style.transform = 'scale(1)' }}
                                 >
                                     Customize & Download QR
-                                    <ArrowLeft className="w-5 h-5 ml-2 rotate-180" />
-                                </Button>
+                                    <ArrowLeft className="w-5 h-5 rotate-180" />
+                                </button>
                             </div>
                         </div>
 
-                        <div className="mt-10 text-center">
-                            <Button variant="outline" className="border-zinc-800 text-white hover:bg-zinc-900 rounded-full px-8 py-6 h-auto text-base">
-                                <Star className="w-5 h-5 mr-2 fill-gray-500 text-gray-400" /> Try Pro Version*
-                            </Button>
-                            <p className="text-xs text-gray-400 mt-4 font-medium">*All QR Codes Ads-free</p>
-                        </div>
                     </div>
                 </div>
             )}

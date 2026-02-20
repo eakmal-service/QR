@@ -1,0 +1,25 @@
+#!/usr/bin/expect -f
+
+set timeout 30
+set host "72.61.229.171"
+set user "root"
+set password ")vbofQi/lHXSMqF?Nk8E"
+
+spawn ssh -o StrictHostKeyChecking=no $user@$host
+
+expect {
+    "password:" {
+        send "$password\r"
+    }
+}
+expect "#"
+
+# Write config using python to avoid heredoc issues
+send "python3 -c \"\nimport os\nconfig = '''server {\n    listen 443 ssl;\n    listen \[::\]:443 ssl;\n    server_name ibaadattracker.in www.ibaadattracker.in;\n\n    ssl_certificate /etc/letsencrypt/live/ibaadattracker.in/fullchain.pem;\n    ssl_certificate_key /etc/letsencrypt/live/ibaadattracker.in/privkey.pem;\n    include /etc/letsencrypt/options-ssl-nginx.conf;\n    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;\n\n    root /var/www/ibaadattracker.in;\n    index index.html;\n\n    location / {\n        try_files \\\$uri \\\$uri/ /index.html;\n    }\n}\n\nserver {\n    listen 80;\n    listen \[::\]:80;\n    server_name ibaadattracker.in www.ibaadattracker.in;\n    return 301 https://\\\$host\\\$request_uri;\n}\n'''\nwith open('/etc/nginx/sites-available/ibaadattracker.in', 'w') as f:\n    f.write(config)\nprint('Config written')\n\"\r"
+expect "#"
+
+send "nginx -t && systemctl reload nginx\r"
+expect "#"
+
+send "exit\r"
+expect eof

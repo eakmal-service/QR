@@ -1,0 +1,37 @@
+#!/usr/bin/expect -f
+
+set timeout 30
+set host "72.61.229.171"
+set user "root"
+set password ")vbofQi/lHXSMqF?Nk8E"
+
+spawn ssh -o StrictHostKeyChecking=no $user@$host
+
+expect {
+    "password:" {
+        send "$password\r"
+    }
+}
+expect "#"
+
+send "cd /var/www/qr.akmal.in\r"
+expect "#"
+
+send "echo '--- LS NODE_MODULES ---'\r"
+send "ls -d node_modules\r"
+expect "#"
+
+send "echo '--- CHECK NEXT BINARY ---'\r"
+send "ls -l node_modules/.bin/next\r"
+expect "#"
+
+send "echo '--- PACKAGE.JSON START SCRIPT ---'\r"
+send "grep '\"start\":' package.json\r"
+expect "#"
+
+send "echo '--- NPM LIST NEXT ---'\r"
+send "npm list next\r"
+expect "#"
+
+send "exit\r"
+expect eof

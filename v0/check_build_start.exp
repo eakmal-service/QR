@@ -1,0 +1,44 @@
+#!/usr/bin/expect -f
+
+set timeout 600
+set host "72.61.229.171"
+set user "root"
+set password ")vbofQi/lHXSMqF?Nk8E"
+
+spawn ssh -o StrictHostKeyChecking=no $user@$host
+
+expect {
+    "password:" {
+        send "$password\r"
+    }
+}
+expect "#"
+
+send "cd /var/www/qr.akmal.in\r"
+expect "#"
+
+# Check if .next exists
+send "ls -d .next && echo '.next EXISTS' || echo '.next MISSING'\r"
+expect "#"
+
+# If .next exists, start PM2
+send "pm2 delete qr-frontend || true\r"
+expect "#"
+
+send "pm2 start npm --name \"qr-frontend\" -- start -- -p 3002\r"
+expect "#"
+
+send "pm2 save\r"
+expect "#"
+
+send "sleep 8\r"
+expect "#"
+
+send "pm2 list\r"
+expect "#"
+
+send "pm2 logs qr-frontend --lines 10 --nostream\r"
+expect "#"
+
+send "exit\r"
+expect eof

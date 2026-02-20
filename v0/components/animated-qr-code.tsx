@@ -20,6 +20,7 @@ export function AnimatedQRCode() {
             size: number
             opacity: number
             speed: number
+            isCorner: boolean
         }> = []
 
         const resizeCanvas = () => {
@@ -44,6 +45,17 @@ export function AnimatedQRCode() {
         const offsetX = (canvas.width - qrSize) / 2
         const offsetY = (canvas.height - qrSize) / 2 - (isDesktop ? canvas.height * 0.1 : 0)
 
+        // Check if a module is in a corner finder pattern (7x7 zones)
+        const isCornerModule = (col: number, row: number) => {
+            // Top-left
+            if (col < 7 && row < 7) return true
+            // Top-right
+            if (col >= gridSize - 7 && row < 7) return true
+            // Bottom-left
+            if (col < 7 && row >= gridSize - 7) return true
+            return false
+        }
+
         // Create particles for each black module in QR code
         for (let row = 0; row < gridSize; row++) {
             for (let col = 0; col < gridSize; col++) {
@@ -51,15 +63,15 @@ export function AnimatedQRCode() {
                     const targetX = offsetX + col * moduleSize + moduleSize / 2
                     const targetY = offsetY + row * moduleSize + moduleSize / 2
 
-                    // Optimized: Reduced from 3 particles to 1 per module
                     particles.push({
                         x: canvas.width * Math.random(),
                         y: canvas.height * Math.random(),
                         targetX,
                         targetY,
                         size: Math.random() * 3 + 2,
-                        opacity: Math.random() * 0.5 + 0.5,
-                        speed: Math.random() * 0.15 + 0.1,
+                        opacity: Math.random() * 0.3 + 0.7,
+                        speed: Math.random() * 0.05 + 0.03,
+                        isCorner: isCornerModule(col, row),
                     })
                 }
             }
@@ -68,14 +80,9 @@ export function AnimatedQRCode() {
         let time = 0
 
         const animate = () => {
-            // Use clearRect for sharp frames, no trails
             ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-            // Optional: Draw a subtle background for contrast if needed, but transparent is fine if parent is black
-            // ctx.fillStyle = "rgba(0, 0, 0, 0.5)"
-            // ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-            time += 0.01
+            time += 0.005
 
             particles.forEach((particle, index) => {
                 const dx = particle.targetX - particle.x
@@ -86,42 +93,23 @@ export function AnimatedQRCode() {
                     particle.x += dx * particle.speed
                     particle.y += dy * particle.speed
                 } else {
-                    // Snap to grid for perfect scannability
-                    particle.x = particle.targetX
-                    particle.y = particle.targetY
+                    // Subtle floating animation once settled
+                    particle.x = particle.targetX + Math.sin(time + index * 0.1) * 0.5
+                    particle.y = particle.targetY + Math.cos(time * 0.7 + index * 0.1) * 0.5
                 }
 
-                // Draw solid square for scannability
-                ctx.fillStyle = `rgba(255, 255, 255, 1)` // Maximum opacity for scanning
-                // Add slight padding to avoid touching modules if desired, or full size for robustness
-                // Using full moduleSize for standard QR look
-                ctx.fillRect(
-                    particle.x - moduleSize / 2,
-                    particle.y - moduleSize / 2,
-                    moduleSize + 0.5, // Slight overlap to prevent subpixel gaps 
-                    moduleSize + 0.5
-                )
+                // Subtle pulse
+                const pulseOpacity = particle.opacity * (0.9 + Math.sin(time * 1.5 + index * 0.05) * 0.1)
+
+                // Corner dots: darker silver for highlight, others: lighter silver
+                if (particle.isCorner) {
+                    ctx.fillStyle = `rgba(255, 255, 255, ${pulseOpacity})`
+                } else {
+                    ctx.fillStyle = `rgba(180, 180, 190, ${pulseOpacity * 0.8})`
+                }
+                const half = moduleSize * 0.45
+                ctx.fillRect(particle.x - half, particle.y - half, half * 2, half * 2)
             })
-
-            const drawCornerMarker = (x: number, y: number) => {
-                const markerSize = moduleSize * 7
-                const innerSize = moduleSize * 3
-
-                // Solid white stroke for outer box
-                ctx.strokeStyle = "rgba(255, 255, 255, 1)"
-                ctx.lineWidth = moduleSize
-                // Adjust for stroke width centering
-                ctx.strokeRect(x + moduleSize / 2, y + moduleSize / 2, markerSize - moduleSize, markerSize - moduleSize)
-
-                const innerOffset = (markerSize - innerSize) / 2
-                // Solid white fill for inner box
-                ctx.fillStyle = "rgba(255, 255, 255, 1)"
-                ctx.fillRect(x + innerOffset, y + innerOffset, innerSize, innerSize)
-            }
-
-            drawCornerMarker(offsetX, offsetY)
-            drawCornerMarker(offsetX + qrSize - moduleSize * 7, offsetY)
-            drawCornerMarker(offsetX, offsetY + qrSize - moduleSize * 7)
 
             animationRef.current = requestAnimationFrame(animate)
         }
@@ -144,7 +132,7 @@ export function AnimatedQRCode() {
 
     return (
         <div className="w-full h-full absolute inset-0">
-            <canvas ref={canvasRef} className="w-full h-full" style={{ background: "black" }} />
+            <canvas ref={canvasRef} className="w-full h-full" style={{ background: "transparent" }} />
         </div>
     )
 }

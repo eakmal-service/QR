@@ -1,0 +1,26 @@
+#!/usr/bin/expect -f
+
+set timeout 30
+set host "72.61.229.171"
+set user "root"
+set password ")vbofQi/lHXSMqF?Nk8E"
+
+spawn ssh -o StrictHostKeyChecking=no $user@$host
+
+expect {
+    "password:" {
+        send "$password\r"
+    }
+}
+expect "#"
+
+send "echo '--- PM2 LOGS ---'\r"
+send "pm2 logs qr-frontend --lines 50 --nostream\r"
+expect "#"
+
+send "echo '--- LISTENING PORTS ---'\r"
+send "ss -tulnp | grep 3002\r"
+expect "#"
+
+send "exit\r"
+expect eof

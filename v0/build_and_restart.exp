@@ -1,0 +1,61 @@
+#!/usr/bin/expect -f
+
+set timeout 600
+set host "72.61.229.171"
+set user "root"
+set password ")vbofQi/lHXSMqF?Nk8E"
+
+spawn ssh -o StrictHostKeyChecking=no $user@$host
+
+expect {
+    "password:" {
+        send "$password\r"
+    }
+}
+expect "#"
+
+send "cd /var/www/qr.akmal.in\r"
+expect "#"
+
+# Stop PM2 first
+send "pm2 delete qr-frontend || true\r"
+expect "#"
+
+# Build
+send "echo '--- BUILDING ---'\r"
+send "NEXT_PUBLIC_BASE_URL=https://qr.akmal.in npm run build\r"
+# Wait for build to complete (up to 5 minutes)
+set timeout 300
+expect {
+    "Build complete" {
+        send_user "Build succeeded!\n"
+    }
+    "Build failed" {
+        send_user "Build FAILED!\n"
+    }
+    "#" {
+        send_user "Build finished (prompt returned)\n"
+    }
+}
+set timeout 30
+
+# Check .next
+send "ls -d .next\r"
+expect "#"
+
+# Start PM2 AFTER build
+send "echo '--- STARTING PM2 ---'\r"
+send "pm2 start npm --name \"qr-frontend\" -- start -- -p 3002\r"
+expect "#"
+
+send "pm2 save\r"
+expect "#"
+
+send "sleep 5\r"
+expect "#"
+
+send "pm2 list\r"
+expect "#"
+
+send "exit\r"
+expect eof

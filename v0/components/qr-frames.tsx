@@ -13,11 +13,11 @@ export interface QRFrameProps {
 import { GENERATED_FRAMES } from './generated-qr-frames';
 
 export const FRAMES = [
-    { id: 'none', label: 'None', category: 'Basic', component: ({ children }: any) => <>{children}</> },
-    { id: 'scan-me-1', label: 'Scan Me 1', category: 'Basic', component: ScanMeFrame1 },
-    { id: 'scan-me-2', label: 'Scan Me 2', category: 'Basic', component: ScanMeFrame2 },
-    { id: 'balloon', label: 'Balloon', category: 'Basic', component: BalloonFrame },
-    { id: 'border', label: 'Simple Border', category: 'Basic', component: BorderFrame },
+    { id: 'none', label: 'None', category: 'Standard Frames', component: ({ children }: any) => <>{children}</> },
+    { id: 'scan-me-1', label: 'Scan Me 1', category: 'Standard Frames', component: ScanMeFrame1 },
+    { id: 'scan-me-2', label: 'Scan Me 2', category: 'Standard Frames', component: ScanMeFrame2 },
+    { id: 'balloon', label: 'Balloon', category: 'Standard Frames', component: BalloonFrame },
+    { id: 'border', label: 'Simple Border', category: 'Standard Frames', component: BorderFrame },
     ...GENERATED_FRAMES,
 ];
 

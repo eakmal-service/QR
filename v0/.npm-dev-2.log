@@ -53,3 +53,164 @@ Attempting generation with model: gemini-2.5-flash-lite
  ✓ Compiled in 278ms (2047 modules)
    Reload env: .env.local
  ✓ Compiled in 5.9s (2088 modules)
+ ○ Compiling /_not-found ...
+ GET / 200 in 1450ms
+ ✓ Compiled /_not-found in 1584ms (2050 modules)
+ GET /apple-touch-icon-precomposed.png 404 in 1777ms
+ GET /apple-touch-icon.png 404 in 1763ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 129ms
+ GET /apple-touch-icon-precomposed.png 404 in 21ms
+ GET /apple-touch-icon.png 404 in 17ms
+ GET / 200 in 46ms
+ GET / 200 in 49ms
+ GET / 200 in 26ms
+ GET /apple-touch-icon-precomposed.png 404 in 112ms
+ GET /apple-touch-icon.png 404 in 98ms
+ ✓ Compiled in 1095ms (2047 modules)
+ GET / 200 in 165ms
+ ✓ Compiled in 934ms (2047 modules)
+ GET / 200 in 291ms
+ ✓ Compiled in 694ms (2047 modules)
+ GET / 200 in 161ms
+ GET / 200 in 43ms
+ ✓ Compiled in 832ms (2047 modules)
+ GET / 200 in 124ms
+ GET / 200 in 65ms
+ ✓ Compiled in 1081ms (2047 modules)
+ GET / 200 in 194ms
+ ✓ Compiled in 1035ms (2047 modules)
+ ✓ Compiled in 743ms (2049 modules)
+ GET / 200 in 526ms
+ ⨯ ./components/header.tsx
+Error: Failed to read source code from /Users/hanzalaqureshi/Desktop/work/QR/QR/v0/components/header.tsx
+
+Caused by:
+    No such file or directory (os error 2)
+
+Import trace for requested module:
+./components/header.tsx
+./app/page.tsx
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 500 in 1220ms
+ ○ Compiling /_error ...
+ GET / 500 in 490ms
+ ⨯ ./components/header.tsx
+Error: Failed to read source code from /Users/hanzalaqureshi/Desktop/work/QR/QR/v0/components/header.tsx
+
+Caused by:
+    No such file or directory (os error 2)
+
+Import trace for requested module:
+./components/header.tsx
+./app/page.tsx
+ ⨯ ./components/header.tsx
+Error: Failed to read source code from /Users/hanzalaqureshi/Desktop/work/QR/QR/v0/components/header.tsx
+
+Caused by:
+    No such file or directory (os error 2)
+
+Import trace for requested module:
+./components/header.tsx
+./app/page.tsx
+ GET / 500 in 448ms
+ ✓ Compiled /_not-found in 1263ms (2283 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET / 200 in 101ms
+ GET / 200 in 105ms
+ ✓ Compiled in 893ms (2280 modules)
+ GET / 200 in 216ms
+ ⨯ ./components/header.tsx
+Error: Failed to read source code from /Users/hanzalaqureshi/Desktop/work/QR/QR/v0/components/header.tsx
+
+Caused by:
+    No such file or directory (os error 2)
+
+Import trace for requested module:
+./components/header.tsx
+ ⨯ ./components/header.tsx
+Error: Failed to read source code from /Users/hanzalaqureshi/Desktop/work/QR/QR/v0/components/header.tsx
+
+Caused by:
+    No such file or directory (os error 2)
+
+Import trace for requested module:
+./components/header.tsx
+./app/page.tsx
+ ✓ Compiled in 1131ms (2280 modules)
+ ✓ Compiled in 497ms (2280 modules)
+ GET / 200 in 234ms
+ ✓ Compiled in 700ms (2280 modules)
+ GET / 200 in 266ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 528ms (2283 modules)
+ GET /apple-touch-icon-precomposed.png 404 in 628ms
+ GET /apple-touch-icon.png 404 in 623ms
+ ✓ Compiled in 735ms (2280 modules)
+ GET / 200 in 218ms
+ ✓ Compiled in 764ms (1092 modules)
+ GET / 200 in 182ms
+ ✓ Compiled in 1003ms (2280 modules)
+ ✓ Compiled in 1521ms (2280 modules)
+ ✓ Compiled in 653ms (2280 modules)
+ ✓ Compiled in 923ms (2280 modules)
+ ✓ Compiled in 491ms (1085 modules)
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter={function onMouseEnter} onMouseLeave=... children=...>
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+digest: "3971174315"
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter={function onMouseEnter} onMouseLeave=... children=...>
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+digest: "4186095904"
+ ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter={function onMouseEnter} onMouseLeave=... children=...>
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+digest: "4186095904"
+ GET / 500 in 195ms
+ ✓ Compiled in 890ms (2271 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 209ms
+ ✓ Compiled in 965ms (2271 modules)
+ GET / 200 in 231ms
+ ✓ Compiled in 1115ms (2271 modules)
+ ○ Compiling /generate ...
+ ✓ Compiled /generate in 1296ms (2340 modules)
+ GET / 200 in 608ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 749ms (2343 modules)
+ GET /apple-touch-icon-precomposed.png 404 in 897ms
+ GET /apple-touch-icon.png 404 in 890ms
+ GET / 200 in 118ms
+ ✓ Compiled in 5.2s (2340 modules)
+ GET /generate 200 in 444ms
+ ✓ Compiled in 1820ms (2340 modules)
+ GET /generate 200 in 236ms
+ GET /generate 200 in 131ms
+ ✓ Compiled in 1040ms (2340 modules)
+ ✓ Compiled in 1117ms (2340 modules)
+ ✓ Compiled in 2.4s (2340 modules)
+ ✓ Compiled in 928ms (2340 modules)
+ GET /generate 200 in 4063ms
+ ○ Compiling /generate/[type] ...
+ ✓ Compiled /generate/[type] in 129.2s (2934 modules)
+ ✓ Compiled in 14.5s (1458 modules)
+ ✓ Compiled in 68s (2934 modules)
+ GET / 200 in 576ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 1009ms (2937 modules)
+ GET /apple-touch-icon-precomposed.png 404 in 1110ms
+ GET /apple-touch-icon.png 404 in 1105ms
+ GET / 200 in 1283ms

@@ -1,0 +1,30 @@
+#!/usr/bin/expect -f
+
+set timeout 30
+set host "72.61.229.171"
+set user "root"
+set password ")vbofQi/lHXSMqF?Nk8E"
+
+spawn ssh -o StrictHostKeyChecking=no $user@$host
+
+expect {
+    "password:" {
+        send "$password\r"
+    }
+}
+expect "#"
+
+send "echo '--- ENABLED SITES ---'\r"
+send "ls -la /etc/nginx/sites-enabled/\r"
+expect "#"
+
+send "echo '--- IBAADAT CONFIG EXISTS? ---'\r"
+send "ls /etc/nginx/sites-available/ | grep ibaadat\r"
+expect "#"
+
+send "echo '--- PM2 LIST ---'\r"
+send "pm2 list\r"
+expect "#"
+
+send "exit\r"
+expect eof

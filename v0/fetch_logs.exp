@@ -1,0 +1,26 @@
+#!/usr/bin/expect -f
+
+set timeout 30
+set host "72.61.229.171"
+set user "root"
+set password ")vbofQi/lHXSMqF?Nk8E"
+
+spawn ssh -o StrictHostKeyChecking=no $user@$host
+
+expect {
+    "password:" {
+        send "$password\r"
+    }
+}
+expect "#"
+
+send "echo '--- QR ACCESS LOG ---'\r"
+send "tail -n 20 /var/log/nginx/qr_access.log\r"
+expect "#"
+
+send "echo '--- DEFAULT ACCESS LOG ---'\r"
+send "tail -n 20 /var/log/nginx/access.log\r"
+expect "#"
+
+send "exit\r"
+expect eof

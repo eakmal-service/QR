@@ -1,0 +1,30 @@
+#!/usr/bin/expect -f
+
+set timeout 20
+set host "84.32.84.32"
+set user "root"
+set password ")vbofQi/lHXSMqF?Nk8E"
+
+spawn ssh -o StrictHostKeyChecking=no $user@$host "echo 'SSH Connection Successful to 84.32.84.32'"
+
+expect {
+    "password:" {
+        send "$password\r"
+        exp_continue
+    }
+    "SSH Connection Successful to 84.32.84.32" {
+        exit 0
+    }
+    "Permission denied" {
+        puts "Permission denied (publickey,password)."
+        exit 1
+    }
+    timeout {
+        puts "Connection timed out"
+        exit 1
+    }
+    eof {
+        puts "Connection failed"
+        exit 1
+    }
+}

@@ -1,0 +1,41 @@
+#!/usr/bin/expect -f
+
+set timeout 300
+set host "72.61.229.171"
+set user "root"
+set password ")vbofQi/lHXSMqF?Nk8E"
+
+spawn ssh -o StrictHostKeyChecking=no $user@$host
+
+expect {
+    "password:" {
+        send "$password\r"
+    }
+}
+expect "#"
+
+send "cd /var/www/qr.akmal.in\r"
+expect "#"
+
+# 1. Install dependencies
+send "echo '--- INSTALLING DEPENDENCIES ---'\r"
+send "npm install --omit=dev\r"
+expect "#"
+
+# 2. Build
+send "echo '--- BUILDING APP ---'\r"
+# Ensure BASE_URL is set during build
+send "NEXT_PUBLIC_BASE_URL=https://qr.akmal.in npm run build\r"
+expect "#"
+
+# 3. Restart PM2 on correct port
+# (Just in case process config was lost or needs refresh)
+send "echo '--- RESTARTING PM2 ---'\r"
+send "pm2 restart qr-frontend\r"
+expect "#"
+
+send "pm2 save\r"
+expect "#"
+
+send "exit\r"
+expect eof

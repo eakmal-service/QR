@@ -1,0 +1,24 @@
+#!/usr/bin/expect -f
+
+set timeout 300
+set host "72.61.229.171"
+set user "root"
+set password ")vbofQi/lHXSMqF?Nk8E"
+
+spawn ssh -o StrictHostKeyChecking=no $user@$host
+
+expect {
+    "password:" {
+        send "$password\r"
+    }
+}
+expect "#"
+
+# Run Certbot
+# Using --register-unsafely-without-email to avoid prompt if email unknown, or use a dummy one
+send "certbot --nginx -d qr.akmal.in --non-interactive --agree-tos --register-unsafely-without-email\r"
+expect "#"
+
+send "exit\r"
+expect eof
+exit 0

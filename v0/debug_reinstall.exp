@@ -1,0 +1,44 @@
+#!/usr/bin/expect -f
+
+set timeout 300
+set host "72.61.229.171"
+set user "root"
+set password ")vbofQi/lHXSMqF?Nk8E"
+
+spawn ssh -o StrictHostKeyChecking=no $user@$host
+
+expect {
+    "password:" {
+        send "$password\r"
+    }
+}
+expect "#"
+
+send "cd /var/www/qr.akmal.in\r"
+expect "#"
+
+# Run npm install and capture output
+send "echo '--- RUNNING NPM INSTALL ---'\r"
+send "npm install --omit=dev > /tmp/npm_install.log 2>&1\r"
+# Check exit code
+send "echo \"EXIT COD: \$?\"\r"
+expect "#"
+
+# Check if node_modules exists
+send "ls -d node_modules\r"
+expect "#"
+
+# Show log if failed (or always show last lines)
+send "tail -n 50 /tmp/npm_install.log\r"
+expect "#"
+
+# If success, run build
+send "if [ -d node_modules ]; then echo '--- BUILDING ---'; NEXT_PUBLIC_BASE_URL=https://qr.akmal.in npm run build > /tmp/npm_build.log 2>&1; echo \"BUILD EXIT: \$?\"; tail -n 20 /tmp/npm_build.log; fi\r"
+expect "#"
+
+# Check .next
+send "ls -d .next\r"
+expect "#"
+
+send "exit\r"
+expect eof
