@@ -1,0 +1,28 @@
+#!/usr/bin/expect -f
+
+set timeout 600
+set host "72.61.229.171"
+set user "root"
+set password ")vbofQi/lHXSMqF?Nk8E"
+
+spawn rsync -a -v --exclude=node_modules --exclude=.next --exclude=.git /Users/hanzalaqureshi/Desktop/work/QR/QR/v0/ $user@$host:/var/www/qr.akmal.in/
+
+expect {
+    "password:" {
+        send "$password\r"
+    }
+    yes/no* {
+        send "yes\r"
+        exp_continue
+    }
+}
+expect eof
+
+spawn ssh -o StrictHostKeyChecking=no $user@$host "cd /var/www/qr.akmal.in && npm install --legacy-peer-deps && pm2 delete qr-frontend || true && rm -rf .next && NEXT_PUBLIC_BASE_URL=https://qr.akmal.in npm run build && pm2 start npm --name 'qr-frontend' -- start -- -p 3002 && pm2 save"
+
+expect {
+    "password:" {
+        send "$password\r"
+    }
+}
+expect eof

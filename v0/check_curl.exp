@@ -1,0 +1,12 @@
+#!/usr/bin/expect -f
+set timeout 60
+set host "72.61.229.171"
+set user "root"
+set password ")vbofQi/lHXSMqF?Nk8E"
+spawn ssh -o StrictHostKeyChecking=no $user@$host "curl -s http://localhost:3002 | grep -i 'pricing'"
+expect {
+    "password:" {
+        send "$password\r"
+    }
+}
+expect eof
