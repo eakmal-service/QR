@@ -13,9 +13,11 @@ model QRCode {
   id          String   @id @default(cuid())
   businessId  String
   businessName String
+  businessCategory String?
+  businessType String? // e.g., b2b, b2c
   productSummary String?
+  description String? // Detailed description of the business
   googleMapsLink String?
-  businessType String?
   location    String?
   metadata    String?  // JSON for additional info
   createdAt   DateTime @default(now())

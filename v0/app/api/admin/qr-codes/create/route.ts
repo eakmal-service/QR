@@ -5,7 +5,7 @@ import { nanoid } from "nanoid";
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { businessName, productSummary, businessId, metadata, googleMapsLink, businessType, location } = body;
+        const { businessName, productSummary, businessCategory, description, businessId, metadata, googleMapsLink, businessType, location } = body;
 
         if (!businessName) {
             return NextResponse.json(
@@ -24,6 +24,8 @@ export async function POST(request: NextRequest) {
                 businessId: businessId || qrId,
                 businessName,
                 productSummary: productSummary || businessName,
+                businessCategory,
+                description,
                 googleMapsLink,
                 businessType,
                 location,
