@@ -42,6 +42,9 @@ export async function POST(request: NextRequest) {
         const generated = await generateReview({
             businessName: qrCode.businessName,
             productSummary: qrCode.productSummary || qrCode.businessName,
+            businessCategory: qrCode.businessCategory,
+            businessType: qrCode.businessType,
+            description: qrCode.description,
             language: language,
         });
 

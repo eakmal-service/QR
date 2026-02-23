@@ -22,23 +22,48 @@ export async function GET(
             return new NextResponse("QR Code not found", { status: 404 });
         }
 
+        const url = new URL(request.url);
+        const format = url.searchParams.get("format") || "png";
+        const sizeParam = url.searchParams.get("size");
+        const size = sizeParam ? parseInt(sizeParam, 10) : 400;
+
         // Generate the visit URL
         const visitUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'https://qr.akmal.in'}/visit/${qrId}`;
 
+        if (format === "svg") {
+            const svgString = await QRCode.toString(visitUrl, {
+                type: 'svg',
+                width: size,
+                margin: 2,
+                color: {
+                    dark: "#000000",
+                    light: "#ffffff",
+                },
+            });
+
+            return new NextResponse(svgString, {
+                headers: {
+                    "Content-Type": "image/svg+xml",
+                    "Cache-Control": "public, max-age=31536000, immutable",
+                },
+            });
+        }
+
         // Generate QR code image buffer
         const qrImageBuffer = await QRCode.toBuffer(visitUrl, {
-            width: 400,
+            type: format === "jpeg" ? "jpeg" : "png",
+            width: size,
             margin: 2,
             color: {
                 dark: "#000000",
                 light: "#ffffff",
             },
-        });
+        } as any);
 
         // Return the image
         return new NextResponse(qrImageBuffer as any, {
             headers: {
-                "Content-Type": "image/png",
+                "Content-Type": format === "jpeg" ? "image/jpeg" : "image/png",
                 "Cache-Control": "public, max-age=31536000, immutable",
             },
         });

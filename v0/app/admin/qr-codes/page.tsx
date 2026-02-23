@@ -24,11 +24,15 @@ export default function AdminQRCodesPage() {
     const [showForm, setShowForm] = useState(false);
     const [formData, setFormData] = useState({
         businessName: "",
+        businessCategory: "",
+        businessType: "",
         productSummary: "",
+        description: "",
         businessId: "",
     });
     const [creating, setCreating] = useState(false);
     const [selectedQR, setSelectedQR] = useState<string | null>(null);
+    const [downloadSettings, setDownloadSettings] = useState<Record<string, { format: string; size: number }>>({});
 
     useEffect(() => {
         fetchQRCodes();
@@ -63,7 +67,7 @@ export default function AdminQRCodesPage() {
             if (data.success) {
                 alert("QR Code created successfully!");
                 setShowForm(false);
-                setFormData({ businessName: "", productSummary: "", businessId: "" });
+                setFormData({ businessName: "", businessCategory: "", businessType: "", productSummary: "", description: "", businessId: "" });
                 fetchQRCodes();
             }
         } catch (error) {
@@ -74,14 +78,25 @@ export default function AdminQRCodesPage() {
         }
     };
 
+    const handleSettingChange = (qrId: string, key: 'format' | 'size', value: string | number) => {
+        setDownloadSettings(prev => ({
+            ...prev,
+            [qrId]: {
+                ...(prev[qrId] || { format: 'png', size: 400 }),
+                [key]: value
+            }
+        }));
+    };
+
     const downloadQR = async (qrId: string, businessName: string) => {
         try {
-            const response = await fetch(`/api/qr/image/${qrId}`);
+            const settings = downloadSettings[qrId] || { format: 'png', size: 400 };
+            const response = await fetch(`/api/qr/image/${qrId}?format=${settings.format}&size=${settings.size}`);
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.href = url;
-            link.download = `${businessName.replace(/\s+/g, "-")}-qr.png`;
+            link.download = `${businessName.replace(/\s+/g, "-")}-qr-${settings.size}.${settings.format}`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -133,6 +148,28 @@ export default function AdminQRCodesPage() {
                                     required
                                 />
                             </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium mb-2">Business Category</label>
+                                    <input
+                                        type="text"
+                                        value={formData.businessCategory}
+                                        onChange={(e) => setFormData({ ...formData, businessCategory: e.target.value })}
+                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                        placeholder="e.g., Cafe, Retail, Service"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium mb-2">Business Type (B2B/B2C)</label>
+                                    <input
+                                        type="text"
+                                        value={formData.businessType}
+                                        onChange={(e) => setFormData({ ...formData, businessType: e.target.value })}
+                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                        placeholder="e.g., B2C"
+                                    />
+                                </div>
+                            </div>
                             <div>
                                 <label className="block text-sm font-medium mb-2">Product/Service Summary</label>
                                 <textarea
@@ -140,6 +177,16 @@ export default function AdminQRCodesPage() {
                                     onChange={(e) => setFormData({ ...formData, productSummary: e.target.value })}
                                     className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                                     placeholder="e.g., Premium artisan coffee and fresh pastries"
+                                    rows={2}
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-2">Detailed Description</label>
+                                <textarea
+                                    value={formData.description}
+                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Detailed information about the business, target audience, and key selling points to help AI generate better reviews."
                                     rows={3}
                                 />
                             </div>
@@ -210,22 +257,45 @@ export default function AdminQRCodesPage() {
                             </div>
 
                             {/* Actions */}
-                            <div className="flex gap-2">
-                                <button
-                                    onClick={() => downloadQR(qr.id, qr.businessName)}
-                                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg text-sm font-semibold transition-colors"
-                                >
-                                    📥 Download
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        navigator.clipboard.writeText(qr.visitUrl);
-                                        alert("URL copied!");
-                                    }}
-                                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-semibold transition-colors"
-                                >
-                                    🔗 Copy URL
-                                </button>
+                            <div className="flex flex-col gap-2">
+                                <div className="flex gap-2 mb-2">
+                                    <select
+                                        className="flex-1 bg-gray-50 border border-gray-200 text-gray-700 py-1.5 px-3 rounded-lg text-sm transition-colors"
+                                        value={downloadSettings[qr.id]?.format || 'png'}
+                                        onChange={(e) => handleSettingChange(qr.id, 'format', e.target.value)}
+                                    >
+                                        <option value="png">PNG</option>
+                                        <option value="jpeg">JPEG</option>
+                                        <option value="svg">SVG</option>
+                                    </select>
+                                    <select
+                                        className="flex-1 bg-gray-50 border border-gray-200 text-gray-700 py-1.5 px-3 rounded-lg text-sm transition-colors"
+                                        value={downloadSettings[qr.id]?.size || 400}
+                                        onChange={(e) => handleSettingChange(qr.id, 'size', Number(e.target.value))}
+                                    >
+                                        <option value={200}>Small (200px)</option>
+                                        <option value={400}>Medium (400px)</option>
+                                        <option value={800}>Large (800px)</option>
+                                        <option value={1200}>HD (1200px)</option>
+                                    </select>
+                                </div>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => downloadQR(qr.id, qr.businessName)}
+                                        className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg text-sm font-semibold transition-colors"
+                                    >
+                                        📥 Download
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            navigator.clipboard.writeText(qr.visitUrl);
+                                            alert("URL copied!");
+                                        }}
+                                        className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-semibold transition-colors"
+                                    >
+                                        🔗 Copy URL
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     ))}
