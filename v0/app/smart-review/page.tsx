@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Star, Coffee, Wrench, Sprout, ArrowRight, QrCode } from "lucide-react";
+import { ArrowLeft, Star, Coffee, Wrench, Sprout, ArrowRight, QrCode, Download } from "lucide-react";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -51,6 +51,34 @@ export default function SmartReviewPage() {
     });
     const [loading, setLoading] = useState(false);
     const [generatedQr, setGeneratedQr] = useState<{ visitUrl: string; id: string } | null>(null);
+    const [downloadFormat, setDownloadFormat] = useState<"png" | "jpeg" | "svg">("png");
+    const [downloadSize, setDownloadSize] = useState<number>(1024);
+    const [downloadingQr, setDownloadingQr] = useState(false);
+
+    const handleDownloadQR = async () => {
+        if (!generatedQr) return;
+        setDownloadingQr(true);
+        try {
+            const response = await fetch(`/api/qr/image/${generatedQr.id}?format=${downloadFormat}&size=${downloadSize}`);
+            if (!response.ok) throw new Error("Failed to generate image");
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `${formData.businessName.replace(/\s+/g, "-")}-qr-${downloadSize}.${downloadFormat}`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            toast.success("Downloaded successfully!");
+        } catch (error) {
+            console.error("Download failed:", error);
+            toast.error("Failed to download QR code");
+        } finally {
+            setDownloadingQr(false);
+        }
+    };
 
     const handleCreateQr = async () => {
         if (!formData.businessName || !formData.googleMapsLink || !formData.businessType || !formData.location) {
@@ -188,33 +216,72 @@ export default function SmartReviewPage() {
                                     </Button>
                                 </div>
                             ) : (
-                                <div className="py-6 flex flex-col items-center text-center space-y-4">
-                                    <div className="p-4 bg-white rounded-xl">
-                                        {/* Using Python backend to generate QR image */}
+                                <div className="py-6 flex flex-col items-center text-center space-y-6 w-full">
+                                    <div className="p-4 bg-white rounded-xl flex items-center justify-center w-48 h-48 border border-zinc-200">
                                         <img
-                                            src={`/api/qr/image/${generatedQr.id}`}
+                                            src={`/api/qr/image/${generatedQr.id}?format=${downloadFormat}&size=400`}
                                             alt="QR Code"
-                                            className="w-48 h-48"
+                                            className="max-w-full max-h-full object-contain"
                                         />
                                     </div>
-                                    <div>
-                                        <p className="text-sm text-gray-400 mb-2">Scan to test your Smart Review flow</p>
-                                        <Link href={generatedQr.visitUrl} target="_blank">
-                                            <Button variant="outline" className="text-violet-400 border-violet-500/20 hover:bg-violet-500/10">
-                                                Test Link Direct Access
+
+                                    <div className="w-full space-y-3">
+                                        <div className="flex gap-2 w-full">
+                                            <Select value={downloadFormat} onValueChange={(v: "png" | "jpeg" | "svg") => setDownloadFormat(v)}>
+                                                <SelectTrigger className="w-full bg-zinc-900 border-zinc-800 text-white focus:ring-violet-500">
+                                                    <SelectValue placeholder="Format" />
+                                                </SelectTrigger>
+                                                <SelectContent className="bg-zinc-900 border-zinc-800 text-white">
+                                                    <SelectItem value="png">PNG</SelectItem>
+                                                    <SelectItem value="jpeg">JPEG</SelectItem>
+                                                    <SelectItem value="svg">SVG</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+
+                                            <Select value={downloadSize.toString()} onValueChange={(v) => setDownloadSize(Number(v))}>
+                                                <SelectTrigger className="w-full bg-zinc-900 border-zinc-800 text-white focus:ring-violet-500">
+                                                    <SelectValue placeholder="Size" />
+                                                </SelectTrigger>
+                                                <SelectContent className="bg-zinc-900 border-zinc-800 text-white">
+                                                    <SelectItem value="256">256x256</SelectItem>
+                                                    <SelectItem value="512">512x512</SelectItem>
+                                                    <SelectItem value="1024">1024x1024</SelectItem>
+                                                    <SelectItem value="2048">2048x2048</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+
+                                        <Button
+                                            className="w-full bg-violet-600 hover:bg-violet-700 text-white font-medium"
+                                            onClick={handleDownloadQR}
+                                            disabled={downloadingQr}
+                                        >
+                                            {downloadingQr ? (
+                                                <div className="w-4 h-4 mr-2 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                                            ) : (
+                                                <Download className="w-4 h-4 mr-2" />
+                                            )}
+                                            {downloadingQr ? "Downloading..." : "Download QR Code"}
+                                        </Button>
+                                    </div>
+
+                                    <div className="w-full flex justify-between gap-3 border-t border-zinc-800 pt-5">
+                                        <Link href={generatedQr.visitUrl} target="_blank" className="flex-1">
+                                            <Button variant="outline" className="w-full text-violet-400 border-violet-500/20 hover:bg-violet-500/10 hover:text-violet-300">
+                                                Test Link
                                             </Button>
                                         </Link>
+                                        <Button
+                                            variant="ghost"
+                                            onClick={() => {
+                                                setGeneratedQr(null);
+                                                setFormData({ businessName: "", googleMapsLink: "", businessType: "", location: "", description: "" });
+                                            }}
+                                            className="flex-1 text-gray-400 hover:text-white bg-zinc-900 hover:bg-zinc-800 border border-transparent"
+                                        >
+                                            Create Another
+                                        </Button>
                                     </div>
-                                    <Button
-                                        variant="ghost"
-                                        onClick={() => {
-                                            setGeneratedQr(null);
-                                            setFormData({ businessName: "", googleMapsLink: "", businessType: "", location: "", description: "" });
-                                        }}
-                                        className="text-gray-400 hover:text-white"
-                                    >
-                                        Create Another
-                                    </Button>
                                 </div>
                             )}
                         </DialogContent>

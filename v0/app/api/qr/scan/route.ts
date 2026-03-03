@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { generateReview, generateHash, calculateSimilarity } from "@/lib/gemini";
-import { nanoid } from "nanoid";
 
 export async function POST(request: NextRequest) {
     try {
@@ -27,6 +25,13 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        if (!qrCode.isActive) {
+            return NextResponse.json(
+                { error: "This QR Code is currently disabled." },
+                { status: 403 }
+            );
+        }
+
         // Log the scan
         await prisma.scanLog.create({
             data: {
@@ -37,94 +42,18 @@ export async function POST(request: NextRequest) {
             },
         });
 
-        // Generate job ID
-        const jobId = nanoid();
-
-        // Generate review
-        const maxAttempts = 3;
-        let attempt = 0;
-        let review = null;
-
-        while (attempt < maxAttempts && !review) {
-            attempt++;
-
-            const generated = await generateReview({
-                businessName: qrCode.businessName,
-                productSummary: qrCode.productSummary || qrCode.businessName,
-                businessCategory: qrCode.businessCategory,
-                businessType: qrCode.businessType,
-                description: qrCode.description,
-            });
-
-            const hash = generateHash(generated.reviewText);
-
-            //Check for exact duplicates
-            const existingReview = await prisma.tempReview.findFirst({
-                where: { hash },
-            });
-
-            if (existingReview) {
-                console.log(`Duplicate detected (attempt ${attempt}), regenerating...`);
-                continue;
-            }
-
-            // Check for similar reviews (last 90 days)
-            const recentReviews = await prisma.tempReview.findMany({
-                where: {
-                    qrCodeId: qrId,
-                    createdAt: {
-                        gte: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000),
-                    },
-                },
-                select: { reviewText: true },
-            });
-
-            const isSimilar = recentReviews.some(
-                (r) => calculateSimilarity(r.reviewText, generated.reviewText) > 0.85
-            );
-
-            if (isSimilar) {
-                console.log(`Similar review detected (attempt ${attempt}), regenerating...`);
-                continue;
-            }
-
-            // Store temp review
-            const expiresAt = new Date(Date.now() + 30 * 60 * 1000); // 30 minutes
-            review = await prisma.tempReview.create({
-                data: {
-                    jobId,
-                    qrCodeId: qrId,
-                    reviewText: generated.reviewText,
-                    language: generated.language,
-                    rating: generated.rating,
-                    hash,
-                    sessionId,
-                    expiresAt,
-                },
-            });
-
-            // Log review generation
-            await prisma.scanLog.create({
-                data: {
-                    qrCodeId: qrId,
-                    jobId,
-                    action: "review_generated",
-                    timestamp: new Date(),
-                },
-            });
-        }
-
-        if (!review) {
-            return NextResponse.json(
-                { error: "Failed to generate unique review after multiple attempts" },
-                { status: 500 }
-            );
-        }
-
+        // Return business details for the interactive form
         return NextResponse.json({
-            status: "accepted",
-            jobId,
-            googleMapsLink: qrCode.googleMapsLink,
+            status: "success",
+            qrCode: {
+                id: qrCode.id,
+                businessName: qrCode.businessName,
+                productSummary: qrCode.productSummary,
+                businessCategory: qrCode.businessCategory,
+                menuItems: qrCode.menuItems ? JSON.parse(qrCode.menuItems) : [],
+                googleMapsLink: qrCode.googleMapsLink,
+                location: qrCode.location,
+            }
         });
     } catch (error) {
         console.error("Error in /api/qr/scan:", error);

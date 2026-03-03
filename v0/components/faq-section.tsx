@@ -8,24 +8,24 @@ import { ProgressiveBlur } from "./ui/progressive-blur"
 
 const faqs = [
   {
-    question: "What is LeLo and how does it work?",
+    question: "What is QR.Akmal and how does it work?",
     answer:
-      "LeLo is a comprehensive SaaS platform designed to streamline your business operations. It combines project management, team collaboration, analytics, and automation tools in one unified dashboard. Simply sign up, invite your team, and start organizing your workflows with our intuitive interface.",
+      "QR.Akmal is a comprehensive AI review solution designed to streamline your business reputation. It combines custom smart QR codes and AI-driven review generation in one unified dashboard. Simply sign up, create a QR code for your business, and let your customers generate personalized reviews effortlessly.",
   },
   {
-    question: "Can I try LeLo before committing to a paid plan?",
+    question: "Can I try QR.Akmal before committing to a paid plan?",
     answer:
       "We offer a 14-day free trial for all our plans. No credit card required. You'll have full access to all features during the trial period, and you can upgrade or cancel anytime.",
   },
   {
-    question: "How secure is my data with LeLo?",
+    question: "How secure is my data with QR.Akmal?",
     answer:
       "Security is our top priority. We use bank-level encryption, comply with SOC 2 Type II standards, and offer features like two-factor authentication, SSO integration, and regular security audits. Your data is stored in secure, redundant data centers with 99.9% uptime guarantee.",
   },
   {
-    question: "Can I integrate LeLo with my existing tools?",
+    question: "Can I integrate QR.Akmal with my existing tools?",
     answer:
-      "Yes! LeLo integrates with over 100+ popular tools including Slack, Google Workspace, Microsoft 365, Salesforce, Zapier, and many more. Our API also allows for custom integrations to fit your specific workflow needs.",
+      "Yes! QR.Akmal integrates with various platforms to fit your specific workflow needs.",
   },
   {
     question: "What kind of support do you provide?",
@@ -40,7 +40,7 @@ const faqs = [
   {
     question: "Do you offer refunds?",
     answer:
-      "We offer a 30-day money-back guarantee for all paid plans. If you're not satisfied with LeLo within the first 30 days of your subscription, contact our support team for a full refund.",
+      "We offer a 30-day money-back guarantee for all paid plans. If you're not satisfied with QR.Akmal within the first 30 days of your subscription, contact our support team for a full refund.",
   },
   {
     question: "Is there a limit on the number of projects or users?",
@@ -77,7 +77,7 @@ export function FAQSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            Everything you need to know about LeLo. Can't find what you're looking for? Contact our support team.
+            Everything you need to know about QR.Akmal. Can't find what you're looking for? Contact our support team.
           </motion.p>
         </div>
 

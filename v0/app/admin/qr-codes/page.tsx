@@ -2,13 +2,20 @@
 
 import { useState, useEffect } from "react";
 import { QRCodeSVG } from "qrcode.react";
+import { read, utils } from "xlsx";
 
 interface QRCode {
     id: string;
+    businessId: string;
     businessName: string;
+    businessCategory?: string;
+    businessType?: string;
     productSummary: string;
+    description: string;
+    menuItems?: any[];
     visitUrl: string;
     createdAt: string;
+    isActive: boolean;
     analytics: {
         totalScans: number;
         totalReviews: number;
@@ -29,12 +36,22 @@ export default function AdminQRCodesPage() {
         productSummary: "",
         description: "",
         businessId: "",
+        menuItems: [] as { name: string, price: string }[],
     });
+    const [newItemName, setNewItemName] = useState("");
+    const [newItemPrice, setNewItemPrice] = useState("");
+    const CATEGORIES = ["Ice Cream Parlor", "Restaurant", "Cafe", "Hotel", "Hospital", "Car Rental", "Retail", "Service", "Other"];
     const [creating, setCreating] = useState(false);
     const [selectedQR, setSelectedQR] = useState<string | null>(null);
     const [downloadSettings, setDownloadSettings] = useState<Record<string, { format: string; size: number }>>({});
+    const [editingQrId, setEditingQrId] = useState<string | null>(null);
+    const [editDesc, setEditDesc] = useState("");
+    const [role, setRole] = useState<string | null>(null);
+    const [isEditingForm, setIsEditingForm] = useState(false);
+    const [editingFormId, setEditingFormId] = useState<string | null>(null);
 
     useEffect(() => {
+        setRole(localStorage.getItem("simulatedAdminRole") || "SUPER_ADMIN");
         fetchQRCodes();
     }, []);
 
@@ -52,29 +69,147 @@ export default function AdminQRCodesPage() {
         }
     };
 
-    const handleCreate = async (e: React.FormEvent) => {
+    const handleToggleStatus = async (qrId: string, currentStatus: boolean) => {
+        try {
+            const response = await fetch("/api/admin/qr-codes/toggle", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ qrId, isActive: !currentStatus }),
+            });
+            const data = await response.json();
+            if (data.success) {
+                fetchQRCodes();
+            } else {
+                alert("Failed to toggle status");
+            }
+        } catch (error) {
+            console.error("Error toggling status:", error);
+            alert("Failed to toggle status");
+        }
+    };
+
+    const handleUpdateDescription = async (qrId: string) => {
+        try {
+            const response = await fetch("/api/admin/qr-codes/update", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ qrId, productSummary: editDesc }),
+            });
+            const data = await response.json();
+            if (data.success) {
+                setEditingQrId(null);
+                fetchQRCodes();
+            } else {
+                alert("Failed to update description");
+            }
+        } catch (error) {
+            console.error("Error updating description:", error);
+            alert("Failed to update description");
+        }
+    };
+
+    const handleCancelForm = () => {
+        setShowForm(false);
+        setIsEditingForm(false);
+        setEditingFormId(null);
+        setFormData({ businessName: "", businessCategory: "", businessType: "", productSummary: "", description: "", businessId: "", menuItems: [] });
+    };
+
+    const handleEditClick = (qr: QRCode) => {
+        setFormData({
+            businessName: qr.businessName || "",
+            businessCategory: qr.businessCategory || "",
+            businessType: qr.businessType || "",
+            productSummary: qr.productSummary || "",
+            description: qr.description || "",
+            businessId: qr.businessId || qr.id,
+            menuItems: qr.menuItems || [],
+        });
+        setEditingFormId(qr.id);
+        setIsEditingForm(true);
+        setShowForm(true);
+        const mainContent = document.querySelector('main');
+        if (mainContent) {
+            mainContent.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setCreating(true);
 
         try {
-            const response = await fetch("/api/admin/qr-codes/create", {
-                method: "POST",
+            const endpoint = isEditingForm ? "/api/admin/qr-codes/update" : "/api/admin/qr-codes/create";
+            const method = isEditingForm ? "PUT" : "POST";
+            const payload = isEditingForm ? { id: editingFormId, ...formData } : formData;
+
+            const response = await fetch(endpoint, {
+                method,
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(payload),
             });
 
             const data = await response.json();
             if (data.success) {
-                alert("QR Code created successfully!");
-                setShowForm(false);
-                setFormData({ businessName: "", businessCategory: "", businessType: "", productSummary: "", description: "", businessId: "" });
+                alert(`QR Code ${isEditingForm ? "updated" : "created"} successfully!`);
+                handleCancelForm();
                 fetchQRCodes();
+            } else {
+                alert(`Failed to ${isEditingForm ? "update" : "create"} QR code`);
             }
         } catch (error) {
-            console.error("Error creating QR code:", error);
-            alert("Failed to create QR code");
+            console.error(`Error ${isEditingForm ? "updating" : "creating"} QR code:`, error);
+            alert(`Failed to ${isEditingForm ? "update" : "create"} QR code`);
         } finally {
             setCreating(false);
+        }
+    };
+
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        try {
+            const data = await file.arrayBuffer();
+            const workbook = read(data);
+            const firstSheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[firstSheetName];
+
+            // Expected format is an array of arrays representing rows: [ [name, price], [name, price] ]
+            const json = utils.sheet_to_json<any[]>(worksheet, { header: 1 });
+
+            const newItems: { name: string, price: string }[] = [];
+
+            // Skip header if it exists (e.g. if row 0 is ["Item Name", "Price"])
+            const startIndex = (json[0] && (String(json[0][0]).toLowerCase().includes('name') || String(json[0][0]).toLowerCase().includes('item'))) ? 1 : 0;
+
+            for (let i = startIndex; i < json.length; i++) {
+                const row = json[i];
+                if (row && row.length > 0 && row[0]) {
+                    const itemName = String(row[0]).trim();
+                    const itemPrice = row.length > 1 && row[1] != null ? String(row[1]).trim() : "";
+
+                    if (itemName) {
+                        newItems.push({ name: itemName, price: itemPrice });
+                    }
+                }
+            }
+
+            if (newItems.length > 0) {
+                setFormData(prev => ({ ...prev, menuItems: [...prev.menuItems, ...newItems] }));
+                alert(`Successfully added ${newItems.length} items from ${file.name}`);
+            } else {
+                alert("No valid items found in the file. Ensure the format is [Item Name] | [Price].");
+            }
+
+        } catch (error) {
+            console.error("Error parsing file:", error);
+            alert("Failed to parse the file. Ensure it is a valid Excel or CSV file.");
+        } finally {
+            // Reset input so the same file could be uploaded again if needed
+            e.target.value = "";
         }
     };
 
@@ -109,14 +244,14 @@ export default function AdminQRCodesPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
+            <div className="flex h-[50vh] items-center justify-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 py-8 px-4">
+        <div className="py-2">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="flex justify-between items-center mb-8">
@@ -125,18 +260,31 @@ export default function AdminQRCodesPage() {
                         <p className="text-gray-600 mt-2">Create and manage QR codes for Smart Auto-Review</p>
                     </div>
                     <button
-                        onClick={() => setShowForm(!showForm)}
+                        onClick={() => {
+                            if (showForm) {
+                                handleCancelForm();
+                            } else {
+                                handleCancelForm();
+                                setShowForm(true);
+                                const mainContent = document.querySelector('main');
+                                if (mainContent) {
+                                    mainContent.scrollTo({ top: 0, behavior: 'smooth' });
+                                } else {
+                                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                                }
+                            }
+                        }}
                         className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
                     >
                         {showForm ? "Cancel" : "+ Create New QR Code"}
                     </button>
                 </div>
 
-                {/* Create Form */}
+                {/* Create/Edit Form */}
                 {showForm && (
                     <div className="bg-white rounded-xl shadow-md p-6 mb-8">
-                        <h2 className="text-xl font-bold mb-4">Create New QR Code</h2>
-                        <form onSubmit={handleCreate} className="space-y-4">
+                        <h2 className="text-xl font-bold mb-4">{isEditingForm ? "Edit QR Code Details" : "Create New QR Code"}</h2>
+                        <form onSubmit={handleSubmit} className="space-y-4">
                             <div>
                                 <label className="block text-sm font-medium mb-2">Business Name *</label>
                                 <input
@@ -151,13 +299,16 @@ export default function AdminQRCodesPage() {
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium mb-2">Business Category</label>
-                                    <input
-                                        type="text"
+                                    <select
                                         value={formData.businessCategory}
                                         onChange={(e) => setFormData({ ...formData, businessCategory: e.target.value })}
-                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                        placeholder="e.g., Cafe, Retail, Service"
-                                    />
+                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 bg-white"
+                                    >
+                                        <option value="">Select Category</option>
+                                        {CATEGORIES.map(cat => (
+                                            <option key={cat} value={cat}>{cat}</option>
+                                        ))}
+                                    </select>
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium mb-2">Business Type (B2B/B2C)</label>
@@ -169,6 +320,93 @@ export default function AdminQRCodesPage() {
                                         placeholder="e.g., B2C"
                                     />
                                 </div>
+                            </div>
+                            <div>
+                                <div className="flex justify-between items-center mb-2">
+                                    <label className="block text-sm font-medium">Menu / Service Items (Optional)</label>
+                                    <div>
+                                        <input
+                                            type="file"
+                                            id="bulkUpload"
+                                            className="hidden"
+                                            accept=".xlsx, .xls, .csv"
+                                            onChange={handleFileUpload}
+                                        />
+                                        <label
+                                            htmlFor="bulkUpload"
+                                            className="cursor-pointer text-xs bg-green-100 hover:bg-green-200 text-green-800 px-3 py-1.5 rounded-lg font-semibold transition-colors flex items-center gap-1"
+                                        >
+                                            📥 Bulk Upload (Excel/CSV)
+                                        </label>
+                                    </div>
+                                </div>
+                                <div className="flex gap-2 mb-2">
+                                    <input
+                                        type="text"
+                                        value={newItemName}
+                                        onChange={(e) => setNewItemName(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                e.preventDefault();
+                                                if (newItemName.trim()) {
+                                                    setFormData({ ...formData, menuItems: [...formData.menuItems, { name: newItemName.trim(), price: newItemPrice.trim() }] });
+                                                    setNewItemName("");
+                                                    setNewItemPrice("");
+                                                }
+                                            }
+                                        }}
+                                        className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                        placeholder="Item Name (e.g., Kaju Anjeer)"
+                                    />
+                                    <input
+                                        type="text"
+                                        value={newItemPrice}
+                                        onChange={(e) => setNewItemPrice(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                e.preventDefault();
+                                                if (newItemName.trim()) {
+                                                    setFormData({ ...formData, menuItems: [...formData.menuItems, { name: newItemName.trim(), price: newItemPrice.trim() }] });
+                                                    setNewItemName("");
+                                                    setNewItemPrice("");
+                                                }
+                                            }
+                                        }}
+                                        className="w-1/3 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                        placeholder="Price (Optional)"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            if (newItemName.trim()) {
+                                                setFormData({ ...formData, menuItems: [...formData.menuItems, { name: newItemName.trim(), price: newItemPrice.trim() }] });
+                                                setNewItemName("");
+                                                setNewItemPrice("");
+                                            }
+                                        }}
+                                        className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg font-medium"
+                                    >
+                                        Add
+                                    </button>
+                                </div>
+                                {formData.menuItems.length > 0 && (
+                                    <div className="flex flex-wrap gap-2 mt-2">
+                                        {formData.menuItems.map((item, index) => {
+                                            // Handle both legacy strings and new `{name, price}` objects for safety
+                                            const displayName = typeof item === 'string' ? item : item.name;
+                                            const displayPrice = typeof item === 'object' && item.price ? ` - ${item.price}` : '';
+
+                                            return (
+                                                <span key={index} className="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full flex items-center gap-1">
+                                                    {displayName}{displayPrice}
+                                                    <button type="button" onClick={() => {
+                                                        setFormData({ ...formData, menuItems: formData.menuItems.filter((_, i) => i !== index) });
+                                                    }} className="text-blue-600 hover:text-blue-900 ml-1">&times;</button>
+                                                </span>
+                                            );
+                                        })}
+                                    </div>
+                                )}
                             </div>
                             <div>
                                 <label className="block text-sm font-medium mb-2">Product/Service Summary</label>
@@ -205,7 +443,7 @@ export default function AdminQRCodesPage() {
                                 disabled={creating}
                                 className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white py-3 rounded-lg font-semibold transition-colors"
                             >
-                                {creating ? "Creating..." : "Create QR Code"}
+                                {isEditingForm ? (creating ? "Updating..." : "Update QR Code") : (creating ? "Creating..." : "Create QR Code")}
                             </button>
                         </form>
                     </div>
@@ -218,14 +456,56 @@ export default function AdminQRCodesPage() {
                             <div className="flex justify-between items-start mb-4">
                                 <div>
                                     <h3 className="text-lg font-bold text-gray-900">{qr.businessName}</h3>
-                                    <p className="text-sm text-gray-500">ID: {qr.id}</p>
+                                    {role === "SUPER_ADMIN" && (
+                                        <p className="text-sm text-gray-500">ID: {qr.id}</p>
+                                    )}
                                 </div>
-                                <span className="px-3 py-1 bg-green-100 text-green-800 text-xs rounded-full font-semibold">
-                                    Active
-                                </span>
+                                <div className="flex flex-col items-end gap-2">
+                                    <span className={`px-3 py-1 text-xs rounded-full font-semibold ${qr.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                                        {qr.isActive ? 'Active' : 'Inactive'}
+                                    </span>
+                                    {role === "SUPER_ADMIN" && (
+                                        <button
+                                            onClick={() => handleToggleStatus(qr.id, qr.isActive)}
+                                            className={`text-xs px-2 py-1 rounded border font-medium transition-colors ${qr.isActive ? 'border-red-200 text-red-600 hover:bg-red-50' : 'border-green-200 text-green-600 hover:bg-green-50'}`}
+                                        >
+                                            {qr.isActive ? 'Deactivate' : 'Activate'}
+                                        </button>
+                                    )}
+                                </div>
                             </div>
 
-                            <p className="text-sm text-gray-600 mb-4">{qr.productSummary}</p>
+                            <div className="mb-4">
+                                {editingQrId === qr.id ? (
+                                    <div className="space-y-2">
+                                        <textarea
+                                            className="w-full text-sm p-3 border rounded-md focus:ring-2 focus:ring-blue-500"
+                                            rows={6}
+                                            value={editDesc}
+                                            onChange={(e) => setEditDesc(e.target.value)}
+                                        />
+                                        <div className="flex gap-2">
+                                            <button onClick={() => handleUpdateDescription(qr.id)} className="text-xs bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors font-medium">Save</button>
+                                            <button onClick={() => setEditingQrId(null)} className="text-xs bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded transition-colors font-medium">Cancel</button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="group relative">
+                                        <p className="text-sm text-gray-800 font-medium leading-relaxed">{qr.productSummary || "No description provided."}</p>
+                                        {role === "SUPER_ADMIN" && (
+                                            <button
+                                                onClick={() => {
+                                                    setEditingQrId(qr.id);
+                                                    setEditDesc(qr.productSummary || "");
+                                                }}
+                                                className="text-xs font-semibold text-blue-600 mt-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                                            >
+                                                ✎ Edit Description
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
 
                             {/* QR Code */}
                             <div className="bg-gray-50 p-4 rounded-lg mb-4 flex justify-center" id={`qr-${qr.id}`}>
@@ -258,6 +538,14 @@ export default function AdminQRCodesPage() {
 
                             {/* Actions */}
                             <div className="flex flex-col gap-2">
+                                <div className="flex gap-2 mb-2">
+                                    <button
+                                        onClick={() => handleEditClick(qr)}
+                                        className="flex-1 bg-amber-500 hover:bg-amber-600 text-white py-1.5 px-3 rounded-lg text-sm font-semibold transition-colors"
+                                    >
+                                        ✏️ Edit Details
+                                    </button>
+                                </div>
                                 <div className="flex gap-2 mb-2">
                                     <select
                                         className="flex-1 bg-gray-50 border border-gray-200 text-gray-700 py-1.5 px-3 rounded-lg text-sm transition-colors"

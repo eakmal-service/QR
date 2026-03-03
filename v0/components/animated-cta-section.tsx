@@ -55,7 +55,7 @@ export function AnimatedCTASection() {
             className="text-xl text-white/90 mb-8 max-w-2xl mx-auto drop-shadow-md animate-fade-in-up"
             style={{ animationDelay: "0.7s" }}
           >
-            Join thousands of companies already using LeLo to streamline their operations and boost productivity.
+            Join thousands of companies already using QR.Akmal to streamline their reputation building and getting more reviews.
           </p>
           <div
             className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up"

@@ -3,12 +3,15 @@
 import { useState, useEffect } from "react"
 import { LeLoLogo } from "./lelo-logo"
 import { Button } from "./ui/button"
+import Link from "next/link"
+import { useAuth } from "@/components/auth/auth-provider"
 
 export function Header() {
     const [mounted, setMounted] = useState(false)
     const [isScrolled, setIsScrolled] = useState(false)
     const [isVisible, setIsVisible] = useState(true)
     const [lastScrollY, setLastScrollY] = useState(0)
+    const { user, isLoading, logout } = useAuth()
 
     useEffect(() => {
         setMounted(true)
@@ -121,19 +124,50 @@ export function Header() {
                 </nav>
 
                 <div className="flex items-center gap-3">
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-foreground/80 hover:text-foreground hover:bg-foreground/10 transition-all duration-200 rounded-xl border-0"
-                    >
-                        Sign In
-                    </Button>
-                    <Button
-                        size="sm"
-                        className="bg-primary hover:bg-primary/90 text-primary-foreground transform transition-all duration-200 hover:scale-105 hover:shadow-lg rounded-xl border-0"
-                    >
-                        Get Started
-                    </Button>
+                    {!isLoading && (
+                        user ? (
+                            <>
+                                {user.email === "hanzalaq63@gmail.com" && (
+                                    <Link href="/admin">
+                                        <Button
+                                            size="sm"
+                                            className="bg-primary hover:bg-primary/90 text-primary-foreground transform transition-all duration-200 hover:scale-105 hover:shadow-lg rounded-xl border-0 mr-2"
+                                        >
+                                            Dashboard
+                                        </Button>
+                                    </Link>
+                                )}
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => logout()}
+                                    className="text-foreground/80 hover:text-foreground hover:bg-foreground/10 transition-all duration-200 rounded-xl border-0"
+                                >
+                                    Log Out
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <Link href="/login">
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="text-foreground/80 hover:text-foreground hover:bg-foreground/10 transition-all duration-200 rounded-xl border-0"
+                                    >
+                                        Sign In
+                                    </Button>
+                                </Link>
+                                <Link href="/register">
+                                    <Button
+                                        size="sm"
+                                        className="bg-primary hover:bg-primary/90 text-primary-foreground transform transition-all duration-200 hover:scale-105 hover:shadow-lg rounded-xl border-0"
+                                    >
+                                        Get Started
+                                    </Button>
+                                </Link>
+                            </>
+                        )
+                    )}
                 </div>
             </div>
         </header>

@@ -10,6 +10,10 @@ interface ReviewGenerationInput {
     businessCategory?: string | null;
     businessType?: string | null; // e.g., b2b, b2c
     description?: string | null;
+    rating?: number;
+    mood?: string;
+    service?: string;
+    selectedItems?: string[];
 }
 
 interface GeneratedReview {
@@ -33,12 +37,17 @@ export async function generateReview(
         if (rand < 0.50) return 4; // 35% chance of 4 stars
         return 5; // 50% chance of 5 stars
     };
-    const rating = generateRating();
+    const rating = input.rating || generateRating();
 
     const productSummaryText = input.productSummary ? `Product/Service Summary: ${input.productSummary}` : "";
     const categoryText = input.businessCategory ? `Business Category: ${input.businessCategory}` : "";
     const typeText = input.businessType ? `Business Type: ${input.businessType}` : "";
     const descText = input.description ? `Detailed Description: ${input.description}` : "";
+
+    // User selections
+    const itemsText = input.selectedItems && input.selectedItems.length > 0 ? `Items Ordered/Experienced: ${input.selectedItems.join(", ")}` : "";
+    const moodText = input.mood ? `Customer's Mood/Experience Context: ${input.mood}` : "";
+    const serviceText = input.service ? `Customer's Opinion on Service/Ambience: ${input.service}` : "";
 
     const prompt = `Generate a highly unique, unpredictable, and human-like customer review for the following business.
     
@@ -49,20 +58,25 @@ export async function generateReview(
     ${productSummaryText}
     ${descText}
     
+    Customer's Specific Visit Details (MANDATORY TO INCLUDE IN REVIEW):
+    ${itemsText}
+    ${moodText}
+    ${serviceText}
+    Rating Given: ${rating} out of 5 stars.
+    
     Target Language: ${language} (STRICTLY OUTPUT THE REVIEW TEXT IN THIS LANGUAGE)
     
     Randomness Constraints (Follow these to make the review TRULY unique and completely unpredictable):
-    - Invent a creative Reviewer Persona (e.g., 'grumpy elderly person', 'Gen-Z foodie', 'rushed professional', 'first-time visitor', 'regular user', 'skeptic', etc. DO NOT limit yourself to these examples. Surprise me!).
-    - Invent a unique Tone based on the persona (e.g., sarcastic but happy, overwhelmingly joyful, matter-of-fact, highly detailed, very brief exclamation).
+    - Invent a creative Reviewer Persona based on the Mood/Experience provided.
+    - Invent a unique Tone based on the persona (e.g., enthusiastic, matter-of-fact, highly detailed, very brief exclamation).
     - Pick a completely random Length (anything between 1 single word to 3 full sentences).
-    - Pick a completely random Focus Area related to the business details provided (e.g., the staff, the packaging, the speed, the atmosphere, a tiny specific detail about their product/service, or just the overall experience).
-    - Rating Given: ${rating} out of 5 stars.
+    - Focus Area: STRICTLY mention the items ordered and the service opinion provided, blending them naturally into the story.
     - RandomSeed: ${Math.random() * 1000000} (Use this random number to seed your creativity so no two reviews are ever identical).
 
     CRITICAL INSTRUCTIONS:
     1. Make it sound exactly like a REAL person from the perspective of the persona you invented, never an AI bot. Use incredibly natural phrasing and vocabulary appropriate for this persona.
-    2. Ensure the tone matches both your randomly invented persona and the strictly assigned '${rating} star' rating.
-    3. Use the provided business details to make the review highly specific and contextual to their actual service/product, rather than generic praise.
+    2. Ensure the tone matches the assigned '${rating} star' rating and the provided mood.
+    3. You MUST naturally weave the "Items Ordered" and the "Service/Ambience" into the review text. Do not just list them out.
     4. ${allowMistakes
             ? "Include 1 minor human imperfection (e.g., lowercase start, trailing thoughts, or casually missing punctuation)."
             : "Use extremely casual, conversational internet grammar. DO NOT use corporate, overly polished, or formal phrasing. Write how a real person texts or posts online."}

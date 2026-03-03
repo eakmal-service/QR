@@ -15,7 +15,7 @@ expect {
 expect eof
 
 # Rsync files
-spawn rsync -avz -e "ssh -o StrictHostKeyChecking=no" --exclude ".next" --exclude "node_modules" --exclude ".git" --exclude ".DS_Store" --exclude "venv" --exclude "__pycache__" ./ $user@$host:/var/www/qr.akmal.in
+spawn rsync -avz -e "ssh -o StrictHostKeyChecking=no" --exclude .next --exclude node_modules --exclude .git --exclude .DS_Store --exclude venv --exclude __pycache__ --exclude "*.db" --exclude "*.sqlite" ./ root@72.61.229.171:/var/www/qr.akmal.in
 expect {
     "password:" {
         send "$password\r"

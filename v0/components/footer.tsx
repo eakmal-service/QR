@@ -8,9 +8,9 @@ export function Footer() {
           <div className="col-span-1 md:col-span-2">
             <LeLoLogo className="mb-4" />
             <p className="text-white/70 mb-4 max-w-md">
-              Empowering businesses with cutting-edge SaaS solutions. Take control of your success with LeLo.
+              Empowering businesses with cutting-edge AI review solutions. Take control of your success with QR.Akmal.
             </p>
-            <p className="text-sm text-white/50 italic">"Jab sb aapki le rahe ho to aap bhi khuch lelo"</p>
+            <p className="text-sm text-white/50 italic">"Boost your reputation, one scan at a time"</p>
           </div>
 
           <div>
@@ -62,12 +62,27 @@ export function Footer() {
                   Contact
                 </a>
               </li>
+              <li className="pt-2">
+                <a href="mailto:support@akmal.in" className="hover:text-white transition-colors flex items-center gap-2">
+                  <span className="text-white/50">Email:</span> support@akmal.in
+                </a>
+              </li>
+              <li>
+                <div className="flex flex-col gap-1">
+                  <span className="text-white/50">Phone / WhatsApp:</span>
+                  <div className="flex gap-3">
+                    <a href="tel:+917600009818" className="hover:text-white transition-colors">
+                      +91 7600009818
+                    </a>
+                  </div>
+                </div>
+              </li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-white/10 mt-8 pt-8 text-center text-white/50">
-          <p>&copy; 2024 LeLo. All rights reserved.</p>
+          <p>&copy; 2024 QR.Akmal. All rights reserved.</p>
         </div>
       </div>
     </footer>

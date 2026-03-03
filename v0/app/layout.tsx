@@ -3,6 +3,9 @@ import type { Metadata } from "next"
 import "./globals.css"
 import { Inter, JetBrains_Mono, Playfair_Display } from "next/font/google"
 import { Toaster } from "@/components/ui/sonner"
+import { AuthProvider } from "@/components/auth/auth-provider"
+import { ThemeProvider } from "@/components/theme-provider"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -21,9 +24,9 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  title: "LeLo - Modern SaaS Solution",
-  description: "Jab sb aapki le rahe ho to aap bhi khuch lelo",
-  generator: "v0.app",
+  title: "QR.Akmal - AI review solution",
+  description: "QR.Akmal - Advanced AI review solution",
+  generator: "QR.Akmal",
 }
 
 export default function RootLayout({
@@ -32,10 +35,15 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`font-sans ${inter.variable} ${jetbrainsMono.variable} ${playfair.variable}`}>
-        {children}
-        <Toaster />
+    <html lang="en" suppressHydrationWarning>
+      <body className={`font-sans ${inter.variable} ${jetbrainsMono.variable} ${playfair.variable} bg-black text-white transition-colors duration-300`}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <AuthProvider>
+            {children}
+            <Toaster />
+            <ThemeToggle />
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
