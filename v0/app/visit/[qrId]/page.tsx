@@ -156,7 +156,7 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
     const checkboxBorderClass = isDairyDon ? "border-[#9C2C86]" : "border-gray-500";
     const checkboxDotClass = isDairyDon ? "bg-[#9C2C86]" : "bg-white";
 
-    const btnPrimaryClass = isDairyDon ? "w-full bg-[#FF4F7A] text-white font-bold text-[17px] py-[18px] rounded-xl shadow-md transition-all active:scale-[0.98] disabled:opacity-60 disabled:active:scale-100 flex items-center justify-center gap-2 mt-2 hover:bg-[#ff3366]" : "w-full bg-white text-black font-bold text-[17px] py-[18px] rounded-xl shadow-md transition-all active:scale-[0.98] disabled:opacity-60 disabled:active:scale-100 flex items-center justify-center gap-2 mt-2 hover:bg-gray-200";
+    const btnPrimaryClass = isDairyDon ? "w-full bg-[#9C2C86] text-white font-bold text-[17px] py-[18px] rounded-xl shadow-md transition-all active:scale-[0.98] disabled:opacity-60 disabled:active:scale-100 flex items-center justify-center gap-2 mt-2 hover:bg-[#7A1F6A]" : "w-full bg-white text-black font-bold text-[17px] py-[18px] rounded-xl shadow-md transition-all active:scale-[0.98] disabled:opacity-60 disabled:active:scale-100 flex items-center justify-center gap-2 mt-2 hover:bg-gray-200";
 
     const reviewCardTopClass = isDairyDon ? "bg-white shadow-lg rounded-[24px] p-6 mb-5" : "bg-white/5 backdrop-blur-xl border border-white/10 rounded-[24px] p-6 shadow-sm";
     const reviewCardClass = isDairyDon ? "bg-gray-50 border border-gray-200 rounded-[20px] p-5 mb-5 relative" : "bg-black/30 border border-white/10 rounded-[20px] p-5 mb-5 relative";
@@ -165,7 +165,7 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
     const reviewLocationClass = isDairyDon ? "flex items-center gap-1.5 text-gray-500" : "flex items-center gap-1.5 text-gray-400";
     const iconColor = isDairyDon ? "text-gray-500" : "text-white";
 
-    const btnHalfPrimaryClass = isDairyDon ? "flex-1 bg-[#FF4F7A] hover:bg-[#ff3366] text-white font-bold text-[16px] py-[15px] px-4 rounded-xl shadow-md transition-colors flex items-center justify-center gap-2 disabled:opacity-70" : "flex-1 bg-white hover:bg-gray-200 text-black font-bold text-[16px] py-[15px] px-4 rounded-xl shadow-md transition-colors flex items-center justify-center gap-2 disabled:opacity-70";
+    const btnHalfPrimaryClass = isDairyDon ? "flex-1 bg-[#9C2C86] hover:bg-[#7A1F6A] text-white font-bold text-[16px] py-[15px] px-4 rounded-xl shadow-md transition-colors flex items-center justify-center gap-2 disabled:opacity-70" : "flex-1 bg-white hover:bg-gray-200 text-black font-bold text-[16px] py-[15px] px-4 rounded-xl shadow-md transition-colors flex items-center justify-center gap-2 disabled:opacity-70";
     const btnHalfSecondaryClass = isDairyDon ? "flex-1 bg-gray-100 border border-gray-200 hover:bg-gray-200 text-gray-800 font-bold text-[16px] py-[15px] px-4 rounded-xl shadow-sm transition-colors flex items-center justify-center gap-2 disabled:opacity-70" : "flex-1 bg-white/5 border border-white/20 hover:bg-white/10 text-white font-bold text-[16px] py-[15px] px-4 rounded-xl shadow-sm transition-colors flex items-center justify-center gap-2 disabled:opacity-70";
 
     const getMenuItemClass = (isSelected: boolean) => {
@@ -182,6 +182,7 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
 
     // Form State
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
+    const [showAllMenu, setShowAllMenu] = useState(false);
     const [rating, setRating] = useState<number>(0);
     const [mood, setMood] = useState<string>(MOOD_OPTIONS[0].value);
     const [service, setService] = useState<string>(SERVICE_OPTIONS[0].value);
@@ -400,18 +401,18 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                         {/* Items Section */}
                         {qrData?.menuItems && qrData.menuItems.length > 0 && (
                             <div>
-                                <label className={labelClass}>Aapne kya order kiya? (Jo items try ki wo select kero menu me se )</label>
+                                <label className={labelClass}>Aapne kya order kiya? (Jo items try ki wo select kero menu me se)</label>
                                 <p className={subLabelClass}>Up to 4 items select karo — review mein mention honge</p>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    {qrData.menuItems.map((item, idx) => {
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
+                                    {(showAllMenu ? qrData.menuItems : qrData.menuItems.slice(0, 9)).map((item, idx) => {
                                         const itemName = typeof item === 'string' ? item : item.name;
                                         const itemPrice = typeof item === 'object' && item.price ? item.price : null;
 
                                         return (
                                             <label key={idx} className={getMenuItemClass(selectedItems.includes(itemName))}>
-                                                <div className={`w-[18px] h-[18px] rounded-full border flex items-center justify-center shrink-0 ${checkboxBorderClass}`}>
+                                                <div className={`w-[16px] h-[16px] sm:w-[18px] sm:h-[18px] rounded-full border flex items-center justify-center shrink-0 ${checkboxBorderClass}`}>
                                                     {selectedItems.includes(itemName) && (
-                                                        <div className={`w-[10px] h-[10px] rounded-full ${checkboxDotClass}`}></div>
+                                                        <div className={`w-[8px] h-[8px] sm:w-[10px] sm:h-[10px] rounded-full ${checkboxDotClass}`}></div>
                                                     )}
                                                 </div>
                                                 <input
@@ -420,14 +421,22 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                                                     onChange={() => toggleItem(itemName)}
                                                     className="hidden"
                                                 />
-                                                <div className="flex flex-col">
-                                                    <span className={menuItemTextClass}>{itemName}</span>
-                                                    {itemPrice && <span className={menuItemPriceClass}>₹{itemPrice}</span>}
+                                                <div className="flex flex-col overflow-hidden">
+                                                    <span className={`${menuItemTextClass} text-[13px] sm:text-[15px]`}>{itemName}</span>
+                                                    {itemPrice && <span className={`${menuItemPriceClass} text-[10px] sm:text-xs`}>₹{itemPrice}</span>}
                                                 </div>
                                             </label>
                                         );
                                     })}
                                 </div>
+                                {qrData.menuItems.length > 9 && (
+                                    <button
+                                        onClick={() => setShowAllMenu(!showAllMenu)}
+                                        className={`mt-4 w-full py-2.5 rounded-xl border ${isDairyDon ? 'border-gray-200 text-[#9C2C86] hover:bg-gray-50' : 'border-white/20 text-white hover:bg-white/5'} font-semibold text-[14px] transition-colors`}
+                                    >
+                                        {showAllMenu ? "View Less" : `View More (${qrData.menuItems.length - 9})`}
+                                    </button>
+                                )}
                             </div>
                         )}
 
