@@ -486,7 +486,7 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                                 onChange={(e) => setLanguage(e.target.value)}
                                 className={inputClass}
                             >
-                                {LANGUAGES.map(opt => <option key={opt.value || opt} value={opt}>{opt}</option>)}
+                                {LANGUAGES.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                             </select>
                         </div>
 
