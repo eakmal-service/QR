@@ -184,10 +184,20 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
     const [showAllMenu, setShowAllMenu] = useState(false);
     const [rating, setRating] = useState<number>(0);
-    const [mood, setMood] = useState<string>(MOOD_OPTIONS[0].value);
-    const [service, setService] = useState<string>(SERVICE_OPTIONS[0].value);
+    const [mood, setMood] = useState<string>("");
+    const [service, setService] = useState<string>("");
     const [category, setCategory] = useState<string>(CATEGORY_DEFAULT);
-    const [language, setLanguage] = useState<string>("Hinglish");
+    const [language, setLanguage] = useState<string>("");
+
+    // Progressive Unlock Logic
+    const isCategoryUnlocked = selectedItems.length > 0;
+    const isRatingUnlocked = isCategoryUnlocked && category !== "";
+    const isMoodUnlocked = isRatingUnlocked && rating > 0;
+    const isServiceUnlocked = isMoodUnlocked && mood !== "";
+    const isLanguageUnlocked = isServiceUnlocked && service !== "";
+
+    const getSectionClass = (isUnlocked: boolean) =>
+        `transition-all duration-500 ${isUnlocked ? 'opacity-100 blur-none pointer-events-auto' : 'opacity-40 blur-[3px] pointer-events-none select-none'}`;
 
     // Result State
     const [draft, setDraft] = useState("");
@@ -246,8 +256,8 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
     };
 
     const handleGenerate = async () => {
-        if (rating === 0) {
-            toast.warning("Please provide a rating first!");
+        if (!isLanguageUnlocked || language === "") {
+            toast.warning("Please complete all details first!");
             return;
         }
 
@@ -441,20 +451,20 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                         )}
 
                         {/* Category */}
-                        <div>
+                        <div className={getSectionClass(isCategoryUnlocked)}>
                             <label className={labelSmallClass}>Category</label>
                             <select
                                 value={category}
                                 onChange={(e) => setCategory(e.target.value)}
                                 className={inputClass}
                             >
-                                <option value="">Select Category</option>
+                                <option value="" disabled>Select Category</option>
                                 {CATEGORY_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                             </select>
                         </div>
 
                         {/* Rating */}
-                        <div>
+                        <div className={getSectionClass(isRatingUnlocked)}>
                             <label className={labelSmallClass}>Rating</label>
                             <div className="flex gap-1.5 ml-1">
                                 {[1, 2, 3, 4, 5].map(star => (
@@ -464,37 +474,40 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                         </div>
 
                         {/* Mood / Experience */}
-                        <div>
+                        <div className={getSectionClass(isMoodUnlocked)}>
                             <label className={labelSmallClass}>Mood / Experience</label>
                             <select
                                 value={mood}
                                 onChange={(e) => setMood(e.target.value)}
                                 className={inputClass}
                             >
+                                <option value="" disabled>Select Mood</option>
                                 {MOOD_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                             </select>
                         </div>
 
                         {/* Service & Ambience */}
-                        <div>
+                        <div className={getSectionClass(isServiceUnlocked)}>
                             <label className={labelSmallClass}>Service & Ambience</label>
                             <select
                                 value={service}
                                 onChange={(e) => setService(e.target.value)}
                                 className={inputClass}
                             >
+                                <option value="" disabled>Select Service & Ambience</option>
                                 {SERVICE_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                             </select>
                         </div>
 
                         {/* Language */}
-                        <div>
+                        <div className={getSectionClass(isLanguageUnlocked)}>
                             <label className={labelSmallClass}>Language</label>
                             <select
                                 value={language}
                                 onChange={(e) => setLanguage(e.target.value)}
                                 className={inputClass}
                             >
+                                <option value="" disabled>Select Language</option>
                                 {LANGUAGES.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                             </select>
                         </div>
@@ -512,18 +525,20 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                     </h2>
                     <div className={dividerClass}></div>
 
-                    <button
-                        onClick={handleGenerate}
-                        disabled={generating || rating === 0}
-                        className={btnPrimaryClass}
-                    >
-                        {generating ? (
-                            <><Loader2 className="w-5 h-5 animate-spin" /> Generating Review...</>
-                        ) : (
-                            <>✨ Smart Review Banao</>
-                        )}
-                    </button>
-                    {rating === 0 && <p className="text-center text-sm text-gray-400 mt-3">Pehle rating select karein</p>}
+                    <div className={getSectionClass(isLanguageUnlocked && language !== "")}>
+                        <button
+                            onClick={handleGenerate}
+                            disabled={generating || !isLanguageUnlocked || language === ""}
+                            className={btnPrimaryClass}
+                        >
+                            {generating ? (
+                                <><Loader2 className="w-5 h-5 animate-spin" /> Generating Review...</>
+                            ) : (
+                                <>✨ Smart Review Banao</>
+                            )}
+                        </button>
+                    </div>
+                    {(!isLanguageUnlocked || language === "") && <p className="text-center text-sm text-gray-400 mt-3">Pehle upar ki details complete karein</p>}
                 </div>
 
                 {/* 3. Aapka Review */}
