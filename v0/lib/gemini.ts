@@ -51,7 +51,6 @@ export async function generateReview(
 
     // User selections
     const itemsText = input.selectedItems && input.selectedItems.length > 0 ? `Items Ordered/Experienced: ${input.selectedItems.join(", ")}` : "";
-    const moodText = input.mood ? `Customer's Mood/Experience Context: ${input.mood}` : "";
     const serviceText = input.service ? `Customer's Opinion on Service/Ambience: ${input.service}` : "";
 
     const prompt = `Generate a highly unique, unpredictable, and human-like customer review for the following business.
@@ -65,7 +64,6 @@ export async function generateReview(
     
     Customer's Specific Visit Details (MANDATORY TO INCLUDE IN REVIEW):
     ${itemsText}
-    ${moodText}
     ${serviceText}
     Rating Given: ${rating} out of 5 stars.
     

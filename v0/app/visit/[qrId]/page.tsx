@@ -15,15 +15,6 @@ interface QRCodeData {
     location?: string;
 }
 
-const MOOD_OPTIONS = [
-    { value: "Happy", label: "Happy" },
-    { value: "Chill", label: "Chill" },
-    { value: "Excited", label: "Excited" },
-    { value: "Relaxed", label: "Relaxed" },
-    { value: "Bored", label: "Bored" },
-    { value: "Energetic", label: "Energetic" },
-];
-
 const SERVICE_OPTIONS = [
     { value: "Excellent", label: "Excellent" },
     { value: "Good", label: "Good" },
@@ -34,17 +25,6 @@ const SERVICE_OPTIONS = [
 ];
 
 const LANGUAGES = ["English", "Hindi", "Hinglish", "Gujarati"];
-
-const CATEGORY_OPTIONS = [
-    { value: "Milk Shake 🥛", label: "Milk Shake 🥛" },
-    { value: "Ice Cream 🍨", label: "Ice Cream 🍨" },
-    { value: "Coco Special 🥥", label: "Coco Special 🥥" },
-    { value: "Kulfi / Roll Slice 🍧", label: "Kulfi / Roll Slice 🍧" },
-    { value: "Falooda 🌹", label: "Falooda 🌹" },
-    { value: "Mixed Items", label: "Mixed Items" }
-];
-
-const CATEGORY_DEFAULT = CATEGORY_OPTIONS[0].value;
 
 const DairyDonBackground = () => (
     <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none opacity-[0.25]">
@@ -182,18 +162,13 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
 
     // Form State
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
-    const [showAllMenu, setShowAllMenu] = useState(false);
     const [rating, setRating] = useState<number>(0);
-    const [mood, setMood] = useState<string>("");
     const [service, setService] = useState<string>("");
-    const [category, setCategory] = useState<string>(CATEGORY_DEFAULT);
     const [language, setLanguage] = useState<string>("");
 
     // Progressive Unlock Logic
-    const isCategoryUnlocked = selectedItems.length > 0;
-    const isRatingUnlocked = isCategoryUnlocked && category !== "";
-    const isMoodUnlocked = isRatingUnlocked && rating > 0;
-    const isServiceUnlocked = isMoodUnlocked && mood !== "";
+    const isRatingUnlocked = selectedItems.length > 0;
+    const isServiceUnlocked = isRatingUnlocked && rating > 0;
     const isLanguageUnlocked = isServiceUnlocked && service !== "";
 
     const getSectionClass = (isUnlocked: boolean) =>
@@ -229,9 +204,6 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                 }
 
                 setQrData(data.qrCode);
-                if (data.qrCode.businessCategory) {
-                    setCategory(data.qrCode.businessCategory);
-                }
             } catch (err: any) {
                 console.error("Scan error:", err);
                 setError(err.message || "Failed to load page");
@@ -255,8 +227,8 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
         }
     };
 
-    const handleGenerate = async () => {
-        if (!isLanguageUnlocked || language === "") {
+    const handleGenerate = async (selectedLanguage = language) => {
+        if (!isLanguageUnlocked || selectedLanguage === "") {
             toast.warning("Please complete all details first!");
             return;
         }
@@ -269,11 +241,9 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                 body: JSON.stringify({
                     qrId: params.qrId,
                     sessionId,
-                    language,
+                    language: selectedLanguage,
                     rating,
-                    mood,
                     service,
-                    category,
                     selectedItems,
                 }),
             });
@@ -369,12 +339,12 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
     const StarRating = ({ isActive, onClick }: { isActive: boolean, onClick: () => void }) => (
         <button onClick={onClick} className="focus:outline-none hover:scale-110 transition-transform">
             <svg
-                width="40" height="40"
+                width="60" height="60"
                 viewBox="0 0 24 24"
                 fill={isActive ? "#FDE047" : "#FFFBF6"}
                 stroke={isActive ? "#EAB308" : "#E2D3BE"}
                 strokeWidth={isActive ? "1" : "1.5"}
-                className={`w-10 h-10 drop-shadow-sm`}
+                className={`w-14 h-14 sm:w-16 sm:h-16 drop-shadow-md`}
             >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
             </svg>
@@ -413,55 +383,53 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                             <div>
                                 <label className={labelClass}>Aapne kya order kiya? (Jo items try ki wo select kero menu me se)</label>
                                 <p className={subLabelClass}>Up to 4 items select karo — review mein mention honge</p>
-                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
-                                    {(showAllMenu ? qrData.menuItems : qrData.menuItems.slice(0, 9)).map((item, idx) => {
-                                        const itemName = typeof item === 'string' ? item : item.name;
-                                        const itemPrice = typeof item === 'object' && item.price ? item.price : null;
 
-                                        return (
-                                            <label key={idx} className={getMenuItemClass(selectedItems.includes(itemName))}>
-                                                <div className={`w-[16px] h-[16px] sm:w-[18px] sm:h-[18px] rounded-full border flex items-center justify-center shrink-0 ${checkboxBorderClass}`}>
-                                                    {selectedItems.includes(itemName) && (
-                                                        <div className={`w-[8px] h-[8px] sm:w-[10px] sm:h-[10px] rounded-full ${checkboxDotClass}`}></div>
-                                                    )}
-                                                </div>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={selectedItems.includes(itemName)}
-                                                    onChange={() => toggleItem(itemName)}
-                                                    className="hidden"
-                                                />
-                                                <div className="flex flex-col overflow-hidden">
-                                                    <span className={`${menuItemTextClass} text-[13px] sm:text-[15px]`}>{itemName}</span>
-                                                    {itemPrice && <span className={`${menuItemPriceClass} text-[10px] sm:text-xs`}>₹{itemPrice}</span>}
-                                                </div>
-                                            </label>
-                                        );
-                                    })}
+                                <div className="mt-4">
+                                    {Object.entries(
+                                        qrData.menuItems.reduce((acc: any, item: any) => {
+                                            const cat = (typeof item === 'object' && item.category) ? item.category : 'Menu';
+                                            if (!acc[cat]) acc[cat] = [];
+                                            acc[cat].push(item);
+                                            return acc;
+                                        }, {})
+                                    ).map(([category, items]: [string, any], groupIdx) => (
+                                        <div key={category} className={groupIdx > 0 ? "mt-5" : ""}>
+                                            {category !== 'Menu' && (
+                                                <h3 className={`font-bold mb-3 text-[15px] uppercase tracking-wider ${isDairyDon ? 'text-[#9C2C86]' : 'text-white/80'}`}>{category}</h3>
+                                            )}
+                                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
+                                                {items.map((item: any, idx: number) => {
+                                                    const itemName = typeof item === 'string' ? item : item.name;
+                                                    const itemPrice = typeof item === 'object' && item.price ? item.price : null;
+
+                                                    return (
+                                                        <label key={idx} className={getMenuItemClass(selectedItems.includes(itemName))}>
+                                                            <div className={`w-[16px] h-[16px] sm:w-[18px] sm:h-[18px] rounded-full border flex items-center justify-center shrink-0 ${checkboxBorderClass}`}>
+                                                                {selectedItems.includes(itemName) && (
+                                                                    <div className={`w-[8px] h-[8px] sm:w-[10px] sm:h-[10px] rounded-full ${checkboxDotClass}`}></div>
+                                                                )}
+                                                            </div>
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={selectedItems.includes(itemName)}
+                                                                onChange={() => toggleItem(itemName)}
+                                                                className="hidden"
+                                                            />
+                                                            <div className="flex flex-col overflow-hidden">
+                                                                <span className={`${menuItemTextClass} text-[13px] sm:text-[15px]`}>{itemName}</span>
+                                                                {itemPrice && <span className={`${menuItemPriceClass} text-[10px] sm:text-xs`}>₹{itemPrice}</span>}
+                                                            </div>
+                                                        </label>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-                                {qrData.menuItems.length > 9 && (
-                                    <button
-                                        onClick={() => setShowAllMenu(!showAllMenu)}
-                                        className={`mt-4 w-full py-2.5 rounded-xl border ${isDairyDon ? 'border-gray-200 text-[#9C2C86] hover:bg-gray-50' : 'border-white/20 text-white hover:bg-white/5'} font-semibold text-[14px] transition-colors`}
-                                    >
-                                        {showAllMenu ? "View Less" : `View More (${qrData.menuItems.length - 9})`}
-                                    </button>
-                                )}
                             </div>
                         )}
 
-                        {/* Category */}
-                        <div className={getSectionClass(isCategoryUnlocked)}>
-                            <label className={labelSmallClass}>Category</label>
-                            <select
-                                value={category}
-                                onChange={(e) => setCategory(e.target.value)}
-                                className={inputClass}
-                            >
-                                <option value="" disabled>Select Category</option>
-                                {CATEGORY_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-                            </select>
-                        </div>
+
 
                         {/* Rating */}
                         <div className={getSectionClass(isRatingUnlocked)}>
@@ -473,18 +441,7 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                             </div>
                         </div>
 
-                        {/* Mood / Experience */}
-                        <div className={getSectionClass(isMoodUnlocked)}>
-                            <label className={labelSmallClass}>Mood / Experience</label>
-                            <select
-                                value={mood}
-                                onChange={(e) => setMood(e.target.value)}
-                                className={inputClass}
-                            >
-                                <option value="" disabled>Select Mood</option>
-                                {MOOD_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-                            </select>
-                        </div>
+
 
                         {/* Service & Ambience */}
                         <div className={getSectionClass(isServiceUnlocked)}>
@@ -504,7 +461,11 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                             <label className={labelSmallClass}>Language</label>
                             <select
                                 value={language}
-                                onChange={(e) => setLanguage(e.target.value)}
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    setLanguage(val);
+                                    handleGenerate(val);
+                                }}
                                 className={inputClass}
                             >
                                 <option value="" disabled>Select Language</option>
@@ -515,38 +476,20 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                     </div>
                 </div>
 
-                {/* 2. Review Generate Karo */}
-                <div className={mainCardClass}>
-                    <h2 className={headingClass}>
-                        <span className={stepCircleClass}>
-                            2
-                        </span>
-                        Review Generate Karo
-                    </h2>
-                    <div className={dividerClass}></div>
-
-                    <div className={getSectionClass(isLanguageUnlocked && language !== "")}>
-                        <button
-                            onClick={handleGenerate}
-                            disabled={generating || !isLanguageUnlocked || language === ""}
-                            className={btnPrimaryClass}
-                        >
-                            {generating ? (
-                                <><Loader2 className="w-5 h-5 animate-spin" /> Generating Review...</>
-                            ) : (
-                                <>✨ Smart Review Banao</>
-                            )}
-                        </button>
+                {/* Loading State */}
+                {generating && (
+                    <div className={`${mainCardClass} flex flex-col items-center justify-center p-8 animate-in fade-in zoom-in duration-300`}>
+                        <Loader2 className={`w-12 h-12 ${isDairyDon ? 'text-[#9C2C86]' : 'text-white'} animate-spin mb-4`} />
+                        <p className={`${isDairyDon ? 'text-[#9C2C86]' : 'text-white'} font-bold text-lg`}>Generating Your Review...</p>
                     </div>
-                    {(!isLanguageUnlocked || language === "") && <p className="text-center text-sm text-gray-400 mt-3">Pehle upar ki details complete karein</p>}
-                </div>
+                )}
 
-                {/* 3. Aapka Review */}
-                {step === 2 && (
+                {/* 2. Aapka Review */}
+                {step === 2 && !generating && (
                     <div className={`${reviewCardTopClass} animate-in fade-in slide-in-from-bottom-4 duration-500`}>
                         <h2 className={headingClass}>
                             <span className={stepCircleClass}>
-                                3
+                                2
                             </span>
                             Aapka Review
                         </h2>
