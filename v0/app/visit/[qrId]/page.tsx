@@ -47,37 +47,43 @@ const CATEGORY_OPTIONS = [
 const CATEGORY_DEFAULT = CATEGORY_OPTIONS[0].value;
 
 const DairyDonBackground = () => (
-    <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none opacity-[0.08]">
+    <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none opacity-[0.25]">
         {/* Ice Cream Cup */}
-        <svg className="absolute top-[5%] left-[5%] w-24 h-24 rotate-[-15deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+        <svg className="absolute top-[2%] left-[2%] w-24 h-24 rotate-[-15deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M4 11h16" />
             <path d="M5 11l1.5 10a1 1 0 001 1h9a1 1 0 001-1l1.5-10" />
             <path d="M6 11c0-3.5 2.5-6.5 6-6.5s6 3 6 6.5" />
         </svg>
         {/* Cone */}
-        <svg className="absolute top-[18%] right-[8%] w-32 h-32 rotate-[25deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+        <svg className="absolute top-[8%] right-[5%] w-32 h-32 rotate-[25deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M6 11l6 12 6-12" />
             <path d="M5 11h14" />
             <path d="M6 11a6 6 0 0112 0" />
             <path d="M10 6v1M14 7v1" />
         </svg>
         {/* Popsicle */}
-        <svg className="absolute top-[45%] left-[-2%] w-[120px] h-[120px] rotate-[-25deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+        <svg className="absolute top-[28%] left-[-4%] w-[120px] h-[120px] rotate-[-25deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M6 17V7a6 6 0 0112 0v10" />
             <path d="M6 17h12" />
             <path d="M12 17v5" />
             <path d="M6 10c2 0 3 1.5 4.5 1.5S13 10 15 10s2.5 1.5 3 1.5" />
         </svg>
         {/* Sundae Glass */}
-        <svg className="absolute bottom-[20%] right-[3%] w-[100px] h-[100px] rotate-[15deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+        <svg className="absolute top-[35%] right-[2%] w-[100px] h-[100px] rotate-[15deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M5 9h14" />
             <path d="M6 9l1 7c0 2 2 4 5 4s5-2 5-4l1-7" />
             <path d="M12 20v2M9 22h6" />
             <path d="M7 9a5 5 0 0110 0" />
             <path d="M11 4v1" />
         </svg>
+        {/* Cupcake 1 */}
+        <svg className="absolute bottom-[35%] left-[5%] w-20 h-20 rotate-[10deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M4 11h16" />
+            <path d="M5 11l2 9h10l2-9" />
+            <path d="M6 11c0-4 3-7 6-7s6 3 6 7" />
+        </svg>
         {/* Cone 2 */}
-        <svg className="absolute bottom-[5%] left-[20%] w-28 h-28 rotate-[-10deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+        <svg className="absolute bottom-[10%] left-[20%] w-28 h-28 rotate-[-10deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M7 11l5 11 5-11" />
             <path d="M6 11h12" />
             <path d="M7 11a5 5 0 0110 0" />
@@ -86,11 +92,42 @@ const DairyDonBackground = () => (
             <circle cx="15" cy="9" r="1" fill="currentColor" />
         </svg>
         {/* Small Popsicle */}
-        <svg className="absolute top-[65%] right-[35%] w-[80px] h-[80px] rotate-[45deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+        <svg className="absolute bottom-[20%] right-[25%] w-[80px] h-[80px] rotate-[45deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M7 18V7a5 5 0 0110 0v11" />
             <path d="M7 18h10" />
             <path d="M10 18v4" />
             <path d="M14 18v4" />
+        </svg>
+        {/* Extra Ice Cream Cup */}
+        <svg className="absolute top-[65%] right-[-2%] w-24 h-24 rotate-[-30deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M4 11h16" />
+            <path d="M5 11l1.5 10a1 1 0 001 1h9a1 1 0 001-1l1.5-10" />
+            <path d="M6 11c0-3.5 2.5-6.5 6-6.5s6 3 6 6.5" />
+        </svg>
+        {/* Extra Cone Center */}
+        <svg className="absolute top-[5%] left-[45%] w-20 h-20 rotate-[5deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M6 11l6 12 6-12" />
+            <path d="M5 11h14" />
+            <path d="M6 11a6 6 0 0112 0" />
+        </svg>
+        {/* Extra Popsicle Center Bottom */}
+        <svg className="absolute bottom-[5%] right-[5%] w-20 h-20 rotate-[-15deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M6 17V7a6 6 0 0112 0v10" />
+            <path d="M6 17h12" />
+            <path d="M12 17v5" />
+        </svg>
+        {/* Cupcake 2 */}
+        <svg className="absolute top-[80%] left-[2%] w-28 h-28 rotate-[12deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M4 11h16" />
+            <path d="M5 11l2 9h10l2-9" />
+            <path d="M6 11c0-4 3-7 6-7s6 3 6 7" />
+        </svg>
+        {/* Sundae 2 */}
+        <svg className="absolute top-[55%] left-[30%] w-24 h-24 rotate-[-10deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M5 9h14" />
+            <path d="M6 9l1 7c0 2 2 4 5 4s5-2 5-4l1-7" />
+            <path d="M12 20v2M9 22h6" />
+            <path d="M7 9a5 5 0 0110 0" />
         </svg>
     </div>
 );
@@ -98,10 +135,44 @@ const DairyDonBackground = () => (
 export default function VisitPage({ params }: { params: { qrId: string } }) {
     const isDairyDon = params.qrId === "qr-VU94MVcLYm";
     const bgClass = isDairyDon ? "bg-gradient-to-br from-[#7A1F6A] to-[#B23A96]" : "bg-black";
-    const inputBgClass = isDairyDon ? "bg-[#7A1F6A]" : "bg-black";
-    const cardInnerBgClass = isDairyDon ? "bg-[#7A1F6A]/50" : "bg-black/30";
-    const btnBgClass = isDairyDon ? "bg-[#FF4F7A] text-white hover:bg-[#ff3366]" : "bg-white text-black hover:bg-gray-200";
-    const btnIconClass = isDairyDon ? "text-white" : "text-black";
+
+    // Derived UI Classes
+    const mainCardClass = isDairyDon ? "bg-white shadow-xl rounded-[24px] p-6 sm:p-8" : "bg-white/5 backdrop-blur-xl border border-white/10 rounded-[24px] p-6 sm:p-8 shadow-sm";
+    const headingClass = isDairyDon ? "text-[22px] font-bold text-[#9C2C86] flex items-center gap-2" : "text-[22px] font-bold text-white flex items-center gap-2";
+    const stepCircleClass = isDairyDon ? "w-7 h-7 rounded-full border-2 border-[#9C2C86] text-[#9C2C86] flex items-center justify-center text-sm" : "w-7 h-7 rounded-full border-2 border-white text-white flex items-center justify-center text-sm";
+    const dividerClass = isDairyDon ? "border-b-[1.5px] border-dashed border-gray-200 my-5" : "border-b-[1.5px] border-dashed border-white/20 my-5";
+    const labelClass = isDairyDon ? "block text-[17px] font-semibold text-gray-800 mb-2 pl-1" : "block text-[17px] font-semibold text-white mb-2 pl-1";
+    const labelSmallClass = isDairyDon ? "block text-[16px] font-semibold text-gray-800 mb-2 pl-1" : "block text-[16px] font-semibold text-white mb-2 pl-1";
+    const subLabelClass = isDairyDon ? "text-sm text-gray-500 mb-4 pl-1" : "text-sm text-gray-400 mb-4";
+    const inputClass = isDairyDon
+        ? "w-full tracking-wide p-3.5 bg-gray-50 border border-gray-200 rounded-xl outline-none text-gray-900 font-medium text-[15px] focus:ring-1 focus:ring-[#9C2C86]/50 appearance-none"
+        : "w-full tracking-wide p-3.5 bg-black border border-white/20 rounded-xl outline-none text-white font-medium text-[15px] focus:ring-1 focus:ring-white/50 appearance-none";
+
+    // Menu item cards
+    const menuItemBaseClass = isDairyDon ? "bg-gray-50 border-gray-200 hover:bg-gray-100" : "bg-black/30 border-white/10 hover:bg-white/10";
+    const menuItemSelectedClass = isDairyDon ? "bg-[#9C2C86]/5 border-[#9C2C86]" : "bg-white/10 border-white/40";
+    const menuItemTextClass = isDairyDon ? "text-[15px] font-medium text-gray-900 truncate" : "text-[15px] font-medium text-white truncate";
+    const menuItemPriceClass = isDairyDon ? "text-xs text-gray-500 font-semibold" : "text-xs text-gray-400 font-semibold";
+    const checkboxBorderClass = isDairyDon ? "border-[#9C2C86]" : "border-gray-500";
+    const checkboxDotClass = isDairyDon ? "bg-[#9C2C86]" : "bg-white";
+
+    const btnPrimaryClass = isDairyDon ? "w-full bg-[#FF4F7A] text-white font-bold text-[17px] py-[18px] rounded-xl shadow-md transition-all active:scale-[0.98] disabled:opacity-60 disabled:active:scale-100 flex items-center justify-center gap-2 mt-2 hover:bg-[#ff3366]" : "w-full bg-white text-black font-bold text-[17px] py-[18px] rounded-xl shadow-md transition-all active:scale-[0.98] disabled:opacity-60 disabled:active:scale-100 flex items-center justify-center gap-2 mt-2 hover:bg-gray-200";
+
+    const reviewCardTopClass = isDairyDon ? "bg-white shadow-lg rounded-[24px] p-6 mb-5" : "bg-white/5 backdrop-blur-xl border border-white/10 rounded-[24px] p-6 shadow-sm";
+    const reviewCardClass = isDairyDon ? "bg-gray-50 border border-gray-200 rounded-[20px] p-5 mb-5 relative" : "bg-black/30 border border-white/10 rounded-[20px] p-5 mb-5 relative";
+    const reviewTextAreaClass = isDairyDon ? "w-full bg-transparent border-none focus:ring-0 p-0 text-gray-900 font-medium leading-relaxed resize-none outline-none min-h-[160px] whitespace-pre-wrap" : "w-full bg-transparent border-none focus:ring-0 p-0 text-white font-medium leading-relaxed resize-none outline-none min-h-[160px] whitespace-pre-wrap";
+    const reviewMetaTextClass = isDairyDon ? "flex items-center gap-2 text-gray-800" : "flex items-center gap-2 text-white";
+    const reviewLocationClass = isDairyDon ? "flex items-center gap-1.5 text-gray-500" : "flex items-center gap-1.5 text-gray-400";
+    const iconColor = isDairyDon ? "text-gray-500" : "text-white";
+
+    const btnHalfPrimaryClass = isDairyDon ? "flex-1 bg-[#FF4F7A] hover:bg-[#ff3366] text-white font-bold text-[16px] py-[15px] px-4 rounded-xl shadow-md transition-colors flex items-center justify-center gap-2 disabled:opacity-70" : "flex-1 bg-white hover:bg-gray-200 text-black font-bold text-[16px] py-[15px] px-4 rounded-xl shadow-md transition-colors flex items-center justify-center gap-2 disabled:opacity-70";
+    const btnHalfSecondaryClass = isDairyDon ? "flex-1 bg-gray-100 border border-gray-200 hover:bg-gray-200 text-gray-800 font-bold text-[16px] py-[15px] px-4 rounded-xl shadow-sm transition-colors flex items-center justify-center gap-2 disabled:opacity-70" : "flex-1 bg-white/5 border border-white/20 hover:bg-white/10 text-white font-bold text-[16px] py-[15px] px-4 rounded-xl shadow-sm transition-colors flex items-center justify-center gap-2 disabled:opacity-70";
+
+    const getMenuItemClass = (isSelected: boolean) => {
+        const base = "flex items-center gap-3 p-3.5 border rounded-xl cursor-pointer transition-colors";
+        const stateClass = isSelected ? menuItemSelectedClass : menuItemBaseClass;
+        return `${base} ${stateClass}`;
+    };
 
     const [loading, setLoading] = useState(true);
     const [generating, setGenerating] = useState(false);
@@ -312,16 +383,16 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                 )}
 
                 {/* 1. Visit Details Form */}
-                <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[24px] p-6 sm:p-8 shadow-sm">
+                <div className={mainCardClass}>
                     {/* Header */}
-                    <h2 className="text-[22px] font-bold text-white flex items-center gap-2">
-                        <span className="w-7 h-7 rounded-full border-2 border-white text-white flex items-center justify-center text-sm">
+                    <h2 className={headingClass}>
+                        <span className={stepCircleClass}>
                             1
                         </span>
                         Aapki Visit Details
                     </h2>
 
-                    <div className="border-b-[1.5px] border-dashed border-white/20 my-5"></div>
+                    <div className={dividerClass}></div>
 
                     <div className="space-y-6">
 
@@ -329,18 +400,18 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                         {/* Items Section */}
                         {qrData?.menuItems && qrData.menuItems.length > 0 && (
                             <div>
-                                <label className="block text-[17px] font-semibold text-white mb-1">Aapne kya order kiya? (Jo items try ki wo select kero menu me se )</label>
-                                <p className="text-sm text-gray-400 mb-4">Up to 4 items select karo — review mein mention honge</p>
+                                <label className={labelClass}>Aapne kya order kiya? (Jo items try ki wo select kero menu me se )</label>
+                                <p className={subLabelClass}>Up to 4 items select karo — review mein mention honge</p>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     {qrData.menuItems.map((item, idx) => {
                                         const itemName = typeof item === 'string' ? item : item.name;
                                         const itemPrice = typeof item === 'object' && item.price ? item.price : null;
 
                                         return (
-                                            <label key={idx} className={`flex items-center gap-3 p-3.5 border ${selectedItems.includes(itemName) ? 'border-white/40 bg-white/10' : `border-white/10 ${cardInnerBgClass}`} rounded-xl cursor-pointer hover:bg-white/10 transition-colors`}>
-                                                <div className="w-[18px] h-[18px] rounded-full border border-gray-500 flex items-center justify-center shrink-0">
+                                            <label key={idx} className={getMenuItemClass(selectedItems.includes(itemName))}>
+                                                <div className={`w-[18px] h-[18px] rounded-full border flex items-center justify-center shrink-0 ${checkboxBorderClass}`}>
                                                     {selectedItems.includes(itemName) && (
-                                                        <div className="w-[10px] h-[10px] rounded-full bg-white"></div>
+                                                        <div className={`w-[10px] h-[10px] rounded-full ${checkboxDotClass}`}></div>
                                                     )}
                                                 </div>
                                                 <input
@@ -350,8 +421,8 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                                                     className="hidden"
                                                 />
                                                 <div className="flex flex-col">
-                                                    <span className="text-[15px] font-medium text-white truncate">{itemName}</span>
-                                                    {itemPrice && <span className="text-xs text-gray-400 font-semibold">₹{itemPrice}</span>}
+                                                    <span className={menuItemTextClass}>{itemName}</span>
+                                                    {itemPrice && <span className={menuItemPriceClass}>₹{itemPrice}</span>}
                                                 </div>
                                             </label>
                                         );
@@ -362,11 +433,11 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
 
                         {/* Category */}
                         <div>
-                            <label className="block text-[16px] font-semibold text-white mb-2 pl-1">Category</label>
+                            <label className={labelSmallClass}>Category</label>
                             <select
                                 value={category}
                                 onChange={(e) => setCategory(e.target.value)}
-                                className={`w-full tracking-wide p-3.5 ${inputBgClass} border border-white/20 rounded-xl outline-none text-white font-medium text-[15px] focus:ring-1 focus:ring-white/50 appearance-none`}
+                                className={inputClass}
                             >
                                 <option value="">Select Category</option>
                                 {CATEGORY_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
@@ -375,7 +446,7 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
 
                         {/* Rating */}
                         <div>
-                            <label className="block text-[16px] font-semibold text-white mb-2 pl-1">Rating</label>
+                            <label className={labelSmallClass}>Rating</label>
                             <div className="flex gap-1.5 ml-1">
                                 {[1, 2, 3, 4, 5].map(star => (
                                     <StarRating key={star} isActive={rating >= star} onClick={() => setRating(star)} />
@@ -385,11 +456,11 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
 
                         {/* Mood / Experience */}
                         <div>
-                            <label className="block text-[16px] font-semibold text-white mb-2 pl-1">Mood / Experience</label>
+                            <label className={labelSmallClass}>Mood / Experience</label>
                             <select
                                 value={mood}
                                 onChange={(e) => setMood(e.target.value)}
-                                className={`w-full p-3.5 ${inputBgClass} border border-white/20 rounded-xl outline-none text-white font-medium text-[15px] appearance-none focus:ring-1 focus:ring-white/50`}
+                                className={inputClass}
                             >
                                 {MOOD_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                             </select>
@@ -397,11 +468,11 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
 
                         {/* Service & Ambience */}
                         <div>
-                            <label className="block text-[16px] font-semibold text-white mb-2 pl-1">Service & Ambience</label>
+                            <label className={labelSmallClass}>Service & Ambience</label>
                             <select
                                 value={service}
                                 onChange={(e) => setService(e.target.value)}
-                                className={`w-full p-3.5 ${inputBgClass} border border-white/20 rounded-xl outline-none text-white font-medium text-[15px] appearance-none focus:ring-1 focus:ring-white/50`}
+                                className={inputClass}
                             >
                                 {SERVICE_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                             </select>
@@ -409,13 +480,13 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
 
                         {/* Language */}
                         <div>
-                            <label className="block text-[16px] font-semibold text-white mb-2 pl-1">Language</label>
+                            <label className={labelSmallClass}>Language</label>
                             <select
                                 value={language}
                                 onChange={(e) => setLanguage(e.target.value)}
-                                className={`w-full p-3.5 ${inputBgClass} border border-white/20 rounded-xl outline-none text-white font-medium text-[15px] appearance-none focus:ring-1 focus:ring-white/50`}
+                                className={inputClass}
                             >
-                                {LANGUAGES.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                                {LANGUAGES.map(opt => <option key={opt.value || opt} value={opt}>{opt}</option>)}
                             </select>
                         </div>
 
@@ -423,19 +494,19 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                 </div>
 
                 {/* 2. Review Generate Karo */}
-                <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[24px] p-6 shadow-sm">
-                    <h2 className="text-[22px] font-bold text-white flex items-center gap-2">
-                        <span className="w-7 h-7 rounded-full border-2 border-white text-white flex items-center justify-center text-sm">
+                <div className={mainCardClass}>
+                    <h2 className={headingClass}>
+                        <span className={stepCircleClass}>
                             2
                         </span>
                         Review Generate Karo
                     </h2>
-                    <div className="border-b-[1.5px] border-dashed border-white/20 my-4"></div>
+                    <div className={dividerClass}></div>
 
                     <button
                         onClick={handleGenerate}
                         disabled={generating || rating === 0}
-                        className={`w-full ${btnBgClass} font-bold text-[17px] py-[18px] rounded-xl shadow-md transition-all active:scale-[0.98] disabled:opacity-60 disabled:active:scale-100 flex items-center justify-center gap-2 mt-2`}
+                        className={btnPrimaryClass}
                     >
                         {generating ? (
                             <><Loader2 className="w-5 h-5 animate-spin" /> Generating Review...</>
@@ -448,25 +519,25 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
 
                 {/* 3. Aapka Review */}
                 {step === 2 && (
-                    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[24px] p-6 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        <h2 className="text-[22px] font-bold text-white flex items-center gap-2">
-                            <span className="w-7 h-7 rounded-full border-2 border-white text-white flex items-center justify-center text-sm">
+                    <div className={`${reviewCardTopClass} animate-in fade-in slide-in-from-bottom-4 duration-500`}>
+                        <h2 className={headingClass}>
+                            <span className={stepCircleClass}>
                                 3
                             </span>
                             Aapka Review
                         </h2>
-                        <div className="border-b-[1.5px] border-dashed border-white/20 my-4"></div>
+                        <div className={dividerClass}></div>
 
-                        <div className={`${cardInnerBgClass} border border-white/10 rounded-[20px] p-5 mb-5 relative`}>
+                        <div className={reviewCardClass}>
                             <textarea
                                 id="review-text"
                                 value={draft}
                                 onChange={(e) => setDraft(e.target.value)}
-                                className="w-full bg-transparent border-none focus:ring-0 p-0 text-white font-medium leading-relaxed resize-none outline-none min-h-[160px] whitespace-pre-wrap"
+                                className={reviewTextAreaClass}
                             />
 
                             <div className="mt-6 font-medium text-[15px] flex flex-col gap-2.5">
-                                <div className="flex items-center gap-2 text-white">
+                                <div className={reviewMetaTextClass}>
                                     Rating:
                                     <span className="flex text-[#Fcd34d]">
                                         {[...Array(rating)].map((_, i) => <Star key={i} className="w-[18px] h-[18px] fill-[#Fcd34d] stroke-[#Fcd34d]" />)}
@@ -478,8 +549,8 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                                     {rating <= 3 && <span> 😐</span>}
                                 </div>
                                 {(qrData?.location || qrData?.businessName) && (
-                                    <div className="flex items-center gap-1.5 text-gray-400">
-                                        <MapPin className="w-4 h-4 text-white" />
+                                    <div className={reviewLocationClass}>
+                                        <MapPin className={`w-4 h-4 ${iconColor}`} />
                                         {qrData.businessName}{qrData.location ? `, ${qrData.location}` : ""}
                                     </div>
                                 )}
@@ -490,17 +561,17 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                             <button
                                 onClick={handleCopyAndRedirect}
                                 disabled={submitting}
-                                className={`flex-1 ${btnBgClass} font-bold text-[16px] py-[15px] px-4 rounded-xl shadow-md transition-colors flex items-center justify-center gap-2 disabled:opacity-70`}
+                                className={btnHalfPrimaryClass}
                             >
-                                <Clipboard className={`w-5 h-5 ${btnIconClass}`} />
+                                <Clipboard className="w-5 h-5 pointer-events-none" />
                                 Copy Review
                             </button>
                             <button
                                 onClick={() => setStep(1)}
                                 disabled={generating}
-                                className="flex-1 bg-white/5 border border-white/20 hover:bg-white/10 text-white font-bold text-[16px] py-[15px] px-4 rounded-xl shadow-sm transition-colors flex items-center justify-center gap-2 disabled:opacity-70"
+                                className={btnHalfSecondaryClass}
                             >
-                                <RefreshCw className="w-5 h-5 text-white" />
+                                <RefreshCw className="w-5 h-5 pointer-events-none" />
                                 Naya Review Generate Karo
                             </button>
                         </div>
