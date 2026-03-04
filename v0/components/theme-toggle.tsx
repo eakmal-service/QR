@@ -1,18 +1,21 @@
 "use client"
 
 import * as React from "react"
+import { usePathname } from "next/navigation"
 import { useTheme } from "next-themes"
 import { Sun, Moon } from "lucide-react"
 
 export function ThemeToggle() {
     const { theme, setTheme, systemTheme } = useTheme()
     const [mounted, setMounted] = React.useState(false)
+    const pathname = usePathname()
 
     React.useEffect(() => {
         setMounted(true)
     }, [])
 
     if (!mounted) return null
+    if (pathname?.startsWith('/visit/')) return null
 
     // Resolve current theme
     const currentTheme = theme === "system" ? systemTheme : theme

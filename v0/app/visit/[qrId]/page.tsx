@@ -387,7 +387,7 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
             <div className="max-w-[800px] mx-auto space-y-5 relative z-10">
                 {isDairyDon && (
                     <div className="text-center pt-2 pb-2">
-                        <h1 className="text-[36px] font-bold text-white tracking-wide" style={{ fontFamily: "'Fredoka', 'Baloo 2', 'Pacifico', cursive", textShadow: "0 2px 10px rgba(0,0,0,0.2)" }}>
+                        <h1 className="text-[52px] sm:text-[64px] md:text-[72px] font-bold text-white tracking-wider" style={{ fontFamily: "'Fredoka', 'Baloo 2', 'Pacifico', cursive", textShadow: "0 4px 12px rgba(0,0,0,0.3)" }}>
                             Dairy Don
                         </h1>
                     </div>
