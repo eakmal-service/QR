@@ -387,15 +387,23 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                                 <div className="mt-4">
                                     {Object.entries(
                                         qrData.menuItems.reduce((acc: any, item: any) => {
-                                            const cat = (typeof item === 'object' && item.category) ? item.category : 'Menu';
-                                            if (!acc[cat]) acc[cat] = [];
-                                            acc[cat].push(item);
+                                            const itemName = typeof item === 'string' ? item : item.name;
+                                            const itemPrice = typeof item === 'object' && item.price ? item.price : null;
+
+                                            // Treat empty price items as Categories
+                                            if (!itemPrice || itemPrice.trim() === "") {
+                                                acc._currentCategory = itemName;
+                                            } else {
+                                                const cat = acc._currentCategory || 'Menu';
+                                                if (!acc.groups[cat]) acc.groups[cat] = [];
+                                                acc.groups[cat].push(item);
+                                            }
                                             return acc;
-                                        }, {})
+                                        }, { _currentCategory: 'Menu', groups: {} }).groups
                                     ).map(([category, items]: [string, any], groupIdx) => (
                                         <div key={category} className={groupIdx > 0 ? "mt-5" : ""}>
                                             {category !== 'Menu' && (
-                                                <h3 className={`font-bold mb-3 text-[15px] uppercase tracking-wider ${isDairyDon ? 'text-[#9C2C86]' : 'text-white/80'}`}>{category}</h3>
+                                                <h3 className={`font-bold mb-3 text-[14px] uppercase tracking-[0.05em] ${isDairyDon ? 'text-[#9C2C86]' : 'text-white/80'}`}>{category}</h3>
                                             )}
                                             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
                                                 {items.map((item: any, idx: number) => {
@@ -416,8 +424,8 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                                                                 className="hidden"
                                                             />
                                                             <div className="flex flex-col overflow-hidden">
-                                                                <span className={`${menuItemTextClass} text-[13px] sm:text-[15px]`}>{itemName}</span>
-                                                                {itemPrice && <span className={`${menuItemPriceClass} text-[10px] sm:text-xs`}>₹{itemPrice}</span>}
+                                                                <span className={`${menuItemTextClass} text-[13px] sm:text-[15px] leading-tight mb-0.5`}>{itemName}</span>
+                                                                {itemPrice && <span className={`${menuItemPriceClass} text-[11px] sm:text-[12px] opacity-80`}>₹{itemPrice}</span>}
                                                             </div>
                                                         </label>
                                                     );
