@@ -581,22 +581,14 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                             </div>
                         </div>
 
-                        <div className="flex flex-col sm:flex-row gap-3">
+                        <div className="flex flex-col gap-3">
                             <button
                                 onClick={handleCopyAndRedirect}
                                 disabled={submitting}
-                                className={btnHalfPrimaryClass}
+                                className={btnPrimaryClass}
                             >
                                 <Clipboard className="w-5 h-5 pointer-events-none" />
-                                Copy Review
-                            </button>
-                            <button
-                                onClick={() => setStep(1)}
-                                disabled={generating}
-                                className={btnHalfSecondaryClass}
-                            >
-                                <RefreshCw className="w-5 h-5 pointer-events-none" />
-                                Naya Review Generate Karo
+                                Copy & Redirect
                             </button>
                         </div>
                     </div>

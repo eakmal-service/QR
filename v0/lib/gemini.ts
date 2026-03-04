@@ -44,6 +44,11 @@ export async function generateReview(
     const typeText = input.businessType ? `Business Type: ${input.businessType}` : "";
     const descText = input.description ? `Detailed Description: ${input.description}` : "";
 
+    const isDetailed = Math.random() < 0.6; // 60% detailed, 40% short
+    const lengthInstruction = isDetailed
+        ? "Length: Write a detailed review (3 to 5 full sentences) explaining the experience."
+        : "Length: Write a short, quick review (1 to 2 short sentences).";
+
     // User selections
     const itemsText = input.selectedItems && input.selectedItems.length > 0 ? `Items Ordered/Experienced: ${input.selectedItems.join(", ")}` : "";
     const moodText = input.mood ? `Customer's Mood/Experience Context: ${input.mood}` : "";
@@ -69,7 +74,7 @@ export async function generateReview(
     Randomness Constraints (Follow these to make the review TRULY unique and completely unpredictable):
     - Invent a creative Reviewer Persona based on the Mood/Experience provided.
     - Invent a unique Tone based on the persona (e.g., enthusiastic, matter-of-fact, highly detailed, very brief exclamation).
-    - Pick a completely random Length (anything between 1 single word to 3 full sentences).
+    - ${lengthInstruction}
     - Focus Area: STRICTLY mention the items ordered and the service opinion provided, blending them naturally into the story.
     - RandomSeed: ${Math.random() * 1000000} (Use this random number to seed your creativity so no two reviews are ever identical).
 
