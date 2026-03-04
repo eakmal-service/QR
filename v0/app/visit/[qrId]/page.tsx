@@ -16,19 +16,21 @@ interface QRCodeData {
 }
 
 const MOOD_OPTIONS = [
-    { value: "Family outing ke liye aaya tha", label: "Family outing ke liye aaya tha" },
-    { value: "Doston ke saath masti", label: "Doston ke saath masti" },
-    { value: "Date night tha", label: "Date night tha" },
-    { value: "Regular customer hoon", label: "Regular customer hoon" },
-    { value: "Pehli baar aaya/aayi", label: "Pehli baar aaya/aayi" },
-    { value: "Ice cream ki craving thi", label: "Ice cream ki craving thi" },
+    { value: "Happy", label: "Happy" },
+    { value: "Chill", label: "Chill" },
+    { value: "Excited", label: "Excited" },
+    { value: "Relaxed", label: "Relaxed" },
+    { value: "Bored", label: "Bored" },
+    { value: "Energetic", label: "Energetic" },
 ];
 
 const SERVICE_OPTIONS = [
-    { value: "Bahut achha — fast service aur friendly staff", label: "Bahut achha — fast service aur friendly staff" },
-    { value: "Acha tha — smooth experience", label: "Acha tha — smooth experience" },
-    { value: "Theek tha — average experience", label: "Theek tha — average experience" },
-    { value: "Thodi bheed thi par koi baat nahi", label: "Thodi bheed thi par koi baat nahi" }
+    { value: "Excellent", label: "Excellent" },
+    { value: "Good", label: "Good" },
+    { value: "Average", label: "Average" },
+    { value: "Bad", label: "Bad" },
+    { value: "Fast", label: "Fast" },
+    { value: "Slow", label: "Slow" }
 ];
 
 const LANGUAGES = ["English", "Hindi", "Hinglish", "Gujarati"];
@@ -45,6 +47,13 @@ const CATEGORY_OPTIONS = [
 const CATEGORY_DEFAULT = CATEGORY_OPTIONS[0].value;
 
 export default function VisitPage({ params }: { params: { qrId: string } }) {
+    const isDairyDon = params.qrId === "qr-VU94MVcLYm";
+    const bgClass = isDairyDon ? "bg-gradient-to-br from-[#7A1F6A] to-[#B23A96]" : "bg-black";
+    const inputBgClass = isDairyDon ? "bg-[#7A1F6A]" : "bg-black";
+    const cardInnerBgClass = isDairyDon ? "bg-[#7A1F6A]/50" : "bg-black/30";
+    const btnBgClass = isDairyDon ? "bg-[#FF4F7A] text-white hover:bg-[#ff3366]" : "bg-white text-black hover:bg-gray-200";
+    const btnIconClass = isDairyDon ? "text-white" : "text-black";
+
     const [loading, setLoading] = useState(true);
     const [generating, setGenerating] = useState(false);
     const [submitting, setSubmitting] = useState(false);
@@ -205,7 +214,7 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
 
     if (error) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-black px-4 font-sans">
+            <div className={`min-h-screen flex items-center justify-center ${bgClass} px-4 font-sans`}>
                 <div className="text-center p-8 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[24px] shadow-sm max-w-md w-full">
                     <h1 className="text-2xl font-bold text-red-500 mb-2">Oops!</h1>
                     <p className="text-gray-300">{error}</p>
@@ -216,7 +225,7 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-black font-sans">
+            <div className={`min-h-screen flex items-center justify-center ${bgClass} font-sans`}>
                 <div className="text-center p-8 bg-white/5 backdrop-blur-xl rounded-2xl shadow-sm border border-white/10 max-w-sm w-full flex flex-col items-center">
                     <Loader2 className="w-10 h-10 text-white animate-spin mb-4" />
                     <p className="text-gray-300 font-medium">Loading details...</p>
@@ -242,8 +251,15 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
     );
 
     return (
-        <div className="min-h-screen bg-black text-white py-6 px-4 font-sans selection:bg-white/30 selection:text-white">
+        <div className={`min-h-screen ${bgClass} text-white py-6 px-4 font-sans selection:bg-white/30 selection:text-white`}>
             <div className="max-w-[800px] mx-auto space-y-5">
+                {isDairyDon && (
+                    <div className="text-center pt-2 pb-2">
+                        <h1 className="text-[36px] font-bold text-white tracking-wide" style={{ fontFamily: "'Fredoka', 'Baloo 2', 'Pacifico', cursive", textShadow: "0 2px 10px rgba(0,0,0,0.2)" }}>
+                            Dairy Don
+                        </h1>
+                    </div>
+                )}
 
                 {/* 1. Visit Details Form */}
                 <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[24px] p-6 sm:p-8 shadow-sm">
@@ -271,7 +287,7 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                                         const itemPrice = typeof item === 'object' && item.price ? item.price : null;
 
                                         return (
-                                            <label key={idx} className={`flex items-center gap-3 p-3.5 border ${selectedItems.includes(itemName) ? 'border-white/40 bg-white/10' : 'border-white/10 bg-black/30'} rounded-xl cursor-pointer hover:bg-white/10 transition-colors`}>
+                                            <label key={idx} className={`flex items-center gap-3 p-3.5 border ${selectedItems.includes(itemName) ? 'border-white/40 bg-white/10' : `border-white/10 ${cardInnerBgClass}`} rounded-xl cursor-pointer hover:bg-white/10 transition-colors`}>
                                                 <div className="w-[18px] h-[18px] rounded-full border border-gray-500 flex items-center justify-center shrink-0">
                                                     {selectedItems.includes(itemName) && (
                                                         <div className="w-[10px] h-[10px] rounded-full bg-white"></div>
@@ -300,7 +316,7 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                             <select
                                 value={category}
                                 onChange={(e) => setCategory(e.target.value)}
-                                className="w-full tracking-wide p-3.5 bg-black border border-white/20 rounded-xl outline-none text-white font-medium text-[15px] focus:ring-1 focus:ring-white/50 appearance-none"
+                                className={`w-full tracking-wide p-3.5 ${inputBgClass} border border-white/20 rounded-xl outline-none text-white font-medium text-[15px] focus:ring-1 focus:ring-white/50 appearance-none`}
                             >
                                 <option value="">Select Category</option>
                                 {CATEGORY_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
@@ -323,7 +339,7 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                             <select
                                 value={mood}
                                 onChange={(e) => setMood(e.target.value)}
-                                className="w-full p-3.5 bg-black border border-white/20 rounded-xl outline-none text-white font-medium text-[15px] appearance-none focus:ring-1 focus:ring-white/50"
+                                className={`w-full p-3.5 ${inputBgClass} border border-white/20 rounded-xl outline-none text-white font-medium text-[15px] appearance-none focus:ring-1 focus:ring-white/50`}
                             >
                                 {MOOD_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                             </select>
@@ -335,7 +351,7 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                             <select
                                 value={service}
                                 onChange={(e) => setService(e.target.value)}
-                                className="w-full p-3.5 bg-black border border-white/20 rounded-xl outline-none text-white font-medium text-[15px] appearance-none focus:ring-1 focus:ring-white/50"
+                                className={`w-full p-3.5 ${inputBgClass} border border-white/20 rounded-xl outline-none text-white font-medium text-[15px] appearance-none focus:ring-1 focus:ring-white/50`}
                             >
                                 {SERVICE_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                             </select>
@@ -347,7 +363,7 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                             <select
                                 value={language}
                                 onChange={(e) => setLanguage(e.target.value)}
-                                className="w-full p-3.5 bg-black border border-white/20 rounded-xl outline-none text-white font-medium text-[15px] appearance-none focus:ring-1 focus:ring-white/50"
+                                className={`w-full p-3.5 ${inputBgClass} border border-white/20 rounded-xl outline-none text-white font-medium text-[15px] appearance-none focus:ring-1 focus:ring-white/50`}
                             >
                                 {LANGUAGES.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                             </select>
@@ -369,7 +385,7 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                     <button
                         onClick={handleGenerate}
                         disabled={generating || rating === 0}
-                        className="w-full bg-white text-black font-bold text-[17px] py-[18px] rounded-xl shadow-md transition-all active:scale-[0.98] disabled:opacity-60 disabled:active:scale-100 flex items-center justify-center gap-2 mt-2 hover:bg-gray-200"
+                        className={`w-full ${btnBgClass} font-bold text-[17px] py-[18px] rounded-xl shadow-md transition-all active:scale-[0.98] disabled:opacity-60 disabled:active:scale-100 flex items-center justify-center gap-2 mt-2`}
                     >
                         {generating ? (
                             <><Loader2 className="w-5 h-5 animate-spin" /> Generating Review...</>
@@ -391,7 +407,7 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                         </h2>
                         <div className="border-b-[1.5px] border-dashed border-white/20 my-4"></div>
 
-                        <div className="bg-black/30 border border-white/10 rounded-[20px] p-5 mb-5 relative">
+                        <div className={`${cardInnerBgClass} border border-white/10 rounded-[20px] p-5 mb-5 relative`}>
                             <textarea
                                 id="review-text"
                                 value={draft}
@@ -424,9 +440,9 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                             <button
                                 onClick={handleCopyAndRedirect}
                                 disabled={submitting}
-                                className="flex-1 bg-white hover:bg-gray-200 text-black font-bold text-[16px] py-[15px] px-4 rounded-xl shadow-md transition-colors flex items-center justify-center gap-2 disabled:opacity-70"
+                                className={`flex-1 ${btnBgClass} font-bold text-[16px] py-[15px] px-4 rounded-xl shadow-md transition-colors flex items-center justify-center gap-2 disabled:opacity-70`}
                             >
-                                <Clipboard className="w-5 h-5 text-black" />
+                                <Clipboard className={`w-5 h-5 ${btnIconClass}`} />
                                 Copy Review
                             </button>
                             <button
