@@ -263,13 +263,13 @@ export default function AdminQRCodesPage() {
     }
 
     return (
-        <div className="py-2">
-            <div className="max-w-7xl mx-auto">
+        <div className="py-2 min-h-screen bg-black text-white">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <div className="flex justify-between items-center mb-8">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900">QR Code Management</h1>
-                        <p className="text-gray-600 mt-2">Create and manage QR codes for Smart Auto-Review</p>
+                        <h1 className="text-3xl font-bold text-white">QR Code Management</h1>
+                        <p className="text-gray-400 mt-2">Create and manage QR codes for Smart Auto-Review</p>
                     </div>
                     <button
                         onClick={() => {
@@ -286,7 +286,7 @@ export default function AdminQRCodesPage() {
                                 }
                             }
                         }}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+                        className="bg-white hover:bg-gray-200 text-black px-6 py-3 rounded-lg font-semibold transition-colors"
                     >
                         {showForm ? "Cancel" : "+ Create New QR Code"}
                     </button>
@@ -294,27 +294,27 @@ export default function AdminQRCodesPage() {
 
                 {/* Create/Edit Form */}
                 {showForm && (
-                    <div className="bg-white rounded-xl shadow-md p-6 mb-8">
-                        <h2 className="text-xl font-bold mb-4">{isEditingForm ? "Edit QR Code Details" : "Create New QR Code"}</h2>
+                    <div className="bg-[#1a1a1a] border border-[#404040] rounded-xl shadow-md p-6 mb-8">
+                        <h2 className="text-xl font-bold mb-4 text-white">{isEditingForm ? "Edit QR Code Details" : "Create New QR Code"}</h2>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium mb-2">Business Name *</label>
+                                <label className="block text-sm font-medium mb-2 text-gray-300">Business Name *</label>
                                 <input
                                     type="text"
                                     value={formData.businessName}
                                     onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
-                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                    className="w-full px-4 py-2 bg-black border border-[#404040] text-white rounded-lg focus:ring-1 focus:ring-white focus:outline-none"
                                     placeholder="e.g., The Coffee House"
                                     required
                                 />
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium mb-2">Business Category</label>
+                                    <label className="block text-sm font-medium mb-2 text-gray-300">Business Category</label>
                                     <select
                                         value={formData.businessCategory}
                                         onChange={(e) => setFormData({ ...formData, businessCategory: e.target.value })}
-                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 bg-white"
+                                        className="w-full px-4 py-2 bg-black border border-[#404040] text-white rounded-lg focus:ring-1 focus:ring-white focus:outline-none"
                                     >
                                         <option value="">Select Category</option>
                                         {CATEGORIES.map(cat => (
@@ -323,19 +323,19 @@ export default function AdminQRCodesPage() {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium mb-2">Business Type (B2B/B2C)</label>
+                                    <label className="block text-sm font-medium mb-2 text-gray-300">Business Type (B2B/B2C)</label>
                                     <input
                                         type="text"
                                         value={formData.businessType}
                                         onChange={(e) => setFormData({ ...formData, businessType: e.target.value })}
-                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                        className="w-full px-4 py-2 bg-black border border-[#404040] text-white rounded-lg focus:ring-1 focus:ring-white focus:outline-none"
                                         placeholder="e.g., B2C"
                                     />
                                 </div>
                             </div>
                             <div>
                                 <div className="flex justify-between items-center mb-2">
-                                    <label className="block text-sm font-medium">Menu / Service Items (Optional)</label>
+                                    <label className="block text-sm font-medium text-gray-300">Menu / Service Items (Optional)</label>
                                     <div>
                                         <input
                                             type="file"
@@ -346,7 +346,7 @@ export default function AdminQRCodesPage() {
                                         />
                                         <label
                                             htmlFor="bulkUpload"
-                                            className="cursor-pointer text-xs bg-green-100 hover:bg-green-200 text-green-800 px-3 py-1.5 rounded-lg font-semibold transition-colors flex items-center gap-1"
+                                            className="cursor-pointer text-xs bg-[#404040] hover:bg-gray-600 text-white border border-[#404040] px-3 py-1.5 rounded-lg font-semibold transition-colors flex items-center gap-1"
                                         >
                                             📥 Bulk Upload (Excel/CSV)
                                         </label>
@@ -362,7 +362,7 @@ export default function AdminQRCodesPage() {
                                                 e.preventDefault();
                                             }
                                         }}
-                                        className="w-1/4 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                        className="w-1/4 px-4 py-2 bg-black border border-[#404040] text-white rounded-lg focus:ring-1 focus:ring-white focus:outline-none"
                                         placeholder="Category (e.g., Ice Cream)"
                                     />
                                     <input
@@ -379,7 +379,7 @@ export default function AdminQRCodesPage() {
                                                 }
                                             }
                                         }}
-                                        className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                        className="flex-1 px-4 py-2 bg-black border border-[#404040] text-white rounded-lg focus:ring-1 focus:ring-white focus:outline-none"
                                         placeholder="Item Name (e.g., Kaju Anjeer)"
                                     />
                                     <input
@@ -396,7 +396,7 @@ export default function AdminQRCodesPage() {
                                                 }
                                             }
                                         }}
-                                        className="w-1/4 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                        className="w-1/4 px-4 py-2 bg-black border border-[#404040] text-white rounded-lg focus:ring-1 focus:ring-white focus:outline-none"
                                         placeholder="Price"
                                     />
                                     <button
@@ -408,7 +408,7 @@ export default function AdminQRCodesPage() {
                                                 setNewItemPrice("");
                                             }
                                         }}
-                                        className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg font-medium"
+                                        className="bg-[#404040] hover:bg-gray-600 text-white px-4 py-2 border border-[#404040] rounded-lg font-medium"
                                     >
                                         Add
                                     </button>
@@ -422,11 +422,11 @@ export default function AdminQRCodesPage() {
                                             const displayCategory = typeof item === 'object' && item.category ? `[${item.category}] ` : '';
 
                                             return (
-                                                <span key={index} className="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full flex items-center gap-1">
-                                                    <span className="font-semibold">{displayCategory}</span>{displayName}{displayPrice}
+                                                <span key={index} className="bg-[#2a2a2a] text-gray-300 border border-[#404040] text-xs px-3 py-1 rounded-full flex items-center gap-1">
+                                                    <span className="font-semibold text-white">{displayCategory}</span>{displayName}{displayPrice}
                                                     <button type="button" onClick={() => {
                                                         setFormData({ ...formData, menuItems: formData.menuItems.filter((_, i) => i !== index) });
-                                                    }} className="text-blue-600 hover:text-blue-900 ml-1">&times;</button>
+                                                    }} className="text-gray-400 hover:text-white ml-1">&times;</button>
                                                 </span>
                                             );
                                         })}
@@ -434,39 +434,39 @@ export default function AdminQRCodesPage() {
                                 )}
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-2">Product/Service Summary</label>
+                                <label className="block text-sm font-medium mb-2 text-gray-300">Product/Service Summary</label>
                                 <textarea
                                     value={formData.productSummary}
                                     onChange={(e) => setFormData({ ...formData, productSummary: e.target.value })}
-                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                    className="w-full px-4 py-2 bg-black border border-[#404040] text-white rounded-lg focus:ring-1 focus:ring-white focus:outline-none"
                                     placeholder="e.g., Premium artisan coffee and fresh pastries"
                                     rows={2}
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-2">Detailed Description</label>
+                                <label className="block text-sm font-medium mb-2 text-gray-300">Detailed Description</label>
                                 <textarea
                                     value={formData.description}
                                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                    className="w-full px-4 py-2 bg-black border border-[#404040] text-white rounded-lg focus:ring-1 focus:ring-white focus:outline-none"
                                     placeholder="Detailed information about the business, target audience, and key selling points to help AI generate better reviews."
                                     rows={3}
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-2">Custom ID (optional)</label>
+                                <label className="block text-sm font-medium mb-2 text-gray-300">Custom ID (optional)</label>
                                 <input
                                     type="text"
                                     value={formData.businessId}
                                     onChange={(e) => setFormData({ ...formData, businessId: e.target.value })}
-                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                    className="w-full px-4 py-2 bg-black border border-[#404040] text-white rounded-lg focus:ring-1 focus:ring-white focus:outline-none"
                                     placeholder="e.g., my-coffee-shop (leave empty for auto-generated)"
                                 />
                             </div>
                             <button
                                 type="submit"
                                 disabled={creating}
-                                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white py-3 rounded-lg font-semibold transition-colors"
+                                className="w-full bg-white hover:bg-gray-200 disabled:bg-[#404040] disabled:text-gray-500 text-black py-3 rounded-lg font-semibold transition-colors"
                             >
                                 {isEditingForm ? (creating ? "Updating..." : "Update QR Code") : (creating ? "Creating..." : "Create QR Code")}
                             </button>
@@ -477,22 +477,22 @@ export default function AdminQRCodesPage() {
                 {/* QR Codes List */}
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {qrCodes.map((qr) => (
-                        <div key={qr.id} className="bg-white rounded-xl shadow-md p-6">
+                        <div key={qr.id} className="bg-[#1a1a1a] border border-[#404040] rounded-xl shadow-md p-6 flex flex-col">
                             <div className="flex justify-between items-start mb-4">
                                 <div>
-                                    <h3 className="text-lg font-bold text-gray-900">{qr.businessName}</h3>
+                                    <h3 className="text-lg font-bold text-white">{qr.businessName}</h3>
                                     {role === "SUPER_ADMIN" && (
                                         <p className="text-sm text-gray-500">ID: {qr.id}</p>
                                     )}
                                 </div>
                                 <div className="flex flex-col items-end gap-2">
-                                    <span className={`px-3 py-1 text-xs rounded-full font-semibold ${qr.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                                    <span className={`px-3 py-1 text-xs rounded-full font-semibold ${qr.isActive ? 'bg-[rgba(255,255,255,0.15)] text-white border border-[rgba(200,200,220,0.3)]' : 'bg-red-900/40 text-red-200 border border-red-900/50'}`}>
                                         {qr.isActive ? 'Active' : 'Inactive'}
                                     </span>
                                     {role === "SUPER_ADMIN" && (
                                         <button
                                             onClick={() => handleToggleStatus(qr.id, qr.isActive)}
-                                            className={`text-xs px-2 py-1 rounded border font-medium transition-colors ${qr.isActive ? 'border-red-200 text-red-600 hover:bg-red-50' : 'border-green-200 text-green-600 hover:bg-green-50'}`}
+                                            className={`text-xs px-2 py-1 rounded border font-medium transition-colors ${qr.isActive ? 'border-red-900/50 text-red-400 hover:bg-red-900/20' : 'border-[rgba(200,200,220,0.3)] text-gray-300 hover:bg-[rgba(255,255,255,0.1)]'}`}
                                         >
                                             {qr.isActive ? 'Deactivate' : 'Activate'}
                                         </button>
@@ -500,30 +500,30 @@ export default function AdminQRCodesPage() {
                                 </div>
                             </div>
 
-                            <div className="mb-4">
+                            <div className="mb-4 flex-grow">
                                 {editingQrId === qr.id ? (
                                     <div className="space-y-2">
                                         <textarea
-                                            className="w-full text-sm p-3 border rounded-md focus:ring-2 focus:ring-blue-500"
+                                            className="w-full text-sm p-3 bg-black border border-[#404040] text-white rounded-md focus:ring-1 focus:ring-white focus:outline-none"
                                             rows={6}
                                             value={editDesc}
                                             onChange={(e) => setEditDesc(e.target.value)}
                                         />
                                         <div className="flex gap-2">
-                                            <button onClick={() => handleUpdateDescription(qr.id)} className="text-xs bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors font-medium">Save</button>
-                                            <button onClick={() => setEditingQrId(null)} className="text-xs bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded transition-colors font-medium">Cancel</button>
+                                            <button onClick={() => handleUpdateDescription(qr.id)} className="text-xs bg-white hover:bg-gray-200 text-black px-4 py-2 rounded transition-colors font-medium">Save</button>
+                                            <button onClick={() => setEditingQrId(null)} className="text-xs bg-[#404040] hover:bg-gray-600 text-white px-4 py-2 rounded transition-colors font-medium">Cancel</button>
                                         </div>
                                     </div>
                                 ) : (
                                     <div className="group relative">
-                                        <p className="text-sm text-gray-800 font-medium leading-relaxed">{qr.productSummary || "No description provided."}</p>
+                                        <p className="text-sm text-gray-300 font-medium leading-relaxed">{qr.productSummary || "No description provided."}</p>
                                         {role === "SUPER_ADMIN" && (
                                             <button
                                                 onClick={() => {
                                                     setEditingQrId(qr.id);
                                                     setEditDesc(qr.productSummary || "");
                                                 }}
-                                                className="text-xs font-semibold text-blue-600 mt-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                className="text-xs font-semibold text-white mt-2 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1"
                                             >
                                                 ✎ Edit Description
                                             </button>
@@ -533,31 +533,31 @@ export default function AdminQRCodesPage() {
                             </div>
 
                             {/* QR Code */}
-                            <div className="bg-gray-50 p-4 rounded-lg mb-4 flex justify-center" id={`qr-${qr.id}`}>
+                            <div className="bg-black border border-[#404040] p-4 rounded-lg mb-4 flex justify-center items-center" id={`qr-${qr.id}`}>
                                 <img
                                     src={`/api/qr/image/${qr.id}`}
                                     alt={`QR code for ${qr.businessName}`}
-                                    className="w-48 h-48"
+                                    className="w-48 h-48 filter invert opacity-90"
                                 />
                             </div>
 
                             {/* Analytics */}
-                            <div className="grid grid-cols-2 gap-3 mb-4 text-sm">
-                                <div className="bg-blue-50 p-3 rounded-lg">
-                                    <div className="text-blue-600 font-semibold">{qr.analytics.totalScans}</div>
-                                    <div className="text-gray-600">Scans</div>
+                            <div className="grid grid-cols-2 gap-3 mb-4 text-sm mt-auto">
+                                <div className="bg-[#2a2a2a] border border-[#404040] p-3 rounded-lg text-center">
+                                    <div className="text-white font-semibold text-lg">{qr.analytics.totalScans}</div>
+                                    <div className="text-gray-400 text-xs uppercase tracking-wider">Scans</div>
                                 </div>
-                                <div className="bg-green-50 p-3 rounded-lg">
-                                    <div className="text-green-600 font-semibold">{qr.analytics.totalReviews}</div>
-                                    <div className="text-gray-600">Reviews</div>
+                                <div className="bg-[#2a2a2a] border border-[#404040] p-3 rounded-lg text-center">
+                                    <div className="text-white font-semibold text-lg">{qr.analytics.totalReviews}</div>
+                                    <div className="text-gray-400 text-xs uppercase tracking-wider">Reviews</div>
                                 </div>
-                                <div className="bg-purple-50 p-3 rounded-lg">
-                                    <div className="text-purple-600 font-semibold">{qr.analytics.averageRating}</div>
-                                    <div className="text-gray-600">Avg Rating</div>
+                                <div className="bg-[#2a2a2a] border border-[#404040] p-3 rounded-lg text-center">
+                                    <div className="text-white font-semibold text-lg">{qr.analytics.averageRating}</div>
+                                    <div className="text-gray-400 text-xs uppercase tracking-wider">Avg Rating</div>
                                 </div>
-                                <div className="bg-orange-50 p-3 rounded-lg">
-                                    <div className="text-orange-600 font-semibold">{qr.analytics.conversionRate}</div>
-                                    <div className="text-gray-600">Conv. Rate</div>
+                                <div className="bg-[#2a2a2a] border border-[#404040] p-3 rounded-lg text-center">
+                                    <div className="text-white font-semibold text-lg">{qr.analytics.conversionRate}</div>
+                                    <div className="text-gray-400 text-xs uppercase tracking-wider">Conv. Rate</div>
                                 </div>
                             </div>
 
@@ -566,14 +566,14 @@ export default function AdminQRCodesPage() {
                                 <div className="flex gap-2 mb-2">
                                     <button
                                         onClick={() => handleEditClick(qr)}
-                                        className="flex-1 bg-amber-500 hover:bg-amber-600 text-white py-1.5 px-3 rounded-lg text-sm font-semibold transition-colors"
+                                        className="flex-1 bg-[rgba(255,255,255,0.1)] hover:bg-[rgba(255,255,255,0.2)] border border-[rgba(200,200,220,0.3)] text-white py-1.5 px-3 rounded-lg text-sm font-semibold transition-colors"
                                     >
                                         ✏️ Edit Details
                                     </button>
                                 </div>
                                 <div className="flex gap-2 mb-2">
                                     <select
-                                        className="flex-1 bg-gray-50 border border-gray-200 text-gray-700 py-1.5 px-3 rounded-lg text-sm transition-colors"
+                                        className="flex-1 bg-black border border-[#404040] text-gray-300 py-1.5 px-3 rounded-lg text-sm transition-colors focus:ring-1 focus:ring-white focus:outline-none"
                                         value={downloadSettings[qr.id]?.format || 'png'}
                                         onChange={(e) => handleSettingChange(qr.id, 'format', e.target.value)}
                                     >
@@ -582,7 +582,7 @@ export default function AdminQRCodesPage() {
                                         <option value="svg">SVG</option>
                                     </select>
                                     <select
-                                        className="flex-1 bg-gray-50 border border-gray-200 text-gray-700 py-1.5 px-3 rounded-lg text-sm transition-colors"
+                                        className="flex-1 bg-black border border-[#404040] text-gray-300 py-1.5 px-3 rounded-lg text-sm transition-colors focus:ring-1 focus:ring-white focus:outline-none"
                                         value={downloadSettings[qr.id]?.size || 400}
                                         onChange={(e) => handleSettingChange(qr.id, 'size', Number(e.target.value))}
                                     >
@@ -595,7 +595,7 @@ export default function AdminQRCodesPage() {
                                 <div className="flex gap-2">
                                     <button
                                         onClick={() => downloadQR(qr.id, qr.businessName)}
-                                        className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg text-sm font-semibold transition-colors"
+                                        className="flex-1 bg-[#404040] hover:bg-gray-600 text-white py-2 px-4 rounded-lg text-sm font-semibold transition-colors"
                                     >
                                         📥 Download
                                     </button>
@@ -604,7 +604,7 @@ export default function AdminQRCodesPage() {
                                             navigator.clipboard.writeText(qr.visitUrl);
                                             alert("URL copied!");
                                         }}
-                                        className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-semibold transition-colors"
+                                        className="flex-1 bg-white hover:bg-gray-200 text-black py-2 px-4 rounded-lg text-sm font-semibold transition-colors"
                                     >
                                         🔗 Copy URL
                                     </button>
@@ -616,7 +616,7 @@ export default function AdminQRCodesPage() {
 
                 {qrCodes.length === 0 && (
                     <div className="text-center py-12">
-                        <p className="text-gray-500 text-lg">No QR codes yet. Create your first one!</p>
+                        <p className="text-gray-400 text-lg">No QR codes yet. Create your first one!</p>
                     </div>
                 )}
             </div>
