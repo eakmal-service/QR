@@ -44,7 +44,7 @@ export async function generateReview(
     const typeText = input.businessType ? `Business Type: ${input.businessType}` : "";
     const descText = input.description ? `Detailed Description: ${input.description}` : "";
 
-    const isDetailed = Math.random() < 0.6; // 60% detailed, 40% short
+    const isDetailed = Math.random() < 0.4; // 40% detailed, 60% short
     const lengthInstruction = isDetailed
         ? "Length: Write a detailed review (3 to 5 full sentences) explaining the experience."
         : "Length: Write a short, quick review (1 to 2 short sentences).";

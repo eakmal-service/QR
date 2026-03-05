@@ -284,9 +284,7 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                 if (!redirectUrl.startsWith('http://') && !redirectUrl.startsWith('https://')) {
                     redirectUrl = 'https://' + redirectUrl;
                 }
-                setTimeout(() => {
-                    window.location.href = redirectUrl;
-                }, 1500);
+                window.location.assign(redirectUrl);
             } else {
                 toast.info("Please paste the copied review on Google.");
             }
@@ -309,9 +307,9 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                     if (!redirectUrl.startsWith('http://') && !redirectUrl.startsWith('https://')) {
                         redirectUrl = 'https://' + redirectUrl;
                     }
-                    setTimeout(() => {
-                        window.location.href = redirectUrl;
-                    }, 1000);
+                    window.location.assign(redirectUrl);
+                } else {
+                    toast.info("Please paste the copied review on Google.");
                 }
             }
         } finally {
