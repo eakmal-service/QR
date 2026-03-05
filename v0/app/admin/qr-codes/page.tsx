@@ -204,21 +204,18 @@ export default function AdminQRCodesPage() {
                     }
 
                     if (itemName) {
-                        const targetCategory = newItemCategory.trim().toLowerCase();
-                        if (targetCategory && itemCategory.toLowerCase() !== targetCategory) {
-                            continue;
-                        }
-                        newItems.push({ category: itemCategory, name: itemName, price: itemPrice });
+                        const finalCategory = newItemCategory.trim() || itemCategory;
+                        newItems.push({ category: finalCategory, name: itemName, price: itemPrice });
                     }
                 }
             }
 
             if (newItems.length > 0) {
                 setFormData(prev => ({ ...prev, menuItems: [...prev.menuItems, ...newItems] }));
-                const filterMsg = newItemCategory.trim() ? ` (filtered by '${newItemCategory.trim()}')` : "";
-                alert(`Successfully added ${newItems.length} items from ${file.name}${filterMsg}`);
+                const assignMsg = newItemCategory.trim() ? ` (assigned to category '${newItemCategory.trim()}')` : "";
+                alert(`Successfully added ${newItems.length} items from ${file.name}${assignMsg}`);
             } else {
-                alert("No valid items found in the file. Ensure the format is [Category?] | [Item Name] | [Price], and check your category filter if applied.");
+                alert("No valid items found in the file. Ensure the format is [Category?] | [Item Name] | [Price].");
             }
 
         } catch (error) {
