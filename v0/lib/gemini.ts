@@ -53,6 +53,10 @@ export async function generateReview(
     const itemsText = input.selectedItems && input.selectedItems.length > 0 ? `Items Ordered/Experienced: ${input.selectedItems.join(", ")}` : "";
     const serviceText = input.service ? `Customer's Opinion on Service/Ambience: ${input.service}` : "";
 
+    const languageInstruction = language.toLowerCase() === 'hinglish'
+        ? "Target Language: HINGLISH. You MUST write in conversational Hindi but STRICTLY use the English alphabet (e.g., 'Bohot acha experience tha', 'Service ekdum mast thi'). NEVER use Devanagari script. ONLY English letters."
+        : `Target Language: ${language} (STRICTLY OUTPUT THE REVIEW TEXT IN THIS LANGUAGE)`;
+
     const prompt = `Generate a highly unique, unpredictable, and human-like customer review for the following business.
     
     Business details to understand context:
@@ -67,7 +71,7 @@ export async function generateReview(
     ${serviceText}
     Rating Given: ${rating} out of 5 stars.
     
-    Target Language: ${language} (STRICTLY OUTPUT THE REVIEW TEXT IN THIS LANGUAGE)
+    ${languageInstruction}
     
     Randomness Constraints (Follow these to make the review TRULY unique and completely unpredictable):
     - Invent a creative Reviewer Persona based on the Mood/Experience provided.

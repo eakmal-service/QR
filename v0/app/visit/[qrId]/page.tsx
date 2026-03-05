@@ -163,13 +163,12 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
     // Form State
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
     const [rating, setRating] = useState<number>(0);
-    const [service, setService] = useState<string>("");
     const [language, setLanguage] = useState<string>("");
+    const [showAllMenu, setShowAllMenu] = useState(false);
 
     // Progressive Unlock Logic
     const isRatingUnlocked = selectedItems.length > 0;
-    const isServiceUnlocked = isRatingUnlocked && rating > 0;
-    const isLanguageUnlocked = isServiceUnlocked && service !== "";
+    const isLanguageUnlocked = isRatingUnlocked && rating > 0;
 
     const getSectionClass = (isUnlocked: boolean) =>
         `transition-all duration-500 ${isUnlocked ? 'opacity-100 blur-none pointer-events-auto' : 'opacity-40 blur-[3px] pointer-events-none select-none'}`;
@@ -243,7 +242,6 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                     sessionId,
                     language: selectedLanguage,
                     rating,
-                    service,
                     selectedItems,
                 }),
             });
@@ -385,46 +383,76 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                                 <p className={subLabelClass}>Up to 4 items select karo — review mein mention honge</p>
 
                                 <div className="mt-4">
-                                    {Object.entries(
-                                        qrData.menuItems.reduce((acc: any, item: any) => {
+                                    {(() => {
+                                        let itemsShown = 0;
+                                        const MAX_INITIAL_ITEMS = 9;
+                                        const groupedMenu: { category: string, items: any[] }[] = [];
+                                        const groups = qrData.menuItems.reduce((acc: any, item: any) => {
                                             const cat = (typeof item === 'object' && item.category && item.category.trim() !== "") ? item.category.trim() : 'Menu';
                                             if (!acc[cat]) acc[cat] = [];
                                             acc[cat].push(item);
                                             return acc;
-                                        }, {})
-                                    ).map(([category, items]: [string, any], groupIdx) => (
-                                        <div key={category} className={groupIdx > 0 ? "mt-5" : ""}>
-                                            {category !== 'Menu' && (
-                                                <h3 className={`font-bold mb-3 text-[14px] uppercase tracking-[0.05em] ${isDairyDon ? 'text-[#9C2C86]' : 'text-white/80'}`}>{category}</h3>
-                                            )}
-                                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
-                                                {items.map((item: any, idx: number) => {
-                                                    const itemName = typeof item === 'string' ? item : item.name;
-                                                    const itemPrice = typeof item === 'object' && item.price ? item.price : null;
+                                        }, {});
 
-                                                    return (
-                                                        <label key={idx} className={getMenuItemClass(selectedItems.includes(itemName))}>
-                                                            <div className={`w-[16px] h-[16px] sm:w-[18px] sm:h-[18px] rounded-full border flex items-center justify-center shrink-0 ${checkboxBorderClass}`}>
-                                                                {selectedItems.includes(itemName) && (
-                                                                    <div className={`w-[8px] h-[8px] sm:w-[10px] sm:h-[10px] rounded-full ${checkboxDotClass}`}></div>
-                                                                )}
-                                                            </div>
-                                                            <input
-                                                                type="checkbox"
-                                                                checked={selectedItems.includes(itemName)}
-                                                                onChange={() => toggleItem(itemName)}
-                                                                className="hidden"
-                                                            />
-                                                            <div className="flex flex-col overflow-hidden">
-                                                                <span className={`${menuItemTextClass} text-[13px] sm:text-[15px] leading-tight mb-0.5`}>{itemName}</span>
-                                                                {itemPrice && <span className={`${menuItemPriceClass} text-[11px] sm:text-[12px] opacity-80`}>₹{itemPrice}</span>}
-                                                            </div>
-                                                        </label>
-                                                    );
-                                                })}
-                                            </div>
-                                        </div>
-                                    ))}
+                                        for (const [category, items] of Object.entries(groups)) {
+                                            if (!showAllMenu && itemsShown >= MAX_INITIAL_ITEMS) break;
+                                            let itemsToAdd = items as any[];
+                                            if (!showAllMenu) {
+                                                itemsToAdd = itemsToAdd.slice(0, MAX_INITIAL_ITEMS - itemsShown);
+                                            }
+                                            if (itemsToAdd.length > 0) {
+                                                groupedMenu.push({ category, items: itemsToAdd });
+                                                itemsShown += itemsToAdd.length;
+                                            }
+                                        }
+
+                                        return (
+                                            <>
+                                                {groupedMenu.map(({ category, items }, groupIdx) => (
+                                                    <div key={category} className={groupIdx > 0 ? "mt-5" : ""}>
+                                                        {category !== 'Menu' && (
+                                                            <h3 className={`font-bold mb-3 text-[14px] uppercase tracking-[0.05em] ${isDairyDon ? 'text-[#9C2C86]' : 'text-white/80'}`}>{category}</h3>
+                                                        )}
+                                                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
+                                                            {items.map((item: any, idx: number) => {
+                                                                const itemName = typeof item === 'string' ? item : item.name;
+                                                                const itemPrice = typeof item === 'object' && item.price ? item.price : null;
+
+                                                                return (
+                                                                    <label key={idx} className={getMenuItemClass(selectedItems.includes(itemName))}>
+                                                                        <div className={`w-[16px] h-[16px] sm:w-[18px] sm:h-[18px] rounded-full border flex items-center justify-center shrink-0 ${checkboxBorderClass}`}>
+                                                                            {selectedItems.includes(itemName) && (
+                                                                                <div className={`w-[8px] h-[8px] sm:w-[10px] sm:h-[10px] rounded-full ${checkboxDotClass}`}></div>
+                                                                            )}
+                                                                        </div>
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            checked={selectedItems.includes(itemName)}
+                                                                            onChange={() => toggleItem(itemName)}
+                                                                            className="hidden"
+                                                                        />
+                                                                        <div className="flex flex-col overflow-hidden">
+                                                                            <span className={`${menuItemTextClass} text-[13px] sm:text-[15px] leading-tight mb-0.5`}>{itemName}</span>
+                                                                            {itemPrice && <span className={`${menuItemPriceClass} text-[11px] sm:text-[12px] opacity-80`}>₹{itemPrice}</span>}
+                                                                        </div>
+                                                                    </label>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                                {!showAllMenu && qrData.menuItems.length > 9 && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setShowAllMenu(true)}
+                                                        className={`mt-6 w-full py-3 rounded-lg font-semibold text-[15px] transition-colors border ${isDairyDon ? 'bg-[#9C2C86]/10 text-[#9C2C86] border-[#9C2C86]/30 hover:bg-[#9C2C86]/20' : 'bg-white/10 text-white border-white/20 hover:bg-white/20'}`}
+                                                    >
+                                                        Show More Menu Items
+                                                    </button>
+                                                )}
+                                            </>
+                                        );
+                                    })()}
                                 </div>
                             </div>
                         )}
@@ -442,19 +470,6 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                         </div>
 
 
-
-                        {/* Service & Ambience */}
-                        <div className={getSectionClass(isServiceUnlocked)}>
-                            <label className={labelSmallClass}>Service & Ambience</label>
-                            <select
-                                value={service}
-                                onChange={(e) => setService(e.target.value)}
-                                className={inputClass}
-                            >
-                                <option value="" disabled>Select Service & Ambience</option>
-                                {SERVICE_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-                            </select>
-                        </div>
 
                         {/* Language */}
                         <div className={getSectionClass(isLanguageUnlocked)}>
