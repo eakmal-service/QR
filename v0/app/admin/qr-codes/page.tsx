@@ -204,6 +204,10 @@ export default function AdminQRCodesPage() {
                     }
 
                     if (itemName) {
+                        const targetCategory = newItemCategory.trim().toLowerCase();
+                        if (targetCategory && itemCategory.toLowerCase() !== targetCategory) {
+                            continue;
+                        }
                         newItems.push({ category: itemCategory, name: itemName, price: itemPrice });
                     }
                 }
@@ -211,9 +215,10 @@ export default function AdminQRCodesPage() {
 
             if (newItems.length > 0) {
                 setFormData(prev => ({ ...prev, menuItems: [...prev.menuItems, ...newItems] }));
-                alert(`Successfully added ${newItems.length} items from ${file.name}`);
+                const filterMsg = newItemCategory.trim() ? ` (filtered by '${newItemCategory.trim()}')` : "";
+                alert(`Successfully added ${newItems.length} items from ${file.name}${filterMsg}`);
             } else {
-                alert("No valid items found in the file. Ensure the format is [Category?] | [Item Name] | [Price].");
+                alert("No valid items found in the file. Ensure the format is [Category?] | [Item Name] | [Price], and check your category filter if applied.");
             }
 
         } catch (error) {
