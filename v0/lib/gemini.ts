@@ -46,7 +46,7 @@ export async function generateReview(
 
     const isDetailed = Math.random() < 0.4; // 40% detailed, 60% short
     const lengthInstruction = isDetailed
-        ? "Length: Write a detailed review (3 to 5 full sentences) explaining the experience."
+        ? "Length: Write a detailed review (3 to 5 full sentences) explaining the experience, but STRICTLY keep it UNDER 350 words."
         : "Length: Write a short, quick review (1 to 2 short sentences).";
 
     // User selections

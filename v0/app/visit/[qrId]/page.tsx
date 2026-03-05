@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { toast } from "sonner";
 import { Copy, RefreshCw, Loader2, MapPin, Star, Clipboard } from "lucide-react";
 import Head from 'next/head';
@@ -26,7 +26,7 @@ const SERVICE_OPTIONS = [
 
 const LANGUAGES = ["English", "Hindi", "Hinglish", "Gujarati"];
 
-const DairyDonBackground = () => (
+const DairyDonBackground = memo(() => (
     <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none opacity-[0.25]">
         {/* Ice Cream Cup */}
         <svg className="absolute top-[2%] left-[2%] w-24 h-24 rotate-[-15deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
@@ -110,7 +110,8 @@ const DairyDonBackground = () => (
             <path d="M7 9a5 5 0 0110 0" />
         </svg>
     </div>
-);
+));
+DairyDonBackground.displayName = "DairyDonBackground";
 
 export default function VisitPage({ params }: { params: { qrId: string } }) {
     const isDairyDon = params.qrId === "qr-VU94MVcLYm";
@@ -393,12 +394,16 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                                         let itemsShown = 0;
                                         const MAX_INITIAL_ITEMS = 9;
                                         const groupedMenu: { category: string, items: any[] }[] = [];
-                                        const groups = qrData.menuItems.reduce((acc: any, item: any) => {
-                                            const cat = (typeof item === 'object' && item.category && item.category.trim() !== "") ? item.category.trim() : 'Menu';
-                                            if (!acc[cat]) acc[cat] = [];
-                                            acc[cat].push(item);
-                                            return acc;
-                                        }, {});
+
+                                        const groups = React.useMemo(() => {
+                                            if (!qrData?.menuItems) return {};
+                                            return qrData.menuItems.reduce((acc: any, item: any) => {
+                                                const cat = (typeof item === 'object' && item.category && item.category.trim() !== "") ? item.category.trim() : 'Menu';
+                                                if (!acc[cat]) acc[cat] = [];
+                                                acc[cat].push(item);
+                                                return acc;
+                                            }, {});
+                                        }, [qrData?.menuItems]);
 
                                         for (const [category, items] of Object.entries(groups)) {
                                             if (!showAllMenu && itemsShown >= MAX_INITIAL_ITEMS) break;
