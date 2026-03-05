@@ -321,8 +321,6 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
         }
     };
 
-    if (!isMounted) return null;
-
     if (error) {
         return (
             <div className={`min-h-screen flex items-center justify-center ${bgClass} px-4 font-sans`}>
@@ -334,9 +332,9 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
         );
     }
 
-    if (loading) {
+    if (!isMounted || loading) {
         return (
-            <div className={`min-h-screen flex items-center justify-center ${bgClass} font-sans`}>
+            <div className={`min-h-screen flex items-center justify-center bg-black font-sans`}>
                 <div className="text-center p-8 bg-white/5 backdrop-blur-xl rounded-2xl shadow-sm border border-white/10 max-w-sm w-full flex flex-col items-center">
                     <Loader2 className="w-10 h-10 text-white animate-spin mb-4" />
                     <p className="text-gray-300 font-medium">Loading details...</p>
