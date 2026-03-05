@@ -280,8 +280,12 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
             });
 
             if (qrData?.googleMapsLink) {
+                let redirectUrl = qrData.googleMapsLink;
+                if (!redirectUrl.startsWith('http://') && !redirectUrl.startsWith('https://')) {
+                    redirectUrl = 'https://' + redirectUrl;
+                }
                 setTimeout(() => {
-                    window.location.href = qrData.googleMapsLink!;
+                    window.location.href = redirectUrl;
                 }, 1500);
             } else {
                 toast.info("Please paste the copied review on Google.");
@@ -301,8 +305,12 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                 textarea.select();
                 document.execCommand("copy");
                 if (qrData?.googleMapsLink) {
+                    let redirectUrl = qrData.googleMapsLink;
+                    if (!redirectUrl.startsWith('http://') && !redirectUrl.startsWith('https://')) {
+                        redirectUrl = 'https://' + redirectUrl;
+                    }
                     setTimeout(() => {
-                        window.location.href = qrData.googleMapsLink!;
+                        window.location.href = redirectUrl;
                     }, 1000);
                 }
             }
