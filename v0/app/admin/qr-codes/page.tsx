@@ -36,8 +36,9 @@ export default function AdminQRCodesPage() {
         productSummary: "",
         description: "",
         businessId: "",
-        menuItems: [] as { name: string, price: string }[],
+        menuItems: [] as { category?: string, name: string, price: string }[],
     });
+    const [newItemCategory, setNewItemCategory] = useState("");
     const [newItemName, setNewItemName] = useState("");
     const [newItemPrice, setNewItemPrice] = useState("");
     const CATEGORIES = ["Ice Cream Parlor", "Restaurant", "Cafe", "Hotel", "Hospital", "Car Rental", "Retail", "Service", "Other"];
@@ -177,22 +178,33 @@ export default function AdminQRCodesPage() {
             const firstSheetName = workbook.SheetNames[0];
             const worksheet = workbook.Sheets[firstSheetName];
 
-            // Expected format is an array of arrays representing rows: [ [name, price], [name, price] ]
+            // Expected format could be [name, price] OR [category, name, price]
             const json = utils.sheet_to_json<any[]>(worksheet, { header: 1 });
 
-            const newItems: { name: string, price: string }[] = [];
+            const newItems: { category?: string, name: string, price: string }[] = [];
 
-            // Skip header if it exists (e.g. if row 0 is ["Item Name", "Price"])
-            const startIndex = (json[0] && (String(json[0][0]).toLowerCase().includes('name') || String(json[0][0]).toLowerCase().includes('item'))) ? 1 : 0;
+            // Skip header if it exists
+            const startIndex = (json[0] && (String(json[0]).toLowerCase().includes('name') || String(json[0]).toLowerCase().includes('item') || String(json[0]).toLowerCase().includes('category'))) ? 1 : 0;
 
             for (let i = startIndex; i < json.length; i++) {
                 const row = json[i];
-                if (row && row.length > 0 && row[0]) {
-                    const itemName = String(row[0]).trim();
-                    const itemPrice = row.length > 1 && row[1] != null ? String(row[1]).trim() : "";
+                if (row && row.length > 0) {
+                    // check if 3 columns: category, name, price
+                    let itemCategory = "";
+                    let itemName = "";
+                    let itemPrice = "";
+
+                    if (row.length >= 3) {
+                        itemCategory = String(row[0]).trim();
+                        itemName = String(row[1]).trim();
+                        itemPrice = row[2] != null ? String(row[2]).trim() : "";
+                    } else if (row.length >= 1) {
+                        itemName = String(row[0]).trim();
+                        itemPrice = row.length > 1 && row[1] != null ? String(row[1]).trim() : "";
+                    }
 
                     if (itemName) {
-                        newItems.push({ name: itemName, price: itemPrice });
+                        newItems.push({ category: itemCategory, name: itemName, price: itemPrice });
                     }
                 }
             }
@@ -201,7 +213,7 @@ export default function AdminQRCodesPage() {
                 setFormData(prev => ({ ...prev, menuItems: [...prev.menuItems, ...newItems] }));
                 alert(`Successfully added ${newItems.length} items from ${file.name}`);
             } else {
-                alert("No valid items found in the file. Ensure the format is [Item Name] | [Price].");
+                alert("No valid items found in the file. Ensure the format is [Category?] | [Item Name] | [Price].");
             }
 
         } catch (error) {
@@ -343,13 +355,25 @@ export default function AdminQRCodesPage() {
                                 <div className="flex gap-2 mb-2">
                                     <input
                                         type="text"
+                                        value={newItemCategory}
+                                        onChange={(e) => setNewItemCategory(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                e.preventDefault();
+                                            }
+                                        }}
+                                        className="w-1/4 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                        placeholder="Category (e.g., Ice Cream)"
+                                    />
+                                    <input
+                                        type="text"
                                         value={newItemName}
                                         onChange={(e) => setNewItemName(e.target.value)}
                                         onKeyDown={(e) => {
                                             if (e.key === 'Enter') {
                                                 e.preventDefault();
                                                 if (newItemName.trim()) {
-                                                    setFormData({ ...formData, menuItems: [...formData.menuItems, { name: newItemName.trim(), price: newItemPrice.trim() }] });
+                                                    setFormData({ ...formData, menuItems: [...formData.menuItems, { category: newItemCategory.trim(), name: newItemName.trim(), price: newItemPrice.trim() }] });
                                                     setNewItemName("");
                                                     setNewItemPrice("");
                                                 }
@@ -366,20 +390,20 @@ export default function AdminQRCodesPage() {
                                             if (e.key === 'Enter') {
                                                 e.preventDefault();
                                                 if (newItemName.trim()) {
-                                                    setFormData({ ...formData, menuItems: [...formData.menuItems, { name: newItemName.trim(), price: newItemPrice.trim() }] });
+                                                    setFormData({ ...formData, menuItems: [...formData.menuItems, { category: newItemCategory.trim(), name: newItemName.trim(), price: newItemPrice.trim() }] });
                                                     setNewItemName("");
                                                     setNewItemPrice("");
                                                 }
                                             }
                                         }}
-                                        className="w-1/3 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                        placeholder="Price (Optional)"
+                                        className="w-1/4 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                        placeholder="Price"
                                     />
                                     <button
                                         type="button"
                                         onClick={() => {
                                             if (newItemName.trim()) {
-                                                setFormData({ ...formData, menuItems: [...formData.menuItems, { name: newItemName.trim(), price: newItemPrice.trim() }] });
+                                                setFormData({ ...formData, menuItems: [...formData.menuItems, { category: newItemCategory.trim(), name: newItemName.trim(), price: newItemPrice.trim() }] });
                                                 setNewItemName("");
                                                 setNewItemPrice("");
                                             }
@@ -392,13 +416,14 @@ export default function AdminQRCodesPage() {
                                 {formData.menuItems.length > 0 && (
                                     <div className="flex flex-wrap gap-2 mt-2">
                                         {formData.menuItems.map((item, index) => {
-                                            // Handle both legacy strings and new `{name, price}` objects for safety
+                                            // Handle both legacy strings and new `{category, name, price}` objects for safety
                                             const displayName = typeof item === 'string' ? item : item.name;
-                                            const displayPrice = typeof item === 'object' && item.price ? ` - ${item.price}` : '';
+                                            const displayPrice = typeof item === 'object' && item.price ? ` - ₹${item.price}` : '';
+                                            const displayCategory = typeof item === 'object' && item.category ? `[${item.category}] ` : '';
 
                                             return (
                                                 <span key={index} className="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full flex items-center gap-1">
-                                                    {displayName}{displayPrice}
+                                                    <span className="font-semibold">{displayCategory}</span>{displayName}{displayPrice}
                                                     <button type="button" onClick={() => {
                                                         setFormData({ ...formData, menuItems: formData.menuItems.filter((_, i) => i !== index) });
                                                     }} className="text-blue-600 hover:text-blue-900 ml-1">&times;</button>

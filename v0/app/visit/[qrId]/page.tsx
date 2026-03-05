@@ -387,19 +387,11 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                                 <div className="mt-4">
                                     {Object.entries(
                                         qrData.menuItems.reduce((acc: any, item: any) => {
-                                            const itemName = typeof item === 'string' ? item : item.name;
-                                            const itemPrice = typeof item === 'object' && item.price ? item.price : null;
-
-                                            // Treat empty price items as Categories
-                                            if (!itemPrice || itemPrice.trim() === "") {
-                                                acc._currentCategory = itemName;
-                                            } else {
-                                                const cat = acc._currentCategory || 'Menu';
-                                                if (!acc.groups[cat]) acc.groups[cat] = [];
-                                                acc.groups[cat].push(item);
-                                            }
+                                            const cat = (typeof item === 'object' && item.category && item.category.trim() !== "") ? item.category.trim() : 'Menu';
+                                            if (!acc[cat]) acc[cat] = [];
+                                            acc[cat].push(item);
                                             return acc;
-                                        }, { _currentCategory: 'Menu', groups: {} }).groups
+                                        }, {})
                                     ).map(([category, items]: [string, any], groupIdx) => (
                                         <div key={category} className={groupIdx > 0 ? "mt-5" : ""}>
                                             {category !== 'Menu' && (
