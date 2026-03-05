@@ -114,6 +114,9 @@ const DairyDonBackground = memo(() => (
 DairyDonBackground.displayName = "DairyDonBackground";
 
 export default function VisitPage({ params }: { params: { qrId: string } }) {
+    const [isMounted, setIsMounted] = useState(false);
+    useEffect(() => setIsMounted(true), []);
+
     const isDairyDon = params.qrId === "qr-VU94MVcLYm";
     const bgClass = isDairyDon ? "bg-gradient-to-br from-[#7A1F6A] to-[#B23A96]" : "bg-black";
 
@@ -317,6 +320,8 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
             setSubmitting(false);
         }
     };
+
+    if (!isMounted) return null;
 
     if (error) {
         return (
