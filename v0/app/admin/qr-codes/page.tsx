@@ -336,7 +336,20 @@ export default function AdminQRCodesPage() {
                             <div>
                                 <div className="flex justify-between items-center mb-2">
                                     <label className="block text-sm font-medium text-gray-300">Menu / Service Items (Optional)</label>
-                                    <div>
+                                    <div className="flex items-center gap-2">
+                                        {formData.menuItems.length > 0 && (
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    if (window.confirm("Are you sure you want to delete all menu items?")) {
+                                                        setFormData({ ...formData, menuItems: [] });
+                                                    }
+                                                }}
+                                                className="text-xs bg-red-900/40 hover:bg-red-900/60 text-red-200 border border-red-900/50 px-3 py-1.5 rounded-lg font-semibold transition-colors flex items-center gap-1"
+                                            >
+                                                🗑️ Delete All
+                                            </button>
+                                        )}
                                         <input
                                             type="file"
                                             id="bulkUpload"
