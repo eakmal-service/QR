@@ -218,6 +218,16 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
         fetchDetails();
     }, [params.qrId, sessionId]);
 
+    const groups = React.useMemo(() => {
+        if (!qrData?.menuItems) return {};
+        return qrData.menuItems.reduce((acc: any, item: any) => {
+            const cat = (typeof item === 'object' && item.category && item.category.trim() !== "") ? item.category.trim() : 'Menu';
+            if (!acc[cat]) acc[cat] = [];
+            acc[cat].push(item);
+            return acc;
+        }, {});
+    }, [qrData?.menuItems]);
+
     const toggleItem = (item: string) => {
         if (selectedItems.includes(item)) {
             setSelectedItems(selectedItems.filter(i => i !== item));
@@ -397,16 +407,6 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                                         let itemsShown = 0;
                                         const MAX_INITIAL_ITEMS = 9;
                                         const groupedMenu: { category: string, items: any[] }[] = [];
-
-                                        const groups = React.useMemo(() => {
-                                            if (!qrData?.menuItems) return {};
-                                            return qrData.menuItems.reduce((acc: any, item: any) => {
-                                                const cat = (typeof item === 'object' && item.category && item.category.trim() !== "") ? item.category.trim() : 'Menu';
-                                                if (!acc[cat]) acc[cat] = [];
-                                                acc[cat].push(item);
-                                                return acc;
-                                            }, {});
-                                        }, [qrData?.menuItems]);
 
                                         for (const [category, items] of Object.entries(groups)) {
                                             if (!showAllMenu && itemsShown >= MAX_INITIAL_ITEMS) break;
