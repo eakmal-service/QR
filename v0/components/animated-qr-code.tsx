@@ -12,62 +12,38 @@ export function AnimatedQRCode() {
         if (!canvas) return
 
         const ctx = canvas.getContext("2d")!
-        const particles: Array<{
+        let particles: Array<{
+            baseCol: number
+            baseRow: number
             x: number
             y: number
-            targetX: number
-            targetY: number
             size: number
             opacity: number
             speed: number
             isCorner: boolean
         }> = []
 
-        const resizeCanvas = () => {
-            const container = canvas.parentElement
-            if (container) {
-                canvas.width = container.clientWidth
-                canvas.height = container.clientHeight
-            }
-        }
-
-        resizeCanvas()
-
         // Generate real QR code for akmal.in
         const qr = QRCode.create("https://akmal.in", { errorCorrectionLevel: 'M' })
         const gridSize = qr.modules.size
 
-        // Calculate size to fit nicely in container
-        const isDesktop = window.innerWidth > 768
-        const targetQRSize = Math.min(canvas.width, canvas.height) * (isDesktop ? 0.6 : 0.5)
-        const moduleSize = targetQRSize / gridSize
-        const qrSize = gridSize * moduleSize
-        const offsetX = (canvas.width - qrSize) / 2
-        const offsetY = (canvas.height - qrSize) / 2 - (isDesktop ? canvas.height * 0.1 : 0)
-
         // Check if a module is in a corner finder pattern (7x7 zones)
         const isCornerModule = (col: number, row: number) => {
-            // Top-left
-            if (col < 7 && row < 7) return true
-            // Top-right
-            if (col >= gridSize - 7 && row < 7) return true
-            // Bottom-left
-            if (col < 7 && row >= gridSize - 7) return true
+            if (col < 7 && row < 7) return true // Top-left
+            if (col >= gridSize - 7 && row < 7) return true // Top-right
+            if (col < 7 && row >= gridSize - 7) return true // Bottom-left
             return false
         }
 
-        // Create particles for each black module in QR code
+        // Initialize particles
         for (let row = 0; row < gridSize; row++) {
             for (let col = 0; col < gridSize; col++) {
                 if (qr.modules.get(col, row)) {
-                    const targetX = offsetX + col * moduleSize + moduleSize / 2
-                    const targetY = offsetY + row * moduleSize + moduleSize / 2
-
                     particles.push({
-                        x: canvas.width * Math.random(),
-                        y: canvas.height * Math.random(),
-                        targetX,
-                        targetY,
+                        baseCol: col,
+                        baseRow: row,
+                        x: window.innerWidth * Math.random(),
+                        y: window.innerHeight * Math.random(),
                         size: Math.random() * 3 + 2,
                         opacity: Math.random() * 0.3 + 0.7,
                         speed: Math.random() * 0.05 + 0.03,
@@ -77,31 +53,50 @@ export function AnimatedQRCode() {
             }
         }
 
+        let animationId: number
         let time = 0
 
         const animate = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height)
+            // Recalculate dimensions to ensure perfect centering on any screen resize
+            const container = canvas.parentElement
+            if (container && (canvas.width !== container.clientWidth || canvas.height !== container.clientHeight)) {
+                canvas.width = container.clientWidth
+                canvas.height = container.clientHeight
+            }
 
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
             time += 0.005
 
+            const isDesktop = window.innerWidth > 768
+            const targetQRSize = Math.min(canvas.width, canvas.height) * (isDesktop ? 0.6 : 0.7)
+            const moduleSize = targetQRSize / gridSize
+            const qrSize = gridSize * moduleSize
+            
+            // Strictly center horizontally
+            const offsetX = (canvas.width - qrSize) / 2
+            
+            // Shift upwards to reduce top padding. 
+            // In mobile, we keep it visually centered above the bottom text, so shifting up effectively places it right in the middle of the empty space.
+            const offsetY = (canvas.height - qrSize) / 2 - (canvas.height * (isDesktop ? 0.15 : 0.1))
+
             particles.forEach((particle, index) => {
-                const dx = particle.targetX - particle.x
-                const dy = particle.targetY - particle.y
+                const targetX = offsetX + particle.baseCol * moduleSize + moduleSize / 2
+                const targetY = offsetY + particle.baseRow * moduleSize + moduleSize / 2
+
+                const dx = targetX - particle.x
+                const dy = targetY - particle.y
                 const distance = Math.sqrt(dx * dx + dy * dy)
 
                 if (distance > 1) {
                     particle.x += dx * particle.speed
                     particle.y += dy * particle.speed
                 } else {
-                    // Subtle floating animation once settled
-                    particle.x = particle.targetX + Math.sin(time + index * 0.1) * 0.5
-                    particle.y = particle.targetY + Math.cos(time * 0.7 + index * 0.1) * 0.5
+                    particle.x = targetX + Math.sin(time + index * 0.1) * 0.5
+                    particle.y = targetY + Math.cos(time * 0.7 + index * 0.1) * 0.5
                 }
 
-                // Subtle pulse
                 const pulseOpacity = particle.opacity * (0.9 + Math.sin(time * 1.5 + index * 0.05) * 0.1)
 
-                // Corner dots: darker silver for highlight, others: lighter silver
                 if (particle.isCorner) {
                     ctx.fillStyle = `rgba(255, 255, 255, ${pulseOpacity})`
                 } else {
@@ -111,22 +106,15 @@ export function AnimatedQRCode() {
                 ctx.fillRect(particle.x - half, particle.y - half, half * 2, half * 2)
             })
 
-            animationRef.current = requestAnimationFrame(animate)
+            animationId = requestAnimationFrame(animate)
         }
 
         animate()
 
-        const handleResize = () => {
-            resizeCanvas()
-        }
-
-        window.addEventListener("resize", handleResize)
-
         return () => {
-            if (animationRef.current) {
-                cancelAnimationFrame(animationRef.current)
+            if (animationId) {
+                cancelAnimationFrame(animationId)
             }
-            window.removeEventListener("resize", handleResize)
         }
     }, [])
 
