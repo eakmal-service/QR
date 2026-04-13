@@ -120,91 +120,110 @@ export function AnimatedFeaturesSection() {
         <div className="md:hidden block columns-2 gap-3 w-full pb-6">
           <div className="break-inside-avoid mb-3 h-56">
             <BentoCard
-              title="Advanced Analytics"
-              value="Insights"
-              subtitle="Deep business metrics"
+              title="BRAND PAGE"
+              value="Your page, your way"
+              subtitle="Logo, Services, Product — everything on one smart link"
               colors={["#1a1a1a", "#2a2a2a", "#1f1f1f"]}
               delay={0.1}
             />
           </div>
           <div className="break-inside-avoid mb-3 h-44">
             <BentoCard
-              title="Team Collab"
-              value="Seamless"
-              subtitle="Work together"
+              title="ZERO FRICTION"
+              value="1-tap flow"
+              subtitle="No login needed"
               colors={["#151515", "#252525", "#1d1d1d"]}
               delay={0.2}
             />
           </div>
           <div className="break-inside-avoid mb-3 h-64">
             <BentoCard
-              title="Performance"
-              value="99.9%"
-              subtitle="Uptime guaranteed"
+              title="REAL-TIME"
+              value="Live stream"
+              subtitle="Review appears as it's typed"
               colors={["#1c1c1c", "#2c2c2c", "#181818"]}
               delay={0.3}
             />
           </div>
           <div className="break-inside-avoid mb-3 h-48">
             <BentoCard
-              title="Enterprise Security"
-              value="Bank-level"
-              subtitle="End-to-end encryption"
+              title="PHYSICAL PRODUCT"
+              value="Standee included"
+              subtitle="Pan-India delivery • Table-ready QR stand "
               colors={["#171717", "#272727", "#1b1b1b"]}
               delay={0.4}
             />
           </div>
           <div className="break-inside-avoid mb-3 h-52">
             <BentoCard
-              title="Global Scale"
-              value="Worldwide"
+              title="GOOGLE VERIFIED"
+              value="Direct to Maps"
+              subtitle="No fake reviews"
               colors={["#131313", "#232323", "#191919"]}
               delay={0.5}
+            />
+          </div>
+          <div className="break-inside-avoid mb-3 h-48">
+            <BentoCard
+              title="GET STARTED"
+              value="Starts at ₹499"
+              subtitle="One-time trial, no commitment"
+              colors={["#1a1a1a", "#2a2a2a", "#1f1f1f"]}
+              delay={0.6}
             />
           </div>
         </div>
 
         {/* Desktop View: Original Bento Grid */}
-        <div className="hidden md:grid grid-cols-3 gap-6 h-[600px]">
+        <div className="hidden md:grid grid-cols-3 gap-6 h-[750px]">
           <div className="md:col-span-2">
             <BentoCard
-              title="Advanced Analytics"
-              value="Real-time Insights"
-              subtitle="Get deep insights into your business performance with comprehensive analytics and reporting"
+              title="BRAND PAGE"
+              value="Your page, your way"
+              subtitle="Logo, Services, Product — everything on one smart link"
               colors={["#1a1a1a", "#2a2a2a", "#1f1f1f"]}
               delay={0.2}
             />
           </div>
           <BentoCard
-            title="Team Collaboration"
-            value="Seamless"
-            subtitle="Work together efficiently"
+            title="ZERO FRICTION"
+            value="1-tap flow"
+            subtitle="No login needed"
             colors={["#151515", "#252525", "#1d1d1d"]}
             delay={0.4}
           />
           <BentoCard
-            title="Lightning Performance"
-            value="99.9%"
-            subtitle="Uptime guaranteed"
+            title="REAL-TIME"
+            value="Live stream"
+            subtitle="Review appears as it's typed"
             colors={["#1c1c1c", "#2c2c2c", "#181818"]}
             delay={0.6}
           />
           <div className="md:col-span-2">
             <BentoCard
-              title="Enterprise Security"
-              value="Bank-level"
-              subtitle="End-to-end encryption with compliance certifications for maximum security"
+              title="PHYSICAL PRODUCT"
+              value="Standee included"
+              subtitle="Pan-India delivery • Table-ready QR stand "
               colors={["#171717", "#272727", "#1b1b1b"]}
               delay={0.8}
             />
           </div>
-          <div className="md:col-span-3">
+          <div className="md:col-span-1">
             <BentoCard
-              title="Global Scale & Mobile Ready"
-              value="Worldwide"
-              subtitle="Deploy globally with our infrastructure and access your dashboard anywhere with responsive design"
+              title="GOOGLE VERIFIED"
+              value="Direct to Maps"
+              subtitle="No fake reviews"
               colors={["#131313", "#232323", "#191919"]}
-              delay={1}
+              delay={1.0}
+            />
+          </div>
+          <div className="md:col-span-2">
+            <BentoCard
+              title="GET STARTED"
+              value="Starts at ₹499"
+              subtitle="One-time trial, no commitment"
+              colors={["#1a1a1a", "#2a2a2a", "#1f1f1f"]}
+              delay={1.2}
             />
           </div>
         </div>
