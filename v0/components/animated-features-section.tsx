@@ -116,9 +116,9 @@ export function AnimatedFeaturesSection() {
           </p>
         </div>
 
-        {/* Mobile View: Pinterest Masonry Layout */}
-        <div className="md:hidden block columns-2 gap-3 w-full pb-6">
-          <div className="break-inside-avoid mb-3 h-56">
+        {/* Mobile View: Custom Grid Layout */}
+        <div className="md:hidden grid grid-cols-2 gap-3 w-full pb-6 auto-rows-fr">
+          <div className="row-span-2 h-full">
             <BentoCard
               title="BRAND PAGE"
               value="Your page, your way"
@@ -127,7 +127,7 @@ export function AnimatedFeaturesSection() {
               delay={0.1}
             />
           </div>
-          <div className="break-inside-avoid mb-3 h-44">
+          <div className="col-span-1 h-full min-h-[140px]">
             <BentoCard
               title="ZERO FRICTION"
               value="1-tap flow"
@@ -136,7 +136,7 @@ export function AnimatedFeaturesSection() {
               delay={0.2}
             />
           </div>
-          <div className="break-inside-avoid mb-3 h-64">
+          <div className="col-span-1 h-full min-h-[140px]">
             <BentoCard
               title="REAL-TIME"
               value="Live stream"
@@ -145,7 +145,7 @@ export function AnimatedFeaturesSection() {
               delay={0.3}
             />
           </div>
-          <div className="break-inside-avoid mb-3 h-48">
+          <div className="col-span-2 h-full min-h-[160px]">
             <BentoCard
               title="PHYSICAL PRODUCT"
               value="Standee included"
@@ -154,7 +154,7 @@ export function AnimatedFeaturesSection() {
               delay={0.4}
             />
           </div>
-          <div className="break-inside-avoid mb-3 h-52">
+          <div className="col-span-1 h-full min-h-[160px]">
             <BentoCard
               title="GOOGLE VERIFIED"
               value="Direct to Maps"
@@ -163,7 +163,7 @@ export function AnimatedFeaturesSection() {
               delay={0.5}
             />
           </div>
-          <div className="break-inside-avoid mb-3 h-48">
+          <div className="col-span-1 h-full min-h-[160px]">
             <BentoCard
               title="GET STARTED"
               value="Starts at ₹499"
