@@ -6,9 +6,10 @@ import { authOptions } from "@/lib/auth";
 export async function DELETE(req: Request) {
     try {
         const session = await getServerSession(authOptions);
+        const adminEmails = process.env.ADMIN_EMAILS?.split(',').map(s => s.trim()).filter(Boolean) || [];
 
         // Ensure admin check
-        if (!session || session.user?.email !== "hanzalaq63@gmail.com") {
+        if (!session || !session.user?.email || !adminEmails.includes(session.user.email)) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 

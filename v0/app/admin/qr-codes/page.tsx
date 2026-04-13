@@ -35,6 +35,7 @@ export default function AdminQRCodesPage() {
         businessType: "",
         productSummary: "",
         description: "",
+        googleMapsLink: "",
         businessId: "",
         menuItems: [] as { category?: string, name: string, price: string }[],
     });
@@ -43,6 +44,8 @@ export default function AdminQRCodesPage() {
     const [newItemPrice, setNewItemPrice] = useState("");
     const CATEGORIES = ["Ice Cream Parlor", "Restaurant", "Cafe", "Hotel", "Hospital", "Car Rental", "Retail", "Service", "Other"];
     const [creating, setCreating] = useState(false);
+    const [generatingAI, setGeneratingAI] = useState(false);
+    const [aiText, setAiText] = useState("");
     const [selectedQR, setSelectedQR] = useState<string | null>(null);
     const [downloadSettings, setDownloadSettings] = useState<Record<string, { format: string; size: number }>>({});
     const [editingQrId, setEditingQrId] = useState<string | null>(null);
@@ -113,7 +116,8 @@ export default function AdminQRCodesPage() {
         setShowForm(false);
         setIsEditingForm(false);
         setEditingFormId(null);
-        setFormData({ businessName: "", businessCategory: "", businessType: "", productSummary: "", description: "", businessId: "", menuItems: [] });
+        setAiText("");
+        setFormData({ businessName: "", businessCategory: "", businessType: "", productSummary: "", description: "", googleMapsLink: "", businessId: "", menuItems: [] });
     };
 
     const handleEditClick = (qr: QRCode) => {
@@ -123,6 +127,7 @@ export default function AdminQRCodesPage() {
             businessType: qr.businessType || "",
             productSummary: qr.productSummary || "",
             description: qr.description || "",
+            googleMapsLink: (qr as any).googleMapsLink || "",
             businessId: qr.businessId || qr.id,
             menuItems: qr.menuItems || [],
         });
@@ -165,6 +170,48 @@ export default function AdminQRCodesPage() {
             alert(`Failed to ${isEditingForm ? "update" : "create"} QR code`);
         } finally {
             setCreating(false);
+        }
+    };
+
+    const handleAIGenerate = async () => {
+        if (!aiText.trim()) {
+            alert("Please paste some text to extract first!");
+            return;
+        }
+
+        setGeneratingAI(true);
+        try {
+            const res = await fetch("/api/admin/qr-codes/generate-details", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: aiText }),
+            });
+            const data = await res.json();
+            
+            if (data.success && data.data) {
+                const aiData = data.data;
+                setFormData(prev => ({
+                    ...prev,
+                    businessName: aiData.businessName || prev.businessName,
+                    businessCategory: aiData.businessCategory || prev.businessCategory,
+                    businessType: aiData.businessType || prev.businessType,
+                    productSummary: aiData.productSummary || prev.productSummary,
+                    description: aiData.description || prev.description,
+                    googleMapsLink: aiData.googleMapsLink || prev.googleMapsLink,
+                    businessId: aiData.customId || prev.businessId,
+                    menuItems: [...prev.menuItems, ...(aiData.menuItems || [])]
+                }));
+                // Clear the AI text once successfully transferred
+                setAiText("");
+                alert("AI successfully filled the form fields!");
+            } else {
+                alert(data.error || "Failed to parse details via AI");
+            }
+        } catch (error) {
+            console.error("AI Auto Fill Error:", error);
+            alert("Network error occurred during AI Auto Fill");
+        } finally {
+            setGeneratingAI(false);
         }
     };
 
@@ -298,6 +345,39 @@ export default function AdminQRCodesPage() {
                 {showForm && (
                     <div className="bg-[#1a1a1a] border border-[#404040] rounded-xl shadow-md p-6 mb-8">
                         <h2 className="text-xl font-bold mb-4 text-white">{isEditingForm ? "Edit QR Code Details" : "Create New QR Code"}</h2>
+                        
+                        {/* AI Section */}
+                        {!isEditingForm && (
+                            <div className="bg-gradient-to-r from-blue-900/20 to-purple-900/20 border border-blue-500/30 rounded-lg p-4 mb-6">
+                                <div className="flex justify-between items-center mb-2">
+                                    <label className="block text-sm font-semibold text-blue-200 flex items-center gap-2">
+                                        ✨ AI Magic Fill
+                                        <span className="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">Beta</span>
+                                    </label>
+                                </div>
+                                <p className="text-xs text-blue-300/70 mb-3">
+                                    Paste unstructured text (like notes, an email, or a website summary) and let Gemini figure out the form fields and menu items for you automatically.
+                                </p>
+                                <textarea
+                                    value={aiText}
+                                    onChange={(e) => setAiText(e.target.value)}
+                                    className="w-full px-4 py-3 bg-black/40 border border-blue-500/20 text-white rounded-lg focus:ring-1 focus:ring-blue-400 focus:outline-none placeholder-blue-300/30"
+                                    placeholder="e.g. 'Opening a new B2C Cafe in Hubli called DemoBakery. Our menu has Chocolate Cake for ₹300 and Black Coffee for ₹50. ID should be demo-bakery-01'"
+                                    rows={3}
+                                />
+                                <div className="mt-3 flex justify-end">
+                                    <button
+                                        type="button"
+                                        onClick={handleAIGenerate}
+                                        disabled={generatingAI || !aiText.trim()}
+                                        className="bg-blue-600 hover:bg-blue-500 disabled:bg-[#404040] disabled:text-gray-500 text-white py-2 px-5 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2"
+                                    >
+                                        {generatingAI ? "Extracting..." : "Auto Fill with AI"}
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div>
                                 <label className="block text-sm font-medium mb-2 text-gray-300">Business Name *</label>
@@ -476,6 +556,16 @@ export default function AdminQRCodesPage() {
                                     onChange={(e) => setFormData({ ...formData, businessId: e.target.value })}
                                     className="w-full px-4 py-2 bg-black border border-[#404040] text-white rounded-lg focus:ring-1 focus:ring-white focus:outline-none"
                                     placeholder="e.g., my-coffee-shop (leave empty for auto-generated)"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-2 text-gray-300">Google Maps Redirect Link (optional)</label>
+                                <input
+                                    type="url"
+                                    value={formData.googleMapsLink}
+                                    onChange={(e) => setFormData({ ...formData, googleMapsLink: e.target.value })}
+                                    className="w-full px-4 py-2 bg-black border border-[#404040] text-white rounded-lg focus:ring-1 focus:ring-white focus:outline-none"
+                                    placeholder="e.g., https://g.page/r/XYZ/review"
                                 />
                             </div>
                             <button

@@ -61,7 +61,7 @@ export function FAQSection() {
       <div className="container mx-auto max-w-4xl">
         <div className="text-center mb-16">
           <motion.h2
-            className="text-4xl font-bold text-white mb-4"
+            className="text-4xl font-bold text-foreground mb-4"
             style={{ fontFamily: "var(--font-playfair)" }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -71,7 +71,7 @@ export function FAQSection() {
             Frequently Asked Questions
           </motion.h2>
           <motion.p
-            className="text-xl text-gray-300 max-w-2xl mx-auto"
+            className="text-xl text-muted-foreground max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -100,7 +100,7 @@ export function FAQSection() {
                 className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-white/5 transition-colors rounded-lg"
                 onClick={() => toggleFAQ(index)}
               >
-                <span className="text-lg font-medium text-white pr-4">{faq.question}</span>
+                <span className="text-lg font-medium text-foreground pr-4">{faq.question}</span>
                 <ChevronDown
                   className={`h-5 w-5 text-gray-400 transition-transform flex-shrink-0 ${openIndex === index ? "rotate-180" : ""
                     }`}
@@ -117,7 +117,7 @@ export function FAQSection() {
                 className="overflow-hidden"
               >
                 <div className="px-6 pb-4">
-                  <p className="text-gray-300 leading-relaxed">{faq.answer}</p>
+                  <p className="text-muted-foreground leading-relaxed">{faq.answer}</p>
                 </div>
               </motion.div>
             </motion.div>
@@ -141,7 +141,7 @@ export function FAQSection() {
                   <InfiniteSlider durationOnHover={20} duration={40} gap={112}>
                     <div className="flex">
                       <img
-                        className="mx-auto h-5 w-fit invert opacity-60 hover:opacity-100 transition-opacity"
+                        className="mx-auto h-5 w-fit dark:invert opacity-60 hover:opacity-100 transition-opacity"
                         src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/nvidia-TAN2JNiFDeluYk9hlkv4qXwWtfx5Cy.svg"
                         alt="Nvidia Logo"
                         height="20"
@@ -151,7 +151,7 @@ export function FAQSection() {
 
                     <div className="flex">
                       <img
-                        className="mx-auto h-4 w-fit invert opacity-60 hover:opacity-100 transition-opacity"
+                        className="mx-auto h-4 w-fit dark:invert opacity-60 hover:opacity-100 transition-opacity"
                         src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/column-qYeLfzzj1ni9E7PhooLL6Mzip5Zeb4.svg"
                         alt="Column Logo"
                         height="16"
@@ -160,7 +160,7 @@ export function FAQSection() {
                     </div>
                     <div className="flex">
                       <img
-                        className="mx-auto h-4 w-fit invert opacity-60 hover:opacity-100 transition-opacity"
+                        className="mx-auto h-4 w-fit dark:invert opacity-60 hover:opacity-100 transition-opacity"
                         src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/github-twQNbc5nAy2jUs7yh5xic8hsEfBYpQ.svg"
                         alt="GitHub Logo"
                         height="16"
@@ -169,7 +169,7 @@ export function FAQSection() {
                     </div>
                     <div className="flex">
                       <img
-                        className="mx-auto h-5 w-fit invert opacity-60 hover:opacity-100 transition-opacity"
+                        className="mx-auto h-5 w-fit dark:invert opacity-60 hover:opacity-100 transition-opacity"
                         src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/nike-H0OCso4JdUtllUTdAverMAjJmcKVXU.svg"
                         alt="Nike Logo"
                         height="20"
@@ -178,7 +178,7 @@ export function FAQSection() {
                     </div>
                     <div className="flex">
                       <img
-                        className="mx-auto h-5 w-fit invert opacity-60 hover:opacity-100 transition-opacity"
+                        className="mx-auto h-5 w-fit dark:invert opacity-60 hover:opacity-100 transition-opacity"
                         src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/lemonsqueezy-ZL7mmIzqR10hWcodoO19ajha8AS9VK.svg"
                         alt="Lemon Squeezy Logo"
                         height="20"
@@ -187,7 +187,7 @@ export function FAQSection() {
                     </div>
                     <div className="flex">
                       <img
-                        className="mx-auto h-4 w-fit invert opacity-60 hover:opacity-100 transition-opacity"
+                        className="mx-auto h-4 w-fit dark:invert opacity-60 hover:opacity-100 transition-opacity"
                         src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/laravel-sDCMR3A82V8F6ycZymrDlmiFpxyUd4.svg"
                         alt="Laravel Logo"
                         height="16"
@@ -196,7 +196,7 @@ export function FAQSection() {
                     </div>
                     <div className="flex">
                       <img
-                        className="mx-auto h-7 w-fit invert opacity-60 hover:opacity-100 transition-opacity"
+                        className="mx-auto h-7 w-fit dark:invert opacity-60 hover:opacity-100 transition-opacity"
                         src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/lilly-Jhslk9VPUVAVK2SCJmCGTEbqKMef5v.svg"
                         alt="Lilly Logo"
                         height="28"
@@ -206,7 +206,7 @@ export function FAQSection() {
 
                     <div className="flex">
                       <img
-                        className="mx-auto h-6 w-fit invert opacity-60 hover:opacity-100 transition-opacity"
+                        className="mx-auto h-6 w-fit dark:invert opacity-60 hover:opacity-100 transition-opacity"
                         src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/openai-5TPubXl1hnLxeIs4ygVSLjJcUoBOCB.svg"
                         alt="OpenAI Logo"
                         height="24"

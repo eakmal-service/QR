@@ -6,7 +6,7 @@ import { nanoid } from "nanoid";
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { qrId, sessionId, language, rating, mood, service, category, selectedItems } = body;
+        const { qrId, sessionId, language, rating, mood, service, category, selectedItems, reviewType } = body;
 
         if (!qrId) {
             return NextResponse.json({ error: "qrId is required" }, { status: 400 });
@@ -37,6 +37,7 @@ export async function POST(request: NextRequest) {
             mood,
             service,
             selectedItems: Array.isArray(selectedItems) ? selectedItems : undefined,
+            reviewType,
         });
 
         const hash = generateHash(generated.reviewText);

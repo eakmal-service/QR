@@ -12,7 +12,7 @@ export function AnimatedCTASection() {
   return (
     <section className="relative py-20 px-4 overflow-hidden">
       <div className="absolute inset-0">
-        <div className="h-full w-full bg-gradient-to-br from-gray-900 via-black to-gray-800">
+        <div className="h-full w-full bg-gradient-to-br from-background via-card to-muted">
           <BackgroundPaths />
           <div className="absolute inset-0 opacity-20">
             <div className="absolute top-0 left-1/4 w-96 h-96 bg-zinc-500/10 rounded-full blur-3xl animate-pulse" />
@@ -28,10 +28,10 @@ export function AnimatedCTASection() {
         </div>
       </div>
 
-      <div className="absolute inset-0 bg-black/20" />
+      <div className="absolute inset-0 bg-background/20" />
 
-      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/20" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/60" />
+      <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-transparent to-background/20" />
+      <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-transparent to-background/60" />
       <div
         className="absolute inset-0 bg-radial-gradient from-transparent via-transparent to-black/40"
         style={{
@@ -46,13 +46,13 @@ export function AnimatedCTASection() {
           style={{ animationDelay: "0.3s" }}
         >
           <h2
-            className="text-4xl font-bold text-white mb-4 drop-shadow-lg animate-fade-in-up"
+            className="text-4xl font-bold text-foreground mb-4 drop-shadow-lg animate-fade-in-up"
             style={{ fontFamily: "var(--font-playfair)", animationDelay: "0.5s" }}
           >
             Ready to Transform Your Business?
           </h2>
           <p
-            className="text-xl text-white/90 mb-8 max-w-2xl mx-auto drop-shadow-md animate-fade-in-up"
+            className="text-xl text-foreground/90 mb-8 max-w-2xl mx-auto drop-shadow-md animate-fade-in-up"
             style={{ animationDelay: "0.7s" }}
           >
             Join thousands of companies already using QR.Akmal to streamline their reputation building and getting more reviews.
@@ -64,7 +64,7 @@ export function AnimatedCTASection() {
             <Link href="/generate/url">
               <Button
                 size="lg"
-                className="text-white group border-0 hover:scale-105 transition-all duration-300"
+                className="text-foreground group border-0 hover:scale-105 transition-all duration-300"
                 style={{
                   background: "linear-gradient(135deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.10))",
                   backdropFilter: "blur(20px)",
@@ -80,7 +80,7 @@ export function AnimatedCTASection() {
             <Button
               size="lg"
               variant="outline"
-              className="text-white border-0 hover:scale-105 transition-all duration-300"
+              className="text-foreground border-0 hover:scale-105 transition-all duration-300"
               style={{
                 background: "linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05))",
                 backdropFilter: "blur(20px)",

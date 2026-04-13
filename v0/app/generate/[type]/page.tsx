@@ -176,6 +176,23 @@ const ERROR_LEVELS = [
     { value: "L", label: "Smallest", desc: "Less cluttered pattern", icon: Minimize },
 ]
 
+const PRINT_SIZES = [
+    { id: "200", label: "200 x 200 px", type: "digital", width: 200, height: 200 },
+    { id: "500", label: "500 x 500 px", type: "digital", width: 500, height: 500 },
+    { id: "1000", label: "1000 x 1000 px", type: "digital", width: 1000, height: 1000 },
+    { id: "2000", label: "2000 x 2000 px", type: "digital", width: 2000, height: 2000 },
+    { id: "a0", label: "A0 Poster (841x1189mm)", type: "print", width: 9933, height: 14043, unit: "mm", mmWidth: 841, mmHeight: 1189 },
+    { id: "a1", label: "A1 Poster (594x841mm)", type: "print", width: 7016, height: 9933, unit: "mm", mmWidth: 594, mmHeight: 841 },
+    { id: "a2", label: "A2 Poster (420x594mm)", type: "print", width: 4961, height: 7016, unit: "mm", mmWidth: 420, mmHeight: 594 },
+    { id: "a3", label: "A3 Poster (297x420mm)", type: "print", width: 3508, height: 4961, unit: "mm", mmWidth: 297, mmHeight: 420 },
+    { id: "a4", label: "A4 Document (210x297mm)", type: "print", width: 2480, height: 3508, unit: "mm", mmWidth: 210, mmHeight: 297 },
+    { id: "a5", label: "A5 Flyer (148x210mm)", type: "print", width: 1748, height: 2480, unit: "mm", mmWidth: 148, mmHeight: 210 },
+    { id: "a6", label: "A6 Postcard (105x148mm)", type: "print", width: 1240, height: 1748, unit: "mm", mmWidth: 105, mmHeight: 148 },
+    { id: "visiting", label: "Visiting Card (90x54mm)", type: "print", width: 1063, height: 638, unit: "mm", mmWidth: 90, mmHeight: 54 },
+    { id: "letter", label: "Letter (8.5x11in)", type: "print", width: 2550, height: 3300, unit: "in", inWidth: 8.5, inHeight: 11 },
+    { id: "legal", label: "Legal (8.5x14in)", type: "print", width: 2550, height: 4200, unit: "in", inWidth: 8.5, inHeight: 14 },
+]
+
 export default function QRGeneratorPage({ params }: { params: { type: string } }) {
     const router = useRouter()
     const [qrType, setQRType] = useState<QRType>((params.type as QRType) || "url")
@@ -465,7 +482,8 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
 
         setIsDownloading(true);
         try {
-            const size = parseInt(downloadSize);
+            const printSize = PRINT_SIZES.find(s => s.id === downloadSize) || PRINT_SIZES[2];
+            const size = printSize.width;
             const format = downloadFormat;
 
             // If no frame and using native library features (except PDF which needs special handling)
@@ -476,25 +494,59 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
 
             // 1. PDF Download
             if (format === "pdf") {
-                // For PDF, we generally capture as image then put in PDF
                 const element = document.getElementById("qr-preview-container");
                 if (element) {
+                    const printSize = PRINT_SIZES.find(s => s.id === downloadSize) || PRINT_SIZES[2]; // Default 1000px if not found
+                    const w_px = printSize.width;
+                    const h_px = printSize.height || printSize.width;
+
                     const canvas = await html2canvas(element, {
                         backgroundColor: null,
-                        scale: size / 300, // Approximate scale
+                        scale: w_px / element.offsetWidth,
                         logging: false,
                         useCORS: true
                     });
 
                     const imgData = canvas.toDataURL("image/png");
+                    const imgRatio = canvas.width / canvas.height;
+
+                    // If it's a standard paper size, we use that for jspdf
+                    let pdfFormat: any = [w_px, h_px];
+                    if (printSize.id === "a3") pdfFormat = "a3";
+                    else if (printSize.id === "a4") pdfFormat = "a4";
+                    else if (printSize.id === "a5") pdfFormat = "a5";
+                    else if (printSize.id === "a6") pdfFormat = "a6";
+                    else if (printSize.id === "letter") pdfFormat = "letter";
+                    else if (printSize.id === "legal") pdfFormat = "legal";
+
                     const pdf = new jsPDF({
-                        orientation: "portrait",
+                        orientation: w_px > h_px ? "landscape" : "portrait",
                         unit: "px",
-                        format: [size, size]
+                        format: pdfFormat
                     });
 
-                    pdf.addImage(imgData, "PNG", 0, 0, size, size);
-                    pdf.save(`qr-${qrType}.${format}`);
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = pdf.internal.pageSize.getHeight();
+
+                    // Adding padding (10% of minimum dimension)
+                    const padding = Math.min(pdfWidth, pdfHeight) * 0.1;
+                    const availW = pdfWidth - padding * 2;
+                    const availH = pdfHeight - padding * 2;
+
+                    let drawW = availW;
+                    let drawH = availH;
+
+                    if (imgRatio > availW / availH) {
+                        drawH = availW / imgRatio;
+                    } else {
+                        drawW = availH * imgRatio;
+                    }
+
+                    const x = (pdfWidth - drawW) / 2;
+                    const y = (pdfHeight - drawH) / 2;
+
+                    pdf.addImage(imgData, "PNG", x, y, drawW, drawH);
+                    pdf.save(`qr-${qrType}-${printSize.id}.${format}`);
                 }
                 return;
             }
@@ -511,75 +563,100 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                 // Fallthrough to PNG
             }
 
-
-            // 4. EPS Download (Raster via Backend)
-            if (format === "eps") {
+            // 4. EPS Download and 5. Image Download (PNG/JPEG)
+            if (format === "eps" || format === "png" || format === "jpeg") {
                 const element = document.getElementById("qr-preview-container");
+                const isPrint = printSize.type === 'print';
+                
+                // If pure digital and native is possible, use native for PNG/JPEG
+                if (!isPrint && format !== "eps" && !hasFrame && !isCustomPattern && !isCustomCorner && !isCustomDot && !logoFile) {
+                    if (qrCodeRef.current) {
+                        qrCodeRef.current.update({ width: size, height: size, imageOptions: { ...qrCodeRef.current._options.imageOptions, imageSize: logoSize[0] / 100, margin: logoMargin[0] } });
+                        await qrCodeRef.current.download({ name: `qr-${qrType}`, extension: format as "png" | "jpeg" });
+                        qrCodeRef.current.update({ width: 300, height: 300 });
+                    }
+                    return;
+                }
+
                 if (element) {
-                    // Scale up for high quality EPS
-                    const currentWidth = element.offsetWidth;
-                    // Target size for EPS should be high res
-                    const targetSize = size < 1000 ? 1000 : size;
-                    const scaleFactor = targetSize / currentWidth;
+                    let finalCanvas: HTMLCanvasElement;
+                    
+                    if (isPrint) {
+                        const targetW = printSize.width;
+                        const targetH = printSize.height || printSize.width;
+                        
+                        // Render QR tightly and scale it up
+                        const padding = Math.min(targetW, targetH) * 0.1;
+                        const availW = targetW - padding * 2;
+                        const availH = targetH - padding * 2;
+                        
+                        // We want the QR to fit in availW/availH without stretching
+                        const elementRatio = element.offsetWidth / element.offsetHeight;
+                        let qrTargetW = availW;
+                        let qrTargetH = availH;
+                        
+                        if (elementRatio > availW / availH) {
+                            qrTargetH = availW / elementRatio;
+                        } else {
+                            qrTargetW = availH * elementRatio;
+                        }
+                        
+                        const qrScale = qrTargetW / element.offsetWidth;
+                        
+                        const qrCanvas = await html2canvas(element, {
+                            backgroundColor: null,
+                            scale: qrScale,
+                            logging: false,
+                            useCORS: true
+                        });
+                        
+                        finalCanvas = document.createElement("canvas");
+                        finalCanvas.width = targetW;
+                        finalCanvas.height = targetH;
+                        const ctx = finalCanvas.getContext("2d");
+                        if (ctx) {
+                            ctx.fillStyle = "#ffffff"; // White padding
+                            ctx.fillRect(0, 0, targetW, targetH);
+                            const x = (targetW - qrCanvas.width) / 2;
+                            const y = (targetH - qrCanvas.height) / 2;
+                            ctx.drawImage(qrCanvas, x, y);
+                        } else {
+                            finalCanvas = qrCanvas; // Fallback
+                        }
+                    } else {
+                        // Digital formats: tightly according to size
+                        const currentWidth = element.offsetWidth;
+                        const targetSize = format === "eps" ? Math.max(size, 1000) : size;
+                        const scaleFactor = targetSize / currentWidth;
 
-                    const canvas = await html2canvas(element, {
-                        backgroundColor: null,
-                        scale: scaleFactor,
-                        logging: false,
-                        useCORS: true
-                    });
+                        finalCanvas = await html2canvas(element, {
+                            backgroundColor: null,
+                            scale: scaleFactor,
+                            logging: false,
+                            useCORS: true
+                        });
+                    }
 
-                    const imgData = canvas.toDataURL("image/png");
-
-                    // Send to backend via proxy (handled by next.config.js rewrite)
-                    const response = await fetch("/api/convert/image-to-eps", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ image: imgData })
-                    });
-
-                    if (!response.ok) throw new Error("EPS conversion failed");
-
-                    const blob = await response.blob();
-                    saveAs(blob, `qr-${qrType}.eps`);
+                    if (format === "eps") {
+                        const imgData = finalCanvas.toDataURL("image/png");
+                        const response = await fetch("/api/convert/image-to-eps", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ image: imgData })
+                        });
+                        if (!response.ok) throw new Error("EPS conversion failed");
+                        const blob = await response.blob();
+                        saveAs(blob, `qr-${qrType}.eps`);
+                    } else {
+                        finalCanvas.toBlob((blob) => {
+                            if (blob) {
+                                const suffix = isPrint ? `-${printSize.id}` : "";
+                                saveAs(blob, `qr-${qrType}${suffix}.${format === "jpeg" ? "jpg" : "png"}`);
+                            }
+                        }, format === "jpeg" ? "image/jpeg" : "image/png");
+                    }
                 }
                 return;
-            }
-
-            // 5. Image Download (PNG/JPEG via html2canvas fallback or native)
-            // If using standard styles (no frame, no custom patterns, no logo which forces custom renderer), use native lib
-            if (!hasFrame && !isCustomPattern && !isCustomCorner && !isCustomDot && !logoFile) {
-                // Use library native download for pure QR
-                if (qrCodeRef.current) {
-                    // Update size temporarily
-                    qrCodeRef.current.update({ width: size, height: size, imageOptions: { ...qrCodeRef.current._options.imageOptions, imageSize: logoSize[0] / 100, margin: logoMargin[0] } });
-                    await qrCodeRef.current.download({ name: `qr-${qrType}`, extension: format as "png" | "jpeg" });
-                    // Revert size
-                    qrCodeRef.current.update({ width: 300, height: 300 });
-                }
-            } else {
-                // Use html2canvas for Frames or Custom Renders
-                const element = document.getElementById("qr-preview-container");
-                if (element) {
-                    // Current display is 300px approx. We need to scale.
-                    // Note: html2canvas scale allows high res capture.
-                    // Scale = Desired / Rendered (approx 300 or element.offsetWidth)
-                    const currentWidth = element.offsetWidth;
-                    const scaleFactor = size / currentWidth;
-
-                    const canvas = await html2canvas(element, {
-                        backgroundColor: null,
-                        scale: scaleFactor,
-                        logging: false,
-                        useCORS: true
-                    });
-
-                    canvas.toBlob((blob) => {
-                        if (blob) {
-                            saveAs(blob, `qr-${qrType}-framed.${format === "jpeg" ? "jpg" : "png"}`);
-                        }
-                    }, format === "jpeg" ? "image/jpeg" : "image/png");
-                }
             }
         } catch (err) {
             console.error("Download failed", err);
@@ -1632,17 +1709,20 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                                     </Select>
                                 </div>
                                 <div className="flex-1">
-                                    <div className="text-sm font-medium text-gray-300 mb-1.5">Size (px)</div>
+                                    <div className="text-sm font-medium text-gray-300 mb-1.5">Size/Format</div>
                                     <Select value={downloadSize} onValueChange={setDownloadSize}>
                                         <SelectTrigger className="bg-white/5 border-white/10 text-white h-10">
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="200">200 x 200</SelectItem>
-                                            <SelectItem value="500">500 x 500</SelectItem>
-                                            <SelectItem value="1000">1000 x 1000</SelectItem>
-                                            <SelectItem value="1500">1500 x 1500</SelectItem>
-                                            <SelectItem value="2000">2000 x 2000</SelectItem>
+                                            <div className="px-2 py-1.5 text-xs font-bold text-gray-500 uppercase">Digital</div>
+                                            {PRINT_SIZES.filter(s => s.type === "digital").map(s => (
+                                                <SelectItem key={s.id} value={s.id}>{s.label}</SelectItem>
+                                            ))}
+                                            <div className="px-2 py-1.5 mt-2 text-xs font-bold text-gray-500 uppercase border-t border-white/5">Printing (300 DPI)</div>
+                                            {PRINT_SIZES.filter(s => s.type === "print").map(s => (
+                                                <SelectItem key={s.id} value={s.id}>{s.label}</SelectItem>
+                                            ))}
                                         </SelectContent>
                                     </Select>
                                 </div>
@@ -1693,7 +1773,7 @@ export default function QRGeneratorPage({ params }: { params: { type: string } }
                                 </button>
                             </Link>
                             <div className="text-sm font-medium text-white flex items-center gap-2">
-                                <span className="text-gray-500">ME-QR</span>
+                                <span className="text-gray-500">Home</span>
                                 <ChevronRight className="w-4 h-4 text-gray-600" />
                                 <span className="text-gray-500">Type</span>
                                 <ChevronRight className="w-4 h-4 text-gray-600" />

@@ -5,8 +5,6 @@ import { Inter, JetBrains_Mono, Playfair_Display } from "next/font/google"
 import { Toaster } from "@/components/ui/sonner"
 import { AuthProvider } from "@/components/auth/auth-provider"
 import { ThemeProvider } from "@/components/theme-provider"
-import { ThemeToggle } from "@/components/theme-toggle"
-
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -36,12 +34,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`font-sans ${inter.variable} ${jetbrainsMono.variable} ${playfair.variable} bg-black text-white transition-colors duration-300`}>
+      <body className={`font-sans ${inter.variable} ${jetbrainsMono.variable} ${playfair.variable} bg-background text-foreground transition-colors duration-300`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <AuthProvider>
             {children}
             <Toaster />
-            <ThemeToggle />
           </AuthProvider>
         </ThemeProvider>
       </body>

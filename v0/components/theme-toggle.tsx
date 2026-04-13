@@ -23,67 +23,72 @@ export function ThemeToggle() {
 
     return (
         <div
-            className="fixed bottom-6 right-6 z-50 flex items-center justify-center"
+            className="fixed bottom-6 right-6 z-50 flex items-center justify-center pointer-events-auto"
             suppressHydrationWarning
         >
-            <button
-                onClick={() => setTheme(isDark ? "light" : "dark")}
-                className={`
-          relative flex items-center w-[120px] h-[48px] rounded-full p-1 
-          transition-colors duration-500 ease-in-out overflow-hidden
-          ${isDark
-                        ? "bg-[#1f2023] border border-black/40 shadow-[inset_0_4px_8px_rgba(0,0,0,0.6)]"
-                        : "bg-gray-300 border border-gray-400 shadow-[inset_0_3px_6px_rgba(0,0,0,0.15)]"
-                    }
-        `}
-                aria-label="Toggle theme"
-            >
-                {/* Background Text Labels */}
-                <div className="absolute inset-0 flex justify-between items-center px-4 pointer-events-none font-medium text-[15px] tracking-wide">
-                    <span
-                        className={`transition-all duration-500 transform ${isDark ? "opacity-0 -translate-x-2" : "opacity-100 translate-x-0 text-gray-500"}`}
-                    >
-                        Light
-                    </span>
-                    <span
-                        className={`transition-all duration-500 transform ${isDark ? "opacity-100 translate-x-0 text-gray-400" : "opacity-0 translate-x-2"}`}
-                    >
-                        Dark
-                    </span>
-                </div>
+            <div className="relative" style={{ transform: 'scale(0.35)', transformOrigin: 'bottom right' }}>
+                <svg className="hidden">
+                    <filter id="lens-distortion">
+                        <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur" />
+                        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
+                        <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+                    </filter>
+                </svg>
 
-                {/* The Glass Knob */}
                 <div
-                    className={`
-            absolute top-[4px] bottom-[4px] w-[40px] rounded-full flex items-center justify-center z-20
-            transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] 
-            bg-white/10 backdrop-blur-xl border border-white/30
-            shadow-[0_8px_16px_rgba(0,0,0,0.2),inset_0_2px_4px_rgba(255,255,255,0.4)]
-            ${isDark ? "translate-x-[72px]" : "translate-x-0"}
-          `}
+                    onClick={() => setTheme(isDark ? "light" : "dark")}
+                    className={`relative w-[320px] h-[110px] rounded-[55px] cursor-pointer flex items-center transition-all duration-700 ${isDark
+                            ? 'bg-[#1e1e22] shadow-[inset_0_10px_20px_rgba(0,0,0,0.6),0_1px_2px_rgba(255,255,255,0.05)]'
+                            : 'bg-[#e2e8f0] shadow-[inset_0_10px_20px_rgba(0,0,0,0.1),0_1px_2px_rgba(255,255,255,0.8)]'
+                        }`}
                 >
-                    {/* Specular Highlights */}
-                    <div className="absolute top-1 left-1 w-2.5 h-1.5 rounded-full bg-white/70 blur-[1px] rotate-[-20deg]"></div>
-                    <div className="absolute bottom-1 right-2 w-3 h-1 rounded-full bg-black/20 blur-[1px]"></div>
-
-                    {/* Active Icon */}
-                    <div className={`transition-opacity duration-300 ${isDark ? 'opacity-100' : 'opacity-0'} absolute inset-0 flex items-center justify-center`}>
-                        <Moon className="w-4 h-4 text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] fill-white/20" />
+                    {/* Background Text */}
+                    <div className="absolute inset-0 flex items-center justify-between px-12 select-none">
+                        <span className={`text-2xl font-bold tracking-tight transition-all duration-700 ${isDark ? 'text-white opacity-100 scale-110 translate-x-0' : 'text-gray-400 opacity-20 -translate-x-4'
+                            }`}>
+                            Dark
+                        </span>
+                        <span className={`text-2xl font-bold tracking-tight transition-all duration-700 ${!isDark ? 'text-slate-800 opacity-100 scale-110 translate-x-0' : 'text-gray-500 opacity-20 translate-x-4'
+                            }`}>
+                            Light
+                        </span>
                     </div>
-                    <div className={`transition-opacity duration-300 ${!isDark ? 'opacity-100' : 'opacity-0'} absolute inset-0 flex items-center justify-center`}>
-                        <Sun className="w-4 h-4 text-yellow-600 drop-shadow-[0_0_4px_rgba(255,200,0,0.4)]" />
+
+                    {/* The "Glass Sphere" Thumb */}
+                    <div
+                        className={`absolute z-20 w-[100px] h-[100px] rounded-full transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] flex items-center justify-center ${isDark ? 'translate-x-[210px]' : 'translate-x-[10px]'
+                            } hover:scale-105`}
+                        style={{
+                            background: 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%)',
+                            backdropFilter: 'blur(12px) brightness(1.1) saturate(120%)',
+                            WebkitBackdropFilter: 'blur(12px) brightness(1.1) saturate(120%)',
+                            boxShadow: isDark
+                                ? '0 20px 40px rgba(0,0,0,0.7), inset 0 0 15px rgba(255,255,255,0.15), inset 0 2px 5px rgba(255,255,255,0.3)'
+                                : '0 20px 40px rgba(0,0,0,0.15), inset 0 0 15px rgba(255,255,255,0.4), inset 0 2px 5px rgba(255,255,255,0.6)',
+                            border: '0.5px solid rgba(255, 255, 255, 0.4)'
+                        }}
+                    >
+                        {/* Edge Refraction / Caustics Effect */}
+                        <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
+                            <div className="absolute -top-2 -left-2 w-full h-full bg-gradient-to-br from-white/30 to-transparent blur-[4px]" />
+                            <div className="absolute -bottom-2 -right-2 w-full h-full bg-gradient-to-tl from-black/20 to-transparent blur-[4px]" />
+                        </div>
+
+                        {/* Central Icon with Glow */}
+                        <div className="relative z-30 transition-transform duration-500 pointer-events-none">
+                            <div className={`transition-all duration-700 ${isDark ? 'rotate-180 scale-0 opacity-0' : 'rotate-0 scale-125 opacity-100'}`}>
+                                <Sun size={38} className="text-white fill-white/10" strokeWidth={1.5} />
+                            </div>
+                            <div className={`absolute top-0 left-0 transition-all duration-700 ${isDark ? 'rotate-0 scale-125 opacity-100' : '-rotate-180 scale-0 opacity-0'}`}>
+                                <Moon size={38} className="text-white fill-white/10" strokeWidth={1.5} />
+                            </div>
+                        </div>
+
+                        {/* Lens Specular Reflection */}
+                        <div className="absolute top-[10%] left-[20%] w-[35%] h-[20%] bg-white/40 rounded-[100%] blur-[1px] rotate-[-25deg] pointer-events-none" />
                     </div>
                 </div>
-
-                {/* Halo Refraction Effect behind the Knob */}
-                <div
-                    className={`
-             absolute top-1/2 -translate-y-1/2 w-[70px] h-[70px] rounded-full bg-white/5 backdrop-blur-[2px] pointer-events-none z-10
-             transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]
-             ${isDark ? "translate-x-[55px]" : "-translate-x-[15px]"}
-           `}
-                />
-            </button>
+            </div>
         </div>
     )
 }

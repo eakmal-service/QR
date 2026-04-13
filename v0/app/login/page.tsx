@@ -32,7 +32,8 @@ export default function LoginPage() {
             if (res?.error) {
                 setError(res.error)
             } else if (res?.ok) {
-                if (email === "hanzalaq63@gmail.com") {
+                const adminEmails = process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',').map(s => s.trim().toLowerCase()).filter(Boolean) || [];
+                if (adminEmails.includes(email.trim().toLowerCase())) {
                     router.push("/admin")
                 } else {
                     router.push("/dashboard")

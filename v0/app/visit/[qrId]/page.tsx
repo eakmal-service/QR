@@ -26,131 +26,87 @@ const SERVICE_OPTIONS = [
 
 const LANGUAGES = ["English", "Hindi", "Hinglish", "Gujarati"];
 
-const DairyDonBackground = memo(() => (
-    <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none opacity-[0.25]">
-        {/* Ice Cream Cup */}
-        <svg className="absolute top-[2%] left-[2%] w-24 h-24 rotate-[-15deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M4 11h16" />
-            <path d="M5 11l1.5 10a1 1 0 001 1h9a1 1 0 001-1l1.5-10" />
-            <path d="M6 11c0-3.5 2.5-6.5 6-6.5s6 3 6 6.5" />
-        </svg>
-        {/* Cone */}
-        <svg className="absolute top-[8%] right-[5%] w-32 h-32 rotate-[25deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M6 11l6 12 6-12" />
-            <path d="M5 11h14" />
-            <path d="M6 11a6 6 0 0112 0" />
-            <path d="M10 6v1M14 7v1" />
-        </svg>
-        {/* Popsicle */}
-        <svg className="absolute top-[28%] left-[-4%] w-[120px] h-[120px] rotate-[-25deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M6 17V7a6 6 0 0112 0v10" />
-            <path d="M6 17h12" />
-            <path d="M12 17v5" />
-            <path d="M6 10c2 0 3 1.5 4.5 1.5S13 10 15 10s2.5 1.5 3 1.5" />
-        </svg>
-        {/* Sundae Glass */}
-        <svg className="absolute top-[35%] right-[2%] w-[100px] h-[100px] rotate-[15deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M5 9h14" />
-            <path d="M6 9l1 7c0 2 2 4 5 4s5-2 5-4l1-7" />
-            <path d="M12 20v2M9 22h6" />
-            <path d="M7 9a5 5 0 0110 0" />
-            <path d="M11 4v1" />
-        </svg>
-        {/* Cupcake 1 */}
-        <svg className="absolute bottom-[35%] left-[5%] w-20 h-20 rotate-[10deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M4 11h16" />
-            <path d="M5 11l2 9h10l2-9" />
-            <path d="M6 11c0-4 3-7 6-7s6 3 6 7" />
-        </svg>
-        {/* Cone 2 */}
-        <svg className="absolute bottom-[10%] left-[20%] w-28 h-28 rotate-[-10deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M7 11l5 11 5-11" />
-            <path d="M6 11h12" />
-            <path d="M7 11a5 5 0 0110 0" />
-            <circle cx="12" cy="7" r="1" fill="currentColor" />
-            <circle cx="9" cy="9" r="1" fill="currentColor" />
-            <circle cx="15" cy="9" r="1" fill="currentColor" />
-        </svg>
-        {/* Small Popsicle */}
-        <svg className="absolute bottom-[20%] right-[25%] w-[80px] h-[80px] rotate-[45deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M7 18V7a5 5 0 0110 0v11" />
-            <path d="M7 18h10" />
-            <path d="M10 18v4" />
-            <path d="M14 18v4" />
-        </svg>
-        {/* Extra Ice Cream Cup */}
-        <svg className="absolute top-[65%] right-[-2%] w-24 h-24 rotate-[-30deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M4 11h16" />
-            <path d="M5 11l1.5 10a1 1 0 001 1h9a1 1 0 001-1l1.5-10" />
-            <path d="M6 11c0-3.5 2.5-6.5 6-6.5s6 3 6 6.5" />
-        </svg>
-        {/* Extra Cone Center */}
-        <svg className="absolute top-[5%] left-[45%] w-20 h-20 rotate-[5deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M6 11l6 12 6-12" />
-            <path d="M5 11h14" />
-            <path d="M6 11a6 6 0 0112 0" />
-        </svg>
-        {/* Extra Popsicle Center Bottom */}
-        <svg className="absolute bottom-[5%] right-[5%] w-20 h-20 rotate-[-15deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M6 17V7a6 6 0 0112 0v10" />
-            <path d="M6 17h12" />
-            <path d="M12 17v5" />
-        </svg>
-        {/* Cupcake 2 */}
-        <svg className="absolute top-[80%] left-[2%] w-28 h-28 rotate-[12deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M4 11h16" />
-            <path d="M5 11l2 9h10l2-9" />
-            <path d="M6 11c0-4 3-7 6-7s6 3 6 7" />
-        </svg>
-        {/* Sundae 2 */}
-        <svg className="absolute top-[55%] left-[30%] w-24 h-24 rotate-[-10deg] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M5 9h14" />
-            <path d="M6 9l1 7c0 2 2 4 5 4s5-2 5-4l1-7" />
-            <path d="M12 20v2M9 22h6" />
-            <path d="M7 9a5 5 0 0110 0" />
-        </svg>
-    </div>
-));
-DairyDonBackground.displayName = "DairyDonBackground";
+import { DairyDonBackground } from "../../../components/clients/dairy-don/DairyDonBackground";
+import { TexnaBackground } from "../../../components/clients/texna/TexnaBackground";
+import { RubyLogo } from "../../../components/clients/ruby/RubyLogo";
 
 export default function VisitPage({ params }: { params: { qrId: string } }) {
     const [isMounted, setIsMounted] = useState(false);
     useEffect(() => setIsMounted(true), []);
 
     const isDairyDon = params.qrId === "qr-VU94MVcLYm";
-    const bgClass = isDairyDon ? "bg-gradient-to-br from-[#7A1F6A] to-[#B23A96]" : "bg-black";
+    const isTexna = params.qrId === "qr-TEXNA1234";
+    const isRuby = params.qrId === "ruby-online-store";
+
+    const bgClass = isRuby ? "bg-[#000000]" : isTexna ? "bg-gradient-to-br from-[#1E3A8A] to-[#3B82F6]" : isDairyDon ? "bg-gradient-to-br from-[#7A1F6A] to-[#B23A96]" : "bg-black";
+    const isLightMode = isDairyDon || isTexna;
+    
+    const themeColor = isRuby ? "#D4AF37" : isTexna ? "#1E3A8A" : "#9C2C86";
+
+    // Static Class Maps for Tailwind Compiler
+    const themeClasses = isRuby ? {
+        text: "text-[#D4AF37]",
+        border: "border-[#D4AF37]",
+        bg: "bg-[#D4AF37]",
+        bgOpacity5: "bg-[#D4AF37]/5",
+        bgOpacity10: "bg-[#D4AF37]/10",
+        bgOpacity20: "bg-[#D4AF37]/20",
+        borderOpacity30: "border-[#D4AF37]/30",
+        borderOpacity20: "border-[#D4AF37]/20",
+        ringOpacity50: "focus:ring-[#D4AF37]/50"
+    } : isTexna ? {
+        text: "text-[#1E3A8A]",
+        border: "border-[#1E3A8A]",
+        bg: "bg-[#1E3A8A]",
+        bgOpacity5: "bg-[#1E3A8A]/5",
+        bgOpacity10: "bg-[#1E3A8A]/10",
+        bgOpacity20: "bg-[#1E3A8A]/20",
+        borderOpacity30: "border-[#1E3A8A]/30",
+        borderOpacity20: "border-[#1E3A8A]/20",
+        ringOpacity50: "focus:ring-[#1E3A8A]/50"
+    } : {
+        text: "text-[#9C2C86]",
+        border: "border-[#9C2C86]",
+        bg: "bg-[#9C2C86]",
+        bgOpacity5: "bg-[#9C2C86]/5",
+        bgOpacity10: "bg-[#9C2C86]/10",
+        bgOpacity20: "bg-[#9C2C86]/20",
+        borderOpacity30: "border-[#9C2C86]/30",
+        borderOpacity20: "border-[#9C2C86]/20",
+        ringOpacity50: "focus:ring-[#9C2C86]/50"
+    };
 
     // Derived UI Classes
-    const mainCardClass = isDairyDon ? "bg-white shadow-xl rounded-[24px] p-6 sm:p-8" : "bg-white/5 backdrop-blur-xl border border-white/10 rounded-[24px] p-6 sm:p-8 shadow-sm";
-    const headingClass = isDairyDon ? "text-[22px] font-bold text-[#9C2C86] flex items-center gap-2" : "text-[22px] font-bold text-white flex items-center gap-2";
-    const stepCircleClass = isDairyDon ? "w-7 h-7 rounded-full border-2 border-[#9C2C86] text-[#9C2C86] flex items-center justify-center text-sm" : "w-7 h-7 rounded-full border-2 border-white text-white flex items-center justify-center text-sm";
-    const dividerClass = isDairyDon ? "border-b-[1.5px] border-dashed border-gray-200 my-5" : "border-b-[1.5px] border-dashed border-white/20 my-5";
-    const labelClass = isDairyDon ? "block text-[17px] font-semibold text-gray-800 mb-2 pl-1" : "block text-[17px] font-semibold text-white mb-2 pl-1";
-    const labelSmallClass = isDairyDon ? "block text-[16px] font-semibold text-gray-800 mb-2 pl-1" : "block text-[16px] font-semibold text-white mb-2 pl-1";
-    const subLabelClass = isDairyDon ? "text-sm text-gray-500 mb-4 pl-1" : "text-sm text-gray-400 mb-4";
-    const inputClass = isDairyDon
-        ? "w-full tracking-wide p-3.5 bg-gray-50 border border-gray-200 rounded-xl outline-none text-gray-900 font-medium text-[15px] focus:ring-1 focus:ring-[#9C2C86]/50 appearance-none"
+    const mainCardClass = isLightMode ? "bg-white shadow-xl rounded-[24px] p-6 sm:p-8" : "bg-white/5 backdrop-blur-xl border border-white/10 rounded-[24px] p-6 sm:p-8 shadow-sm";
+    const headingClass = isLightMode ? `text-[22px] font-bold ${themeClasses.text} flex items-center gap-2` : "text-[22px] font-bold text-white flex items-center gap-2";
+    const stepCircleClass = isLightMode ? `w-7 h-7 rounded-full border-2 ${themeClasses.border} ${themeClasses.text} flex items-center justify-center text-sm` : "w-7 h-7 rounded-full border-2 border-white text-white flex items-center justify-center text-sm";
+    const dividerClass = isLightMode ? "border-b-[1.5px] border-dashed border-gray-200 my-5" : "border-b-[1.5px] border-dashed border-white/20 my-5";
+    const labelClass = isLightMode ? "block text-[17px] font-semibold text-gray-800 mb-2 pl-1" : "block text-[17px] font-semibold text-white mb-2 pl-1";
+    const labelSmallClass = isLightMode ? "block text-[16px] font-semibold text-gray-800 mb-2 pl-1" : "block text-[16px] font-semibold text-white mb-2 pl-1";
+    const subLabelClass = isLightMode ? "text-sm text-gray-500 mb-4 pl-1" : "text-sm text-gray-400 mb-4";
+    const inputClass = isLightMode
+        ? `w-full tracking-wide p-3.5 bg-gray-50 border border-gray-200 rounded-xl outline-none text-gray-900 font-medium text-[15px] focus:ring-1 ${themeClasses.ringOpacity50} appearance-none`
         : "w-full tracking-wide p-3.5 bg-black border border-white/20 rounded-xl outline-none text-white font-medium text-[15px] focus:ring-1 focus:ring-white/50 appearance-none";
 
     // Menu item cards
-    const menuItemBaseClass = isDairyDon ? "bg-gray-50 border-gray-200 hover:bg-gray-100" : "bg-black/30 border-white/10 hover:bg-white/10";
-    const menuItemSelectedClass = isDairyDon ? "bg-[#9C2C86]/5 border-[#9C2C86]" : "bg-white/10 border-white/40";
-    const menuItemTextClass = isDairyDon ? "text-[15px] font-medium text-gray-900 truncate" : "text-[15px] font-medium text-white truncate";
-    const menuItemPriceClass = isDairyDon ? "text-xs text-gray-500 font-semibold" : "text-xs text-gray-400 font-semibold";
-    const checkboxBorderClass = isDairyDon ? "border-[#9C2C86]" : "border-gray-500";
-    const checkboxDotClass = isDairyDon ? "bg-[#9C2C86]" : "bg-white";
+    const menuItemBaseClass = isLightMode ? "bg-gray-50 border-gray-200 hover:bg-gray-100" : "bg-black/30 border-white/10 hover:bg-white/10";
+    const menuItemSelectedClass = isLightMode ? `${themeClasses.bgOpacity5} ${themeClasses.border}` : "bg-white/10 border-white/40";
+    const menuItemTextClass = isLightMode ? "text-[15px] font-medium text-gray-900 truncate" : "text-[15px] font-medium text-white truncate";
+    const menuItemPriceClass = isLightMode ? "text-xs text-gray-500 font-semibold" : "text-xs text-gray-400 font-semibold";
+    const checkboxBorderClass = isLightMode ? themeClasses.border : "border-gray-500";
+    const checkboxDotClass = isLightMode ? themeClasses.bg : "bg-white";
 
-    const btnPrimaryClass = isDairyDon ? "w-full bg-[#9C2C86] text-white font-bold text-[17px] py-[18px] rounded-xl shadow-md transition-all active:scale-[0.98] disabled:opacity-60 disabled:active:scale-100 flex items-center justify-center gap-2 mt-2 hover:bg-[#7A1F6A]" : "w-full bg-white text-black font-bold text-[17px] py-[18px] rounded-xl shadow-md transition-all active:scale-[0.98] disabled:opacity-60 disabled:active:scale-100 flex items-center justify-center gap-2 mt-2 hover:bg-gray-200";
+    const btnPrimaryClass = isLightMode ? `w-full ${themeClasses.bg} text-white font-bold text-[17px] py-[18px] rounded-xl shadow-md transition-all active:scale-[0.98] disabled:opacity-60 disabled:active:scale-100 flex items-center justify-center gap-2 mt-2 hover:opacity-90` : "w-full bg-white text-black font-bold text-[17px] py-[18px] rounded-xl shadow-md transition-all active:scale-[0.98] disabled:opacity-60 disabled:active:scale-100 flex items-center justify-center gap-2 mt-2 hover:bg-gray-200";
 
-    const reviewCardTopClass = isDairyDon ? "bg-white shadow-lg rounded-[24px] p-6 mb-5" : "bg-white/5 backdrop-blur-xl border border-white/10 rounded-[24px] p-6 shadow-sm";
-    const reviewCardClass = isDairyDon ? "bg-gray-50 border border-gray-200 rounded-[20px] p-5 mb-5 relative" : "bg-black/30 border border-white/10 rounded-[20px] p-5 mb-5 relative";
-    const reviewTextAreaClass = isDairyDon ? "w-full bg-transparent border-none focus:ring-0 p-0 text-gray-900 font-medium leading-relaxed resize-none outline-none min-h-[160px] whitespace-pre-wrap" : "w-full bg-transparent border-none focus:ring-0 p-0 text-white font-medium leading-relaxed resize-none outline-none min-h-[160px] whitespace-pre-wrap";
-    const reviewMetaTextClass = isDairyDon ? "flex items-center gap-2 text-gray-800" : "flex items-center gap-2 text-white";
-    const reviewLocationClass = isDairyDon ? "flex items-center gap-1.5 text-gray-500" : "flex items-center gap-1.5 text-gray-400";
-    const iconColor = isDairyDon ? "text-gray-500" : "text-white";
+    const reviewCardTopClass = isLightMode ? "bg-white shadow-lg rounded-[24px] p-6 mb-5" : `bg-white/5 backdrop-blur-xl border ${themeClasses.borderOpacity20} rounded-[24px] p-6 shadow-sm`;
+    const reviewCardClass = isLightMode ? "bg-gray-50 border border-gray-200 rounded-[20px] p-5 mb-5 relative" : `bg-black/40 border ${themeClasses.borderOpacity20} rounded-[20px] p-5 mb-5 relative`;
+    const reviewTextAreaClass = isLightMode ? "w-full bg-transparent border-none focus:ring-0 p-0 text-gray-900 font-medium leading-relaxed resize-none outline-none min-h-[160px] whitespace-pre-wrap" : "w-full bg-transparent border-none focus:ring-0 p-0 text-white font-medium leading-relaxed resize-none outline-none min-h-[160px] whitespace-pre-wrap";
+    const reviewMetaTextClass = isLightMode ? "flex items-center gap-2 text-gray-800" : "flex items-center gap-2 text-white/90";
+    const reviewLocationClass = isLightMode ? "flex items-center gap-1.5 text-gray-500" : "flex items-center gap-1.5 text-white/50";
+    const iconColor = isLightMode ? "text-gray-500" : themeClasses.text;
 
-    const btnHalfPrimaryClass = isDairyDon ? "flex-1 bg-[#9C2C86] hover:bg-[#7A1F6A] text-white font-bold text-[16px] py-[15px] px-4 rounded-xl shadow-md transition-colors flex items-center justify-center gap-2 disabled:opacity-70" : "flex-1 bg-white hover:bg-gray-200 text-black font-bold text-[16px] py-[15px] px-4 rounded-xl shadow-md transition-colors flex items-center justify-center gap-2 disabled:opacity-70";
-    const btnHalfSecondaryClass = isDairyDon ? "flex-1 bg-gray-100 border border-gray-200 hover:bg-gray-200 text-gray-800 font-bold text-[16px] py-[15px] px-4 rounded-xl shadow-sm transition-colors flex items-center justify-center gap-2 disabled:opacity-70" : "flex-1 bg-white/5 border border-white/20 hover:bg-white/10 text-white font-bold text-[16px] py-[15px] px-4 rounded-xl shadow-sm transition-colors flex items-center justify-center gap-2 disabled:opacity-70";
+    const btnHalfPrimaryClass = isLightMode ? `flex-1 ${themeClasses.bg} hover:opacity-90 text-white font-bold text-[16px] py-[15px] px-4 rounded-xl shadow-md transition-colors flex items-center justify-center gap-2 disabled:opacity-70` : "flex-1 bg-white hover:bg-gray-200 text-black font-bold text-[16px] py-[15px] px-4 rounded-xl shadow-md transition-colors flex items-center justify-center gap-2 disabled:opacity-70";
+    const btnHalfSecondaryClass = isLightMode ? "flex-1 bg-gray-100 border border-gray-200 hover:bg-gray-200 text-gray-800 font-bold text-[16px] py-[15px] px-4 rounded-xl shadow-sm transition-colors flex items-center justify-center gap-2 disabled:opacity-70" : "flex-1 bg-white/5 border border-white/20 hover:bg-white/10 text-white font-bold text-[16px] py-[15px] px-4 rounded-xl shadow-sm transition-colors flex items-center justify-center gap-2 disabled:opacity-70";
 
     const getMenuItemClass = (isSelected: boolean) => {
         const base = "flex items-center gap-3 p-3.5 border rounded-xl cursor-pointer transition-colors";
@@ -169,9 +125,11 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
     const [rating, setRating] = useState<number>(0);
     const [language, setLanguage] = useState<string>("");
     const [showAllMenu, setShowAllMenu] = useState(false);
+    const [reviewType, setReviewType] = useState<'short' | 'detailed' | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
     // Progressive Unlock Logic
-    const isRatingUnlocked = selectedItems.length > 0;
+    const isRatingUnlocked = reviewType === 'short' ? true : selectedItems.length > 0;
     const isLanguageUnlocked = isRatingUnlocked && rating > 0;
 
     const getSectionClass = (isUnlocked: boolean) =>
@@ -256,7 +214,8 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                     sessionId,
                     language: selectedLanguage,
                     rating,
-                    selectedItems,
+                    selectedItems: reviewType === 'short' ? [] : selectedItems,
+                    reviewType,
                 }),
             });
 
@@ -371,7 +330,8 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
 
     return (
         <div className={`min-h-screen ${bgClass} text-white py-6 px-4 font-sans selection:bg-white/30 selection:text-white relative`}>
-            {isDairyDon && <DairyDonBackground />}
+            {isDairyDon && isLightMode && <DairyDonBackground />}
+            {isTexna && isLightMode && <TexnaBackground />}
             <div className="max-w-[800px] mx-auto space-y-5 relative z-10">
                 {isDairyDon && (
                     <div className="text-center pt-2 pb-2">
@@ -380,6 +340,15 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
                         </h1>
                     </div>
                 )}
+                {isTexna && (
+                    <div className="text-center pt-2 pb-2">
+                        <h1 className="text-[48px] sm:text-[56px] md:text-[64px] font-bold text-white tracking-widest uppercase" style={{ fontFamily: "'Inter', 'Roboto', sans-serif", letterSpacing: "0.1em", textShadow: "0 4px 12px rgba(0,0,0,0.4)" }}>
+                            TEXNA
+                        </h1>
+                        <p className="text-blue-200 font-medium text-sm tracking-widest mt-1">B2B TEXTILE MACHINERY</p>
+                    </div>
+                )}
+                {isRuby && <RubyLogo />}
 
                 {/* 1. Visit Details Form */}
                 <div className={mainCardClass}>
@@ -393,123 +362,166 @@ export default function VisitPage({ params }: { params: { qrId: string } }) {
 
                     <div className={dividerClass}></div>
 
-                    <div className="space-y-6">
+                    {!reviewType ? (
+                        <div className="flex flex-col gap-4 py-2">
+                            <label className={labelClass}>Review ka type select karein</label>
+                            <button
+                                onClick={() => setReviewType('short')}
+                                className={btnPrimaryClass}
+                            >
+                                Short Review (Quick Rating)
+                            </button>
+                            <button
+                                onClick={() => setReviewType('detailed')}
+                                className={isLightMode ? `w-full bg-transparent border-2 ${themeClasses.border} ${themeClasses.text} font-bold text-[17px] py-[16px] rounded-xl shadow-sm transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${themeClasses.bgOpacity5.replace('bg-', 'hover:bg-')}` : "w-full bg-transparent border-2 border-white text-white font-bold text-[17px] py-[16px] rounded-xl shadow-sm transition-all active:scale-[0.98] flex items-center justify-center gap-2 hover:bg-white/10"}
+                            >
+                                Detailed Review (Menu Items)
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="space-y-6">
+                            <div className="flex justify-between items-center bg-gray-100/10 p-2 rounded-lg mb-2">
+                                <span className={labelSmallClass}>{reviewType === 'short' ? 'Short Review' : 'Detailed Review'}</span>
+                                <button
+                                    onClick={() => { setReviewType(null); setSelectedItems([]); setRating(0); setLanguage(""); setDraft(""); setStep(1); }}
+                                    className={`text-sm underline ${isLightMode ? themeClasses.text : 'text-blue-400'}`}
+                                >
+                                    Change Option
+                                </button>
+                            </div>
 
+                            {/* Items Section */}
+                            {reviewType === 'detailed' && qrData?.menuItems && qrData.menuItems.length > 0 && (
+                                <div className="animate-in fade-in duration-300">
+                                    <label className={labelClass}>Aapne kya order kiya? (Jo items try ki wo select kero menu me se)</label>
+                                    <p className={subLabelClass}>Up to 4 items select karo — review mein mention honge</p>
 
-                        {/* Items Section */}
-                        {qrData?.menuItems && qrData.menuItems.length > 0 && (
-                            <div>
-                                <label className={labelClass}>Aapne kya order kiya? (Jo items try ki wo select kero menu me se)</label>
-                                <p className={subLabelClass}>Up to 4 items select karo — review mein mention honge</p>
+                                    <div className="mt-4">
+                                        {(() => {
+                                            const allCategories = ["All", ...Object.keys(groups)];
+                                            let itemsToDisplay: any[] = [];
 
-                                <div className="mt-4">
-                                    {(() => {
-                                        let itemsShown = 0;
-                                        const MAX_INITIAL_ITEMS = 9;
-                                        const groupedMenu: { category: string, items: any[] }[] = [];
-
-                                        for (const [category, items] of Object.entries(groups)) {
-                                            if (!showAllMenu && itemsShown >= MAX_INITIAL_ITEMS) break;
-                                            let itemsToAdd = items as any[];
-                                            if (!showAllMenu) {
-                                                itemsToAdd = itemsToAdd.slice(0, MAX_INITIAL_ITEMS - itemsShown);
+                                            // Extract items based on selected category
+                                            if (selectedCategory === "All") {
+                                                // Group all items
+                                                Object.values(groups).forEach((items: any) => {
+                                                    itemsToDisplay.push(...items);
+                                                });
+                                            } else {
+                                                itemsToDisplay = groups[selectedCategory] || [];
                                             }
-                                            if (itemsToAdd.length > 0) {
-                                                groupedMenu.push({ category, items: itemsToAdd });
-                                                itemsShown += itemsToAdd.length;
-                                            }
-                                        }
 
-                                        return (
-                                            <>
-                                                {groupedMenu.map(({ category, items }, groupIdx) => (
-                                                    <div key={category} className={groupIdx > 0 ? "mt-5" : ""}>
-                                                        {category !== 'Menu' && (
-                                                            <h3 className={`font-bold mb-3 text-[14px] uppercase tracking-[0.05em] ${isDairyDon ? 'text-[#9C2C86]' : 'text-white/80'}`}>{category}</h3>
-                                                        )}
-                                                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
-                                                            {items.map((item: any, idx: number) => {
-                                                                const itemName = typeof item === 'string' ? item : item.name;
-                                                                const itemPrice = typeof item === 'object' && item.price ? item.price : null;
+                                            // Limit logic
+                                            const MAX_INITIAL_ITEMS = 12;
+                                            const hasMore = !showAllMenu && itemsToDisplay.length > MAX_INITIAL_ITEMS;
+                                            const visibleItems = showAllMenu ? itemsToDisplay : itemsToDisplay.slice(0, MAX_INITIAL_ITEMS);
 
-                                                                return (
-                                                                    <label key={idx} className={getMenuItemClass(selectedItems.includes(itemName))}>
-                                                                        <div className={`w-[16px] h-[16px] sm:w-[18px] sm:h-[18px] rounded-full border flex items-center justify-center shrink-0 ${checkboxBorderClass}`}>
-                                                                            {selectedItems.includes(itemName) && (
-                                                                                <div className={`w-[8px] h-[8px] sm:w-[10px] sm:h-[10px] rounded-full ${checkboxDotClass}`}></div>
-                                                                            )}
-                                                                        </div>
-                                                                        <input
-                                                                            type="checkbox"
-                                                                            checked={selectedItems.includes(itemName)}
-                                                                            onChange={() => toggleItem(itemName)}
-                                                                            className="hidden"
-                                                                        />
-                                                                        <div className="flex flex-col overflow-hidden">
-                                                                            <span className={`${menuItemTextClass} text-[13px] sm:text-[15px] leading-tight mb-0.5`}>{itemName}</span>
-                                                                            {itemPrice && <span className={`${menuItemPriceClass} text-[11px] sm:text-[12px] opacity-80`}>₹{itemPrice}</span>}
-                                                                        </div>
-                                                                    </label>
-                                                                );
-                                                            })}
-                                                        </div>
+                                            return (
+                                                <div className="flex flex-col gap-4">
+                                                    {/* Category Tabs */}
+                                                    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide hide-scrollbar w-full snap-x">
+                                                        {allCategories.map(cat => (
+                                                            <button
+                                                                key={cat}
+                                                                onClick={() => {
+                                                                    setSelectedCategory(cat);
+                                                                    setShowAllMenu(false); // reset limit when switching categories
+                                                                }}
+                                                                className={`shrink-0 px-4 py-2 rounded-full text-[14px] font-semibold transition-colors border snap-start outline-none ${selectedCategory === cat
+                                                                    ? (isLightMode ? `${themeClasses.bg} text-white ${themeClasses.border}` : 'bg-white text-black border-white')
+                                                                    : (isLightMode ? 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50' : 'bg-transparent text-white border-white/20 hover:bg-white/10')
+                                                                    }`}
+                                                            >
+                                                                {cat === "Menu" ? "Other" : cat}
+                                                            </button>
+                                                        ))}
                                                     </div>
-                                                ))}
-                                                {!showAllMenu && qrData.menuItems.length > 9 && (
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => setShowAllMenu(true)}
-                                                        className={`mt-6 w-full py-3 rounded-lg font-semibold text-[15px] transition-colors border ${isDairyDon ? 'bg-[#9C2C86]/10 text-[#9C2C86] border-[#9C2C86]/30 hover:bg-[#9C2C86]/20' : 'bg-white/10 text-white border-white/20 hover:bg-white/20'}`}
-                                                    >
-                                                        Show More Menu Items
-                                                    </button>
-                                                )}
-                                            </>
-                                        );
-                                    })()}
+
+                                                    {/* Items Grid */}
+                                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
+                                                        {visibleItems.map((item: any, idx: number) => {
+                                                            const itemName = typeof item === 'string' ? item : item.name;
+                                                            const itemPrice = typeof item === 'object' && item.price ? item.price : null;
+
+                                                            return (
+                                                                <label key={`${selectedCategory}-${idx}`} className={getMenuItemClass(selectedItems.includes(itemName))}>
+                                                                    <div className={`w-[16px] h-[16px] sm:w-[18px] sm:h-[18px] rounded-full border flex items-center justify-center shrink-0 ${checkboxBorderClass}`}>
+                                                                        {selectedItems.includes(itemName) && (
+                                                                            <div className={`w-[8px] h-[8px] sm:w-[10px] sm:h-[10px] rounded-full ${checkboxDotClass}`}></div>
+                                                                        )}
+                                                                    </div>
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        checked={selectedItems.includes(itemName)}
+                                                                        onChange={() => toggleItem(itemName)}
+                                                                        className="hidden"
+                                                                    />
+                                                                    <div className="flex flex-col overflow-hidden">
+                                                                        <span className={`${menuItemTextClass} text-[13px] sm:text-[15px] leading-tight mb-0.5`}>{itemName}</span>
+                                                                        {itemPrice && <span className={`${menuItemPriceClass} text-[11px] sm:text-[12px] opacity-80`}>₹{itemPrice}</span>}
+                                                                    </div>
+                                                                </label>
+                                                            );
+                                                        })}
+                                                    </div>
+
+                                                    {/* Show More Button */}
+                                                    {hasMore && (
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setShowAllMenu(true)}
+                                                            className={`mt-2 w-full py-3 rounded-lg font-semibold text-[15px] transition-colors border ${isLightMode ? `bg-[${themeColor}]/10 text-[${themeColor}] border-[${themeColor}]/30 hover:bg-[${themeColor}]/20` : 'bg-white/10 text-white border-white/20 hover:bg-white/20'}`}
+                                                        >
+                                                            Show {itemsToDisplay.length - MAX_INITIAL_ITEMS} More {selectedCategory === "All" ? "Items" : selectedCategory}
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            );
+                                        })()}
+                                    </div>
+                                </div>
+                            )}
+
+
+
+                            {/* Rating */}
+                            <div className={getSectionClass(isRatingUnlocked)}>
+                                <label className={labelSmallClass}>Rating</label>
+                                <div className="flex gap-1.5 ml-1">
+                                    {[1, 2, 3, 4, 5].map(star => (
+                                        <StarRating key={star} isActive={rating >= star} onClick={() => setRating(star)} />
+                                    ))}
                                 </div>
                             </div>
-                        )}
 
 
 
-                        {/* Rating */}
-                        <div className={getSectionClass(isRatingUnlocked)}>
-                            <label className={labelSmallClass}>Rating</label>
-                            <div className="flex gap-1.5 ml-1">
-                                {[1, 2, 3, 4, 5].map(star => (
-                                    <StarRating key={star} isActive={rating >= star} onClick={() => setRating(star)} />
-                                ))}
+                            {/* Language */}
+                            <div className={getSectionClass(isLanguageUnlocked)}>
+                                <label className={labelSmallClass}>Language</label>
+                                <select
+                                    value={language}
+                                    onChange={(e) => {
+                                        const val = e.target.value;
+                                        setLanguage(val);
+                                        handleGenerate(val);
+                                    }}
+                                    className={inputClass}
+                                >
+                                    <option value="" disabled>Select Language</option>
+                                    {LANGUAGES.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                                </select>
                             </div>
+
                         </div>
-
-
-
-                        {/* Language */}
-                        <div className={getSectionClass(isLanguageUnlocked)}>
-                            <label className={labelSmallClass}>Language</label>
-                            <select
-                                value={language}
-                                onChange={(e) => {
-                                    const val = e.target.value;
-                                    setLanguage(val);
-                                    handleGenerate(val);
-                                }}
-                                className={inputClass}
-                            >
-                                <option value="" disabled>Select Language</option>
-                                {LANGUAGES.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-                            </select>
-                        </div>
-
-                    </div>
+                    )}
                 </div>
 
                 {/* Loading State */}
                 {generating && (
                     <div className={`${mainCardClass} flex flex-col items-center justify-center p-8 animate-in fade-in zoom-in duration-300`}>
-                        <Loader2 className={`w-12 h-12 ${isDairyDon ? 'text-[#9C2C86]' : 'text-white'} animate-spin mb-4`} />
-                        <p className={`${isDairyDon ? 'text-[#9C2C86]' : 'text-white'} font-bold text-lg`}>Generating Your Review...</p>
+                        <Loader2 className={`w-12 h-12 ${isLightMode ? themeClasses.text : 'text-white'} animate-spin mb-4`} />
+                        <p className={`${isLightMode ? themeClasses.text : 'text-white'} font-bold text-lg`}>Generating Your Review...</p>
                     </div>
                 )}
 

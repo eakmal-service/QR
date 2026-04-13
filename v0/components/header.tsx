@@ -50,19 +50,10 @@ export function Header() {
           flex items-center justify-center gap-6 px-6 py-3 rounded-2xl border transition-all duration-300
           backdrop-blur-xl shadow-2xl
           ${isScrolled
-                        ? "border-white/25 shadow-black/20"
-                        : "border-white/20 shadow-black/10"
+                        ? "border-white/30 bg-white/15 shadow-black/20"
+                        : "border-white/20 bg-white/10 shadow-black/10"
                     }
         `}
-                style={{
-                    background: isScrolled
-                        ? "linear-gradient(135deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.20))"
-                        : "linear-gradient(135deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.15))",
-                    boxShadow: isScrolled
-                        ? "0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05)"
-                        : "0 4px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.03)",
-                    borderColor: isScrolled ? "rgba(200, 200, 220, 0.35)" : "rgba(200, 200, 220, 0.25)",
-                }}
             >
                 <div className="transform transition-transform duration-200 hover:scale-105">
                     <LeLoLogo />
@@ -71,7 +62,7 @@ export function Header() {
                 <nav className="hidden md:flex items-center gap-1">
                     <a
                         href="#features"
-                        className="relative text-foreground/70 hover:text-white transition-all duration-300 px-4 py-2 rounded-xl hover:scale-110 border-0 outline-none"
+                        className="relative text-foreground/70 hover:text-foreground transition-all duration-300 px-4 py-2 rounded-xl hover:scale-110 border-0 outline-none"
                         style={{ background: "rgba(255, 255, 255, 0.06)" }}
                         onMouseEnter={(e) => {
                             e.currentTarget.style.background = "rgba(255, 255, 255, 0.15)"
@@ -84,7 +75,7 @@ export function Header() {
                     </a>
                     <a
                         href="#pricing"
-                        className="relative text-foreground/70 hover:text-white transition-all duration-300 px-4 py-2 rounded-xl hover:scale-110"
+                        className="relative text-foreground/70 hover:text-foreground transition-all duration-300 px-4 py-2 rounded-xl hover:scale-110"
                         style={{ background: "rgba(255, 255, 255, 0.06)" }}
                         onMouseEnter={(e) => {
                             e.currentTarget.style.background = "rgba(255, 255, 255, 0.15)"
@@ -97,7 +88,7 @@ export function Header() {
                     </a>
                     <a
                         href="#about"
-                        className="relative text-foreground/70 hover:text-white transition-all duration-300 px-4 py-2 rounded-xl hover:scale-110"
+                        className="relative text-foreground/70 hover:text-foreground transition-all duration-300 px-4 py-2 rounded-xl hover:scale-110"
                         style={{ background: "rgba(255, 255, 255, 0.06)" }}
                         onMouseEnter={(e) => {
                             e.currentTarget.style.background = "rgba(255, 255, 255, 0.15)"
@@ -110,7 +101,7 @@ export function Header() {
                     </a>
                     <a
                         href="#about"
-                        className="relative text-foreground/70 hover:text-white transition-all duration-300 px-4 py-2 rounded-xl hover:scale-110"
+                        className="relative text-foreground/70 hover:text-foreground transition-all duration-300 px-4 py-2 rounded-xl hover:scale-110"
                         style={{ background: "rgba(255, 255, 255, 0.06)" }}
                         onMouseEnter={(e) => {
                             e.currentTarget.style.background = "rgba(255, 255, 255, 0.15)"

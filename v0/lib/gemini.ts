@@ -14,6 +14,7 @@ interface ReviewGenerationInput {
     mood?: string;
     service?: string;
     selectedItems?: string[];
+    reviewType?: 'short' | 'detailed' | null;
 }
 
 interface GeneratedReview {
@@ -44,7 +45,13 @@ export async function generateReview(
     const typeText = input.businessType ? `Business Type: ${input.businessType}` : "";
     const descText = input.description ? `Detailed Description: ${input.description}` : "";
 
-    const isDetailed = Math.random() < 0.4; // 40% detailed, 60% short
+    let isDetailed = Math.random() < 0.4; // default random: 40% detailed, 60% short
+    if (input.reviewType === 'short') {
+        isDetailed = false;
+    } else if (input.reviewType === 'detailed') {
+        isDetailed = true;
+    }
+
     const lengthInstruction = isDetailed
         ? "Length: Write a detailed review (3 to 5 full sentences) explaining the experience, but STRICTLY keep it UNDER 350 words."
         : "Length: Write a short, quick review (1 to 2 short sentences).";
@@ -53,9 +60,14 @@ export async function generateReview(
     const itemsText = input.selectedItems && input.selectedItems.length > 0 ? `Items Ordered/Experienced: ${input.selectedItems.join(", ")}` : "";
     const serviceText = input.service ? `Customer's Opinion on Service/Ambience: ${input.service}` : "";
 
-    const languageInstruction = language.toLowerCase() === 'hinglish'
-        ? "Target Language: HINGLISH. You MUST write in conversational Hindi but STRICTLY use the English alphabet (e.g., 'Bohot acha experience tha', 'Service ekdum mast thi'). NEVER use Devanagari script. ONLY English letters."
-        : `Target Language: ${language} (STRICTLY OUTPUT THE REVIEW TEXT IN THIS LANGUAGE)`;
+    let languageInstruction = `Target Language: ${language} (STRICTLY OUTPUT THE REVIEW TEXT IN THIS LANGUAGE)`;
+    if (language.toLowerCase() === 'hinglish') {
+        languageInstruction = "Target Language: HINGLISH. You MUST write in conversational Hindi but STRICTLY use the English alphabet (e.g., 'Bohot acha experience tha', 'Service ekdum mast thi'). NEVER use Devanagari script. ONLY English letters.";
+    } else if (language.toLowerCase() === 'hindi') {
+        languageInstruction = "Target Language: HINDI. You MUST STRICTLY write the review in pure Hindi using the Devanagari script (e.g., 'बहुत अच्छा अनुभव था'). DO NOT use the English alphabet for the review text.";
+    } else if (language.toLowerCase() === 'gujarati') {
+        languageInstruction = "Target Language: GUJARATI. You MUST STRICTLY write the review in pure Gujarati using the Gujarati script (e.g., 'ખૂબ સારો અનુભવ હતો'). DO NOT use the English alphabet for the review text.";
+    }
 
     const prompt = `Generate a highly unique, unpredictable, and human-like customer review for the following business.
     
@@ -78,6 +90,7 @@ export async function generateReview(
     - Invent a unique Tone based on the persona (e.g., enthusiastic, matter-of-fact, highly detailed, very brief exclamation).
     - ${lengthInstruction}
     - Focus Area: STRICTLY mention the items ordered and the service opinion provided, blending them naturally into the story.
+    - BANNED WORDS/PHRASES: DO NOT use the words "yaar", "yaarr", "arey", "arey yaar", "અરે", "અરે યાર", "યાર", "अरे यार", "यार" etc. ABSOLUTELY NEVER output these words in any language. DO NOT overuse the word "service" or "services" (use synonyms like 'staff', 'experience', 'hospitality' or just describe the action). DO NOT sound completely fake.
     - RandomSeed: ${Math.random() * 1000000} (Use this random number to seed your creativity so no two reviews are ever identical).
 
     CRITICAL INSTRUCTIONS:
@@ -110,12 +123,17 @@ export async function generateReview(
             const response = await result.response;
             const text = response.text();
 
-            // Clean the response - remove markdown code blocks if present
+            // Clean the response - remove markdown code blocks and conversational text
             let cleanedText = text.trim();
-            if (cleanedText.startsWith("```json")) {
-                cleanedText = cleanedText.replace(/```json\n?/g, "").replace(/```\n?/g, "");
-            } else if (cleanedText.startsWith("```")) {
-                cleanedText = cleanedText.replace(/```\n?/g, "");
+            const jsonMatch = cleanedText.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+                cleanedText = jsonMatch[0];
+            } else {
+                if (cleanedText.startsWith("```json")) {
+                    cleanedText = cleanedText.replace(/```json\n?/g, "").replace(/```\n?/g, "");
+                } else if (cleanedText.startsWith("```")) {
+                    cleanedText = cleanedText.replace(/```\n?/g, "");
+                }
             }
 
             const parsed = JSON.parse(cleanedText) as {

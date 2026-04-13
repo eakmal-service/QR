@@ -5,6 +5,7 @@ import { PricingSection } from "@/components/pricing-section"
 import { FAQSection } from "@/components/faq-section"
 import { AnimatedCTASection } from "@/components/animated-cta-section"
 import { Footer } from "@/components/footer"
+import { MobileNav } from "@/components/mobile-nav"
 
 export default function HomePage() {
   return (
@@ -18,6 +19,7 @@ export default function HomePage() {
         <AnimatedCTASection />
       </main>
       <Footer />
+      <MobileNav />
     </div>
   )
 }

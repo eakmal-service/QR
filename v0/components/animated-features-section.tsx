@@ -116,7 +116,56 @@ export function AnimatedFeaturesSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-[600px]">
+        {/* Mobile View: Pinterest Masonry Layout */}
+        <div className="md:hidden block columns-2 gap-3 w-full pb-6">
+          <div className="break-inside-avoid mb-3 h-56">
+            <BentoCard
+              title="Advanced Analytics"
+              value="Insights"
+              subtitle="Deep business metrics"
+              colors={["#1a1a1a", "#2a2a2a", "#1f1f1f"]}
+              delay={0.1}
+            />
+          </div>
+          <div className="break-inside-avoid mb-3 h-44">
+            <BentoCard
+              title="Team Collab"
+              value="Seamless"
+              subtitle="Work together"
+              colors={["#151515", "#252525", "#1d1d1d"]}
+              delay={0.2}
+            />
+          </div>
+          <div className="break-inside-avoid mb-3 h-64">
+            <BentoCard
+              title="Performance"
+              value="99.9%"
+              subtitle="Uptime guaranteed"
+              colors={["#1c1c1c", "#2c2c2c", "#181818"]}
+              delay={0.3}
+            />
+          </div>
+          <div className="break-inside-avoid mb-3 h-48">
+            <BentoCard
+              title="Enterprise Security"
+              value="Bank-level"
+              subtitle="End-to-end encryption"
+              colors={["#171717", "#272727", "#1b1b1b"]}
+              delay={0.4}
+            />
+          </div>
+          <div className="break-inside-avoid mb-3 h-52">
+            <BentoCard
+              title="Global Scale"
+              value="Worldwide"
+              colors={["#131313", "#232323", "#191919"]}
+              delay={0.5}
+            />
+          </div>
+        </div>
+
+        {/* Desktop View: Original Bento Grid */}
+        <div className="hidden md:grid grid-cols-3 gap-6 h-[600px]">
           <div className="md:col-span-2">
             <BentoCard
               title="Advanced Analytics"

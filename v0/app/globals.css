@@ -126,34 +126,39 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --animate-background-gradient: background-gradient var(--background-gradient-speed, 15s)
-    cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
+  --animate-background-gradient: background-gradient var(--background-gradient-speed, 15s) cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
 }
 
 @keyframes background-gradient {
+
   0%,
   100% {
     transform: translate(0, 0);
     animation-delay: var(--background-gradient-delay, 0s);
   }
+
   20% {
     transform: translate(calc(100% * var(--tx-1, 1)), calc(100% * var(--ty-1, 1)));
   }
+
   40% {
     transform: translate(calc(100% * var(--tx-2, -1)), calc(100% * var(--ty-2, 1)));
   }
+
   60% {
     transform: translate(calc(100% * var(--tx-3, 1)), calc(100% * var(--ty-3, -1)));
   }
+
   80% {
     transform: translate(calc(100% * var(--tx-4, -1)), calc(100% * var(--ty-4, -1)));
   }
@@ -163,6 +168,7 @@
   0% {
     transform: translateX(-100%) skewX(-12deg);
   }
+
   100% {
     transform: translateX(200%) skewX(-12deg);
   }
@@ -178,31 +184,39 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .qr-card .qr-badge-icon {
   color: #9ca3af;
   transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .qr-card:hover .qr-badge {
   background: color-mix(in srgb, var(--accent) 18%, transparent);
   border-color: color-mix(in srgb, var(--accent) 35%, transparent);
 }
+
 .qr-card:hover .qr-badge-icon {
   color: var(--accent);
 }
+
 .qr-card .qr-glow {
   background: #555;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .qr-card:hover .qr-glow {
   background: var(--accent);
 }
+
 .qr-card .qr-tint {
   background: radial-gradient(ellipse at bottom, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%);
 }
+
 /* WhatsApp tall card - stays colored */
 .qr-card .qr-badge-filled {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .qr-card:hover .qr-badge-filled {
   box-shadow: 0 4px 24px color-mix(in srgb, var(--accent) 50%, transparent);
 }
