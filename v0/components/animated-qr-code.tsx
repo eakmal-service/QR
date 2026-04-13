@@ -77,7 +77,7 @@ export function AnimatedQRCode() {
             
             // Shift upwards to reduce top padding. 
             // In mobile, we keep it visually centered above the bottom text, so shifting up effectively places it right in the middle of the empty space.
-            const offsetY = (canvas.height - qrSize) / 2 - (canvas.height * (isDesktop ? 0.15 : 0.1))
+            const offsetY = (canvas.height - qrSize) / 2 - (canvas.height * (isDesktop ? 0.2 : 0.18))
 
             particles.forEach((particle, index) => {
                 const targetX = offsetX + particle.baseCol * moduleSize + moduleSize / 2

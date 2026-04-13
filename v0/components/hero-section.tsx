@@ -22,7 +22,7 @@ export function HeroSection() {
           You built something great. <span className="text-muted-foreground">Don't let zero reviews be the reason they walked away.</span>
         </h2>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-row gap-2 sm:gap-4 justify-center items-center w-full max-w-full">
           <GenerateQRButton />
           <Link href="/smart-review">
             <button
