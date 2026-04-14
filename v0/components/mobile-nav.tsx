@@ -18,7 +18,7 @@ export function MobileNav() {
   return (
     <div className="fixed bottom-6 left-4 right-4 z-50 md:hidden">
       <div 
-        className="flex items-center justify-around px-4 py-3 rounded-full border border-white/20 bg-background/30 backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.05)] transition-all duration-300"
+        className="grid grid-cols-4 items-center justify-items-center py-3 px-2 rounded-[2rem] border border-white/20 bg-background/30 backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.05)] transition-all duration-300"
         style={{
           WebkitBackdropFilter: "blur(20px)",
         }}
