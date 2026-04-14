@@ -1,8 +1,9 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTheme } from "next-themes"
 
-function FloatingPaths({ position }: { position: number }) {
+function FloatingPaths({ position, strokeColor }: { position: number; strokeColor: string }) {
   const [paths, setPaths] = useState<any[]>([])
 
   useEffect(() => {
@@ -36,7 +37,7 @@ function FloatingPaths({ position }: { position: number }) {
             <path d={path.d} stroke="none" fill="none" />
             <path
               d={path.d}
-              stroke="rgba(255, 255, 255, 0.8)"
+              stroke={strokeColor}
               strokeWidth={path.width}
               fill="none"
               style={{
@@ -71,7 +72,7 @@ function FloatingPaths({ position }: { position: number }) {
   )
 }
 
-function FlippedFloatingPaths({ position }: { position: number }) {
+function FlippedFloatingPaths({ position, strokeColor }: { position: number; strokeColor: string }) {
   const [paths, setPaths] = useState<any[]>([])
 
   useEffect(() => {
@@ -83,7 +84,6 @@ function FlippedFloatingPaths({ position }: { position: number }) {
 
       return {
         id: i,
-        // Flipped path: starts from right side and flows to bottom
         d: `M${696 + 380 - i * 5 * position} ${-189 - i * 6}C${696 + 380 - i * 5 * position} ${-189 - i * 6} ${696 + 312 - i * 5 * position} ${216 - i * 6} ${696 - 152 + i * 5 * position} ${343 - i * 6}C${696 - 616 + i * 5 * position} ${470 - i * 6} ${696 - 684 + i * 5 * position} ${875 - i * 6} ${696 - 684 + i * 5 * position} ${875 - i * 6}`,
         width: 0.8 + i * 0.02,
         dashLength: randomDashLength,
@@ -103,7 +103,7 @@ function FlippedFloatingPaths({ position }: { position: number }) {
             <path d={path.d} stroke="none" fill="none" />
             <path
               d={path.d}
-              stroke="rgba(255, 255, 255, 0.8)"
+              stroke={strokeColor}
               strokeWidth={path.width}
               fill="none"
               style={{
@@ -139,12 +139,17 @@ function FlippedFloatingPaths({ position }: { position: number }) {
 }
 
 export function BackgroundPaths() {
+  const { resolvedTheme } = useTheme()
+  const strokeColor = resolvedTheme === "light"
+    ? "rgba(0, 0, 0, 0.55)"
+    : "rgba(255, 255, 255, 0.8)"
+
   return (
     <div className="absolute inset-0 overflow-hidden">
-      <FloatingPaths position={1} />
-      <FloatingPaths position={-1} />
-      <FlippedFloatingPaths position={1} />
-      <FlippedFloatingPaths position={-1} />
+      <FloatingPaths position={1} strokeColor={strokeColor} />
+      <FloatingPaths position={-1} strokeColor={strokeColor} />
+      <FlippedFloatingPaths position={1} strokeColor={strokeColor} />
+      <FlippedFloatingPaths position={-1} strokeColor={strokeColor} />
     </div>
   )
 }
