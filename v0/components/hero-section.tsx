@@ -9,19 +9,6 @@ import { GenerateQRButton } from "./ui/generate-qr-button"
 export function HeroSection() {
   return (
     <section className="relative overflow-hidden min-h-screen flex items-end justify-center pb-24 md:pb-32">
-      {/* Light mode: soft ambient mesh behind QR */}
-      <div className="absolute inset-0 dark:hidden pointer-events-none">
-        <div className="absolute inset-0"
-          style={{
-            backgroundImage: `
-              radial-gradient(ellipse at 30% 20%, rgba(147,112,219,0.15) 0%, transparent 55%),
-              radial-gradient(ellipse at 75% 30%, rgba(99,102,241,0.12) 0%, transparent 50%),
-              radial-gradient(ellipse at 50% 90%, rgba(167,139,250,0.10) 0%, transparent 50%)
-            `
-          }}
-        />
-      </div>
-
       {/* QR Code Background */}
       <div className="absolute inset-0">
         <AnimatedQRCode />

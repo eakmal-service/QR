@@ -133,7 +133,7 @@ export function AnimatedFeaturesSection() {
               title="BRAND PAGE"
               value="Your page, your way"
               subtitle="Logo, Services, Product — everything on one smart link"
-              colors={getColors(["#1a1a1a", "#2a2a2a", "#1f1f1f"], ["#c4b5fd", "#a5b4fc", "#ddd6fe", "#e0e7ff"])}
+              colors={getColors(["#1a1a1a", "#2a2a2a", "#1f1f1f"], ["#ffffff", "#f5f5f7", "#e8e8ea", "#f0f0f2"])}
               delay={0.1}
             />
           </div>
@@ -142,7 +142,7 @@ export function AnimatedFeaturesSection() {
               title="ZERO FRICTION"
               value="1-tap flow"
               subtitle="No login needed"
-              colors={getColors(["#151515", "#252525", "#1d1d1d"], ["#fde68a", "#fbcfe8", "#fed7aa", "#fecdd3"])}
+              colors={getColors(["#151515", "#252525", "#1d1d1d"], ["#ffffff", "#f8f8fa", "#ebebed", "#f2f2f4"])}
               delay={0.2}
             />
           </div>
@@ -151,7 +151,7 @@ export function AnimatedFeaturesSection() {
               title="REAL-TIME"
               value="Live stream"
               subtitle="Review appears as it's typed"
-              colors={getColors(["#1c1c1c", "#2c2c2c", "#181818"], ["#a7f3d0", "#bfdbfe", "#c7d2fe", "#d1fae5"])}
+              colors={getColors(["#1c1c1c", "#2c2c2c", "#181818"], ["#f5f5f7", "#ffffff", "#e8e8ea", "#f0f0f2"])}
               delay={0.3}
             />
           </div>
@@ -160,7 +160,7 @@ export function AnimatedFeaturesSection() {
               title="PHYSICAL PRODUCT"
               value="Standee included"
               subtitle="Pan-India delivery • Table-ready QR stand"
-              colors={getColors(["#171717", "#272727", "#1b1b1b"], ["#fecaca", "#fde68a", "#fbcfe8", "#fed7aa"])}
+              colors={getColors(["#171717", "#272727", "#1b1b1b"], ["#ffffff", "#f2f2f4", "#e8e8ea", "#f8f8fa"])}
               delay={0.4}
             />
           </div>
@@ -169,7 +169,7 @@ export function AnimatedFeaturesSection() {
               title="GOOGLE VERIFIED"
               value="Direct to Maps"
               subtitle="No fake reviews"
-              colors={getColors(["#131313", "#232323", "#191919"], ["#bbf7d0", "#a7f3d0", "#bfdbfe", "#c7d2fe"])}
+              colors={getColors(["#131313", "#232323", "#191919"], ["#f0f0f2", "#e8e8ea", "#f8f8fa", "#ffffff"])}
               delay={0.5}
             />
           </div>
@@ -178,7 +178,7 @@ export function AnimatedFeaturesSection() {
               title="GET STARTED"
               value="Starts at ₹499"
               subtitle="One-time trial, no commitment"
-              colors={getColors(["#1a1a1a", "#2a2a2a", "#1f1f1f"], ["#c4b5fd", "#ddd6fe", "#e0e7ff", "#a5b4fc"])}
+              colors={getColors(["#1a1a1a", "#2a2a2a", "#1f1f1f"], ["#f5f5f7", "#ffffff", "#f0f0f2", "#e8e8ea"])}
               delay={0.6}
             />
           </div>
@@ -191,7 +191,7 @@ export function AnimatedFeaturesSection() {
               title="BRAND PAGE"
               value="Your page, your way"
               subtitle="Logo, Services, Product — everything on one smart link"
-              colors={getColors(["#1a1a1a", "#2a2a2a", "#1f1f1f"], ["#c4b5fd", "#a5b4fc", "#ddd6fe", "#e0e7ff"])}
+              colors={getColors(["#1a1a1a", "#2a2a2a", "#1f1f1f"], ["#ffffff", "#f5f5f7", "#e8e8ea", "#f0f0f2"])}
               delay={0.2}
             />
           </div>
@@ -199,14 +199,14 @@ export function AnimatedFeaturesSection() {
             title="ZERO FRICTION"
             value="1-tap flow"
             subtitle="No login needed"
-            colors={getColors(["#151515", "#252525", "#1d1d1d"], ["#fde68a", "#fbcfe8", "#fed7aa", "#fecdd3"])}
+            colors={getColors(["#151515", "#252525", "#1d1d1d"], ["#ffffff", "#f8f8fa", "#ebebed", "#f2f2f4"])}
             delay={0.4}
           />
           <BentoCard
             title="REAL-TIME"
             value="Live stream"
             subtitle="Review appears as it's typed"
-            colors={getColors(["#1c1c1c", "#2c2c2c", "#181818"], ["#a7f3d0", "#bfdbfe", "#c7d2fe", "#d1fae5"])}
+            colors={getColors(["#1c1c1c", "#2c2c2c", "#181818"], ["#f5f5f7", "#e8e8ea", "#ffffff", "#f0f0f2"])}
             delay={0.6}
           />
           <div className="md:col-span-2">
@@ -214,7 +214,7 @@ export function AnimatedFeaturesSection() {
               title="PHYSICAL PRODUCT"
               value="Standee included"
               subtitle="Pan-India delivery • Table-ready QR stand"
-              colors={getColors(["#171717", "#272727", "#1b1b1b"], ["#fecaca", "#fde68a", "#fbcfe8", "#fed7aa"])}
+              colors={getColors(["#171717", "#272727", "#1b1b1b"], ["#ffffff", "#f2f2f4", "#e8e8ea", "#f8f8fa"])}
               delay={0.8}
             />
           </div>
@@ -223,7 +223,7 @@ export function AnimatedFeaturesSection() {
               title="GOOGLE VERIFIED"
               value="Direct to Maps"
               subtitle="No fake reviews"
-              colors={getColors(["#131313", "#232323", "#191919"], ["#bbf7d0", "#a7f3d0", "#bfdbfe", "#c7d2fe"])}
+              colors={getColors(["#131313", "#232323", "#191919"], ["#f0f0f2", "#e8e8ea", "#f8f8fa", "#ffffff"])}
               delay={1.0}
             />
           </div>
@@ -232,7 +232,7 @@ export function AnimatedFeaturesSection() {
               title="GET STARTED"
               value="Starts at ₹499"
               subtitle="One-time trial, no commitment"
-              colors={getColors(["#1a1a1a", "#2a2a2a", "#1f1f1f"], ["#c4b5fd", "#ddd6fe", "#e0e7ff", "#a5b4fc"])}
+              colors={getColors(["#1a1a1a", "#2a2a2a", "#1f1f1f"], ["#f5f5f7", "#ffffff", "#f0f0f2", "#e8e8ea"])}
               delay={1.2}
             />
           </div>
