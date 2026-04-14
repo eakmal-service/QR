@@ -55,27 +55,21 @@ const BentoCard: React.FC<BentoCardProps> = ({ title, value, subtitle, colors, d
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/8 dark:via-white/5 to-transparent transform -skew-x-12 -translate-x-full animate-[shine_6s_ease-in-out_infinite]" />
       </div>
 
-      {/* Content */}
+      {/* Content — original layout: label top, large value, subtitle */}
       <motion.div
-        className="relative z-10 p-4 sm:p-6 md:p-8 h-full flex flex-col justify-end"
+        className="relative z-10 p-3 sm:p-5 md:p-8 text-foreground h-full flex flex-col justify-center"
         variants={container}
         initial="hidden"
         animate="show"
       >
-        <motion.p
-          className="text-[10px] sm:text-xs font-semibold tracking-[0.15em] uppercase text-foreground/50 dark:text-foreground/40 mb-2"
-          variants={item}
-        >
+        <motion.h3 className="text-sm sm:text-base md:text-lg text-foreground mb-2" variants={item}>
           {title}
-        </motion.p>
-        <motion.p
-          className="text-xl sm:text-3xl md:text-4xl font-semibold text-foreground leading-tight mb-2"
-          variants={item}
-        >
+        </motion.h3>
+        <motion.p className="text-2xl sm:text-4xl md:text-5xl font-medium mb-4 text-foreground" variants={item}>
           {value}
         </motion.p>
         {subtitle && (
-          <motion.p className="text-xs sm:text-sm text-foreground/60 dark:text-foreground/50 leading-relaxed" variants={item}>
+          <motion.p className="text-sm text-foreground/80" variants={item}>
             {subtitle}
           </motion.p>
         )}
@@ -97,33 +91,12 @@ export function AnimatedFeaturesSection() {
     <section id="features" className="py-20 px-4 bg-transparent transition-colors duration-300">
       <div className="container mx-auto">
         <div className="text-center mb-16">
-          <motion.p
-            className="text-xs font-semibold tracking-[0.2em] uppercase text-muted-foreground mb-3"
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            Everything you need
-          </motion.p>
-          <motion.h2
-            className="text-4xl font-bold text-foreground mb-4"
-            style={{ fontFamily: "var(--font-playfair)" }}
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            viewport={{ once: true }}
-          >
+          <h2 className="text-4xl font-bold text-foreground mb-4" style={{ fontFamily: "var(--font-playfair)" }}>
             Powerful Features
-          </motion.h2>
-          <motion.p
-            className="text-lg text-muted-foreground max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            viewport={{ once: true }}
-          >
+          </h2>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Everything you need to take your business to the next level
-          </motion.p>
+          </p>
         </div>
 
         {/* Mobile View */}
@@ -185,7 +158,7 @@ export function AnimatedFeaturesSection() {
         </div>
 
         {/* Desktop View */}
-        <div className="hidden md:grid grid-cols-3 gap-4 h-[750px]">
+        <div className="hidden md:grid grid-cols-3 gap-6 h-[750px]">
           <div className="md:col-span-2">
             <BentoCard
               title="BRAND PAGE"
