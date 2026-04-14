@@ -12,7 +12,7 @@ export function HeroSection() {
   return (
     <section className="relative overflow-hidden min-h-screen flex items-end justify-center pb-24 md:pb-32">
       {/* QR Code Background - covers entire section */}
-      <div className="absolute inset-0 md:pt-52">
+      <div className="absolute inset-0">
         <AnimatedQRCode />
       </div>
 
