@@ -40,8 +40,8 @@ const pricingPlans: {
   {
     name: "Base",
     price: "₹999",
-    period: "/annually",
-    description: "Perfect for single-location businesses, restaurants, shops, cafes",
+    period: " / annually",
+    description: "Perfect for single-location businesses like restaurants, shops, and cafés",
     popular: true,
     cta: "Get Started",
     groups: [
@@ -49,18 +49,18 @@ const pricingPlans: {
         label: "Physical Product",
         items: [
           { text: "1 Premium QR Stand", included: true },
-          { text: "Free pan India delivery (5–7 days)", included: true },
+          { text: "Free Pan-India delivery (5–7 days)", included: true },
         ],
       },
       {
         label: "Digital Features",
         items: [
-          { text: "5,000 AI reviews per month", included: true },
+          { text: "5,000 AI-generated reviews per month", included: true },
           { text: "10 unique digital QR codes", included: true },
           { text: "Advanced analytics dashboard", included: true },
-          { text: "Custom Brand Page", included: true },
-          { text: "Get reports (PDF) on WhatsApp", included: true },
-          { text: "4 languages support", included: true },
+          { text: "Custom brand page", included: true },
+          { text: "Receive PDF reports on WhatsApp", included: true },
+          { text: "Support for 4 languages", included: true },
           { text: "Email support", included: true },
         ],
       },
@@ -69,8 +69,8 @@ const pricingPlans: {
   {
     name: "Premium",
     price: "₹2,999",
-    period: "/annually",
-    description: "Perfect for multi-location businesses, agencies, growing brands",
+    period: " / annually",
+    description: "Perfect for multi-location businesses, agencies, and growing brands",
     popular: false,
     cta: "Get Started",
     groups: [
@@ -78,19 +78,19 @@ const pricingPlans: {
         label: "Physical Product",
         items: [
           { text: "2 Premium QR Stands", included: true },
-          { text: "Free pan India delivery (5–7 days)", included: true },
+          { text: "Free Pan-India delivery (5–7 days)", included: true },
         ],
       },
       {
         label: "Digital Features",
         items: [
-          { text: "10,000 AI reviews per month (2× more)", included: true },
+          { text: "10,000 AI-generated reviews per month (2× more)", included: true },
           { text: "20 unique digital QR codes (3× more)", included: true },
           { text: "Advanced analytics dashboard", included: true },
-          { text: "Custom brand Page", included: true },
-          { text: "WhatsApp support (priority)", included: true },
-          { text: "Export reports (PDF)", included: true },
-          { text: "Get reports (PDF) on WhatsApp", included: true },
+          { text: "Custom brand page", included: true },
+          { text: "Priority WhatsApp support", included: true },
+          { text: "Export reports in PDF format", included: true },
+          { text: "Receive PDF reports on WhatsApp", included: true },
         ],
       },
     ],
