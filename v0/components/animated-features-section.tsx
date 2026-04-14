@@ -28,54 +28,46 @@ const BentoCard: React.FC<BentoCardProps> = ({ title, value, subtitle, colors, d
 
   return (
     <motion.div
-      className="bento-card relative overflow-hidden h-full rounded-2xl group"
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
+      className="relative overflow-hidden h-full bg-black rounded-lg border border-border/20 group"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       transition={{ duration: 0.5, delay }}
+      style={{ filter: "url(#noise)" }}
     >
-      {/* Animated gradient background */}
       <AnimatedGradient colors={colors} speed={0.05} blur="medium" />
 
-      {/* Glass highlight layer — top specular reflection */}
-      <div className="absolute inset-0 pointer-events-none rounded-2xl overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 to-transparent" />
-        <div className="absolute top-0 left-0 w-[1px] h-full bg-gradient-to-b from-white/60 to-transparent" />
+      {/* Noise texture */}
+      <div className="absolute inset-0 opacity-[0.05] pointer-events-none">
+        <div
+          className="w-full h-full"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+            backgroundSize: "256px 256px",
+            mixBlendMode: "overlay",
+          }}
+        />
       </div>
 
-      {/* Subtle grain texture */}
-      <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06] pointer-events-none mix-blend-overlay"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-          backgroundSize: "128px 128px",
-        }}
-      />
-
       {/* Shine sweep */}
-      <div className="absolute inset-0 opacity-60 transition-opacity duration-500 pointer-events-none overflow-hidden rounded-2xl">
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/8 dark:via-white/5 to-transparent transform -skew-x-12 -translate-x-full animate-[shine_6s_ease-in-out_infinite]" />
+      <div className="absolute inset-0 opacity-80 transition-opacity duration-500">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 -translate-x-full animate-[shine_4s_ease-in-out_infinite] w-[200%]" />
       </div>
 
       {/* Content */}
       <motion.div
-        className="relative z-10 p-4 sm:p-6 md:p-8 h-full flex flex-col justify-end"
+        className="relative z-10 p-3 sm:p-5 md:p-8 text-foreground backdrop-blur-sm h-full flex flex-col justify-center"
         variants={container}
         initial="hidden"
         animate="show"
       >
-        <motion.p
-          className="text-[10px] sm:text-xs font-semibold tracking-[0.15em] uppercase text-foreground/50 dark:text-foreground/40 mb-2"
-          variants={item}
-        >
+        <motion.h3 className="text-sm sm:text-base md:text-lg text-foreground mb-2" variants={item}>
           {title}
-        </motion.p>
-        <motion.p
-          className="text-xl sm:text-3xl md:text-4xl font-semibold text-foreground leading-tight mb-2"
-          variants={item}
-        >
+        </motion.h3>
+        <motion.p className="text-2xl sm:text-4xl md:text-5xl font-medium mb-4 text-foreground" variants={item}>
           {value}
         </motion.p>
         {subtitle && (
-          <motion.p className="text-xs sm:text-sm text-foreground/60 dark:text-foreground/50 leading-relaxed" variants={item}>
+          <motion.p className="text-sm text-foreground/80" variants={item}>
             {subtitle}
           </motion.p>
         )}
@@ -95,6 +87,18 @@ export function AnimatedFeaturesSection() {
 
   return (
     <section id="features" className="py-20 px-4 bg-transparent transition-colors duration-300">
+      <svg width="0" height="0" className="absolute">
+        <defs>
+          <filter id="noise" x="0%" y="0%" width="100%" height="100%">
+            <feTurbulence baseFrequency="0.4" numOctaves="2" result="noise" seed="2" type="fractalNoise" />
+            <feColorMatrix in="noise" type="saturate" values="0" />
+            <feComponentTransfer>
+              <feFuncA type="discrete" tableValues="0.02 0.04 0.06" />
+            </feComponentTransfer>
+            <feComposite operator="over" in2="SourceGraphic" />
+          </filter>
+        </defs>
+      </svg>
       <div className="container mx-auto">
         <div className="text-center mb-16">
           <motion.p
