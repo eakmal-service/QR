@@ -88,6 +88,7 @@ const pricingPlans: {
           { text: "20 unique digital QR codes (3× more)", included: true },
           { text: "Advanced analytics dashboard", included: true },
           { text: "Custom brand page", included: true },
+          { text: "4+ custom language support", included: true },
           { text: "Priority WhatsApp support", included: true },
           { text: "Export reports in PDF format", included: true },
           { text: "Receive PDF reports on WhatsApp", included: true },
