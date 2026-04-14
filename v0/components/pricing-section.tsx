@@ -78,12 +78,12 @@ const pricingPlans: {
         label: "Physical Product",
         items: [
           { text: "2 Premium QR Stands", included: true },
+          { text: "Free pan India delivery (5–7 days)", included: true },
         ],
       },
       {
         label: "Digital Features",
         items: [
-          { text: "Free pan India delivery (5–7 days)", included: true },
           { text: "10,000 AI reviews per month (2× more)", included: true },
           { text: "20 unique digital QR codes (3× more)", included: true },
           { text: "Advanced analytics dashboard", included: true },
