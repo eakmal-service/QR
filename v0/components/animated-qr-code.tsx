@@ -77,7 +77,7 @@ export function AnimatedQRCode() {
             
             // Desktop: shift slightly below center to create space from navbar
             // Mobile: shift up so QR is centered in the empty space above the bottom text
-            const offsetY = (canvas.height - qrSize) / 2 - (canvas.height * (isDesktop ? -0.05 : 0.18))
+            const offsetY = (canvas.height - qrSize) / 2 - (canvas.height * (isDesktop ? 0.08 : 0.18))
 
             particles.forEach((particle, index) => {
                 const targetX = offsetX + particle.baseCol * moduleSize + moduleSize / 2
