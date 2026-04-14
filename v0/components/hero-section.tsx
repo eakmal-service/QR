@@ -26,33 +26,7 @@ export function HeroSection() {
           <GenerateQRButton />
           <Link href="/smart-review">
             <button
-              className="smart-review-btn"
-              style={{
-                cursor: "pointer",
-                position: "relative",
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                padding: "0.625rem 1.5rem",
-                background: "linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.08))",
-                backdropFilter: "blur(20px)",
-                WebkitBackdropFilter: "blur(20px)",
-                border: "1px solid rgba(255, 255, 255, 0.25)",
-                borderRadius: "0.75rem",
-                boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 4px 16px rgba(0,0,0,0.3)",
-                color: "white",
-                fontSize: "1rem",
-                fontWeight: 500,
-                transition: "all 0.3s ease-in-out",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "scale(1.05)"
-                e.currentTarget.style.boxShadow = "inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 0 0 0.375rem rgba(255, 255, 255, 0.3)"
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1)"
-                e.currentTarget.style.boxShadow = "inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 4px 16px rgba(0,0,0,0.3)"
-              }}
+              className="relative flex items-center gap-2 px-6 py-2.5 rounded-xl font-medium transition-all duration-300 backdrop-blur-[20px] bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/25 text-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.05)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_4px_16px_rgba(0,0,0,0.3)] hover:scale-105 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_0_0_0.375rem_rgba(0,0,0,0.05)] dark:hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_0_0_0.375rem_rgba(255,255,255,0.3)]"
             >
               Smart Review QR
             </button>

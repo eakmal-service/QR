@@ -18,7 +18,7 @@ export function MobileNav() {
   return (
     <div className="fixed bottom-6 left-4 right-4 z-50 md:hidden">
       <div 
-        className="grid grid-cols-4 items-center justify-items-center py-3 px-2 rounded-[2rem] border border-white/20 bg-background/30 backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.05)] transition-all duration-300"
+        className="grid grid-cols-4 items-center justify-items-center py-3 px-2 rounded-[2rem] border border-black/5 dark:border-white/20 bg-background/30 backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.05)] transition-all duration-300"
         style={{
           WebkitBackdropFilter: "blur(20px)",
         }}
@@ -27,7 +27,7 @@ export function MobileNav() {
           href="#" 
           className="flex flex-col items-center gap-1 text-foreground/70 hover:text-foreground transition-all duration-300 active:scale-95"
         >
-          <div className="p-1.5 rounded-full hover:bg-white/10 transition-colors">
+          <div className="p-1.5 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
             <Home className="w-5 h-5" />
           </div>
           <span className="text-[10px] font-medium tracking-wide">Home</span>
@@ -37,7 +37,7 @@ export function MobileNav() {
           href="#features" 
           className="flex flex-col items-center gap-1 text-foreground/70 hover:text-foreground transition-all duration-300 active:scale-95"
         >
-          <div className="p-1.5 rounded-full hover:bg-white/10 transition-colors">
+          <div className="p-1.5 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
             <Sparkles className="w-5 h-5" />
           </div>
           <span className="text-[10px] font-medium tracking-wide">Features</span>
@@ -47,7 +47,7 @@ export function MobileNav() {
           href="#pricing" 
           className="flex flex-col items-center gap-1 text-foreground/70 hover:text-foreground transition-all duration-300 active:scale-95"
         >
-          <div className="p-1.5 rounded-full hover:bg-white/10 transition-colors">
+          <div className="p-1.5 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
             <Tag className="w-5 h-5" />
           </div>
           <span className="text-[10px] font-medium tracking-wide">Pricing</span>
@@ -65,7 +65,7 @@ export function MobileNav() {
             href={user ? (user.email === "hanzalaq63@gmail.com" ? "/admin" : "/dashboard") : "/login"} 
             className="flex flex-col items-center gap-1 text-foreground/70 hover:text-foreground transition-all duration-300 active:scale-95"
           >
-            <div className="p-1.5 rounded-full hover:bg-white/10 transition-colors">
+            <div className="p-1.5 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
               <User className="w-5 h-5" />
             </div>
             <span className="text-[10px] font-medium tracking-wide">

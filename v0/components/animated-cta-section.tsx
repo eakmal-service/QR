@@ -33,7 +33,7 @@ export function AnimatedCTASection() {
       <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-transparent to-background/20" />
       <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-transparent to-background/60" />
       <div
-        className="absolute inset-0 bg-radial-gradient from-transparent via-transparent to-black/40"
+        className="absolute inset-0 hidden dark:block"
         style={{
           background: "radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.4) 70%)",
         }}
@@ -64,14 +64,7 @@ export function AnimatedCTASection() {
             <Link href="/generate/url">
               <Button
                 size="lg"
-                className="text-foreground group border-0 hover:scale-105 transition-all duration-300"
-                style={{
-                  background: "linear-gradient(135deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.10))",
-                  backdropFilter: "blur(20px)",
-                  WebkitBackdropFilter: "blur(20px)",
-                  border: "1px solid rgba(255, 255, 255, 0.3)",
-                  boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 4px 16px rgba(0,0,0,0.3)",
-                }}
+                className="relative flex items-center gap-2 px-6 py-2.5 rounded-xl font-medium transition-all duration-300 backdrop-blur-[20px] bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/25 text-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.05)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_4px_16px_rgba(0,0,0,0.3)] hover:scale-105 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_0_0_0.375rem_rgba(0,0,0,0.05)] dark:hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_0_0_0.375rem_rgba(255,255,255,0.3)]"
               >
                 Start Your Free Trial
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -80,14 +73,7 @@ export function AnimatedCTASection() {
             <Button
               size="lg"
               variant="outline"
-              className="text-foreground border-0 hover:scale-105 transition-all duration-300"
-              style={{
-                background: "linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05))",
-                backdropFilter: "blur(20px)",
-                WebkitBackdropFilter: "blur(20px)",
-                border: "1px solid rgba(255, 255, 255, 0.2)",
-                boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 4px 16px rgba(0,0,0,0.2)",
-              }}
+              className="relative flex items-center gap-2 px-6 py-2.5 rounded-xl font-medium transition-all duration-300 backdrop-blur-[20px] bg-black/[0.02] dark:bg-white/[0.05] border border-black/5 dark:border-white/20 text-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.5),0_4px_16px_rgba(0,0,0,0.02)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_4px_16px_rgba(0,0,0,0.2)] hover:scale-105 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.5),0_0_0_0.375rem_rgba(0,0,0,0.02)] dark:hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_0_0_0.375rem_rgba(255,255,255,0.2)]"
             >
               Contact Sales
             </Button>

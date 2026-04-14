@@ -3,6 +3,7 @@
 import type React from "react"
 import { motion } from "framer-motion"
 import { AnimatedGradient } from "@/components/ui/animated-gradient-with-svg"
+import { useTheme } from "next-themes"
 
 interface BentoCardProps {
   title: string
@@ -91,8 +92,14 @@ const BentoCard: React.FC<BentoCardProps> = ({ title, value, subtitle, colors, d
 }
 
 export function AnimatedFeaturesSection() {
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme !== "light"
+
+  // Base colors for dark mode and light mode
+  const getColors = (baseDark: string[], baseLight: string[]) => isDark ? baseDark : baseLight
+
   return (
-    <section id="features" className="py-20 px-4 bg-black">
+    <section id="features" className="py-20 px-4 bg-background transition-colors duration-300">
       <svg width="0" height="0" className="absolute">
         <defs>
           <filter id="noise" x="0%" y="0%" width="100%" height="100%">
@@ -108,10 +115,10 @@ export function AnimatedFeaturesSection() {
 
       <div className="container mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4" style={{ fontFamily: "var(--font-playfair)" }}>
+          <h2 className="text-4xl font-bold text-foreground mb-4" style={{ fontFamily: "var(--font-playfair)" }}>
             Powerful Features
           </h2>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Everything you need to take your business to the next level
           </p>
         </div>
@@ -123,7 +130,7 @@ export function AnimatedFeaturesSection() {
               title="BRAND PAGE"
               value="Your page, your way"
               subtitle="Logo, Services, Product — everything on one smart link"
-              colors={["#1a1a1a", "#2a2a2a", "#1f1f1f"]}
+              colors={getColors(["#1a1a1a", "#2a2a2a", "#1f1f1f"], ["#e4e4e7", "#f4f4f5", "#d4d4d8"])}
               delay={0.1}
             />
           </div>
@@ -132,7 +139,7 @@ export function AnimatedFeaturesSection() {
               title="ZERO FRICTION"
               value="1-tap flow"
               subtitle="No login needed"
-              colors={["#151515", "#252525", "#1d1d1d"]}
+              colors={getColors(["#151515", "#252525", "#1d1d1d"], ["#e4e4e7", "#f4f4f5", "#d4d4d8"])}
               delay={0.2}
             />
           </div>
@@ -141,7 +148,7 @@ export function AnimatedFeaturesSection() {
               title="REAL-TIME"
               value="Live stream"
               subtitle="Review appears as it's typed"
-              colors={["#1c1c1c", "#2c2c2c", "#181818"]}
+              colors={getColors(["#1c1c1c", "#2c2c2c", "#181818"], ["#e4e4e7", "#f4f4f5", "#d4d4d8"])}
               delay={0.3}
             />
           </div>
@@ -150,7 +157,7 @@ export function AnimatedFeaturesSection() {
               title="PHYSICAL PRODUCT"
               value="Standee included"
               subtitle="Pan-India delivery • Table-ready QR stand "
-              colors={["#171717", "#272727", "#1b1b1b"]}
+              colors={getColors(["#171717", "#272727", "#1b1b1b"], ["#e4e4e7", "#f4f4f5", "#d4d4d8"])}
               delay={0.4}
             />
           </div>
@@ -159,7 +166,7 @@ export function AnimatedFeaturesSection() {
               title="GOOGLE VERIFIED"
               value="Direct to Maps"
               subtitle="No fake reviews"
-              colors={["#131313", "#232323", "#191919"]}
+              colors={getColors(["#131313", "#232323", "#191919"], ["#e4e4e7", "#f4f4f5", "#d4d4d8"])}
               delay={0.5}
             />
           </div>
@@ -168,7 +175,7 @@ export function AnimatedFeaturesSection() {
               title="GET STARTED"
               value="Starts at ₹499"
               subtitle="One-time trial, no commitment"
-              colors={["#1a1a1a", "#2a2a2a", "#1f1f1f"]}
+              colors={getColors(["#1a1a1a", "#2a2a2a", "#1f1f1f"], ["#e4e4e7", "#f4f4f5", "#d4d4d8"])}
               delay={0.6}
             />
           </div>
@@ -181,7 +188,7 @@ export function AnimatedFeaturesSection() {
               title="BRAND PAGE"
               value="Your page, your way"
               subtitle="Logo, Services, Product — everything on one smart link"
-              colors={["#1a1a1a", "#2a2a2a", "#1f1f1f"]}
+              colors={getColors(["#1a1a1a", "#2a2a2a", "#1f1f1f"], ["#e4e4e7", "#f4f4f5", "#d4d4d8"])}
               delay={0.2}
             />
           </div>
@@ -189,14 +196,14 @@ export function AnimatedFeaturesSection() {
             title="ZERO FRICTION"
             value="1-tap flow"
             subtitle="No login needed"
-            colors={["#151515", "#252525", "#1d1d1d"]}
+            colors={getColors(["#151515", "#252525", "#1d1d1d"], ["#e4e4e7", "#f4f4f5", "#d4d4d8"])}
             delay={0.4}
           />
           <BentoCard
             title="REAL-TIME"
             value="Live stream"
             subtitle="Review appears as it's typed"
-            colors={["#1c1c1c", "#2c2c2c", "#181818"]}
+            colors={getColors(["#1c1c1c", "#2c2c2c", "#181818"], ["#e4e4e7", "#f4f4f5", "#d4d4d8"])}
             delay={0.6}
           />
           <div className="md:col-span-2">
@@ -204,7 +211,7 @@ export function AnimatedFeaturesSection() {
               title="PHYSICAL PRODUCT"
               value="Standee included"
               subtitle="Pan-India delivery • Table-ready QR stand "
-              colors={["#171717", "#272727", "#1b1b1b"]}
+              colors={getColors(["#171717", "#272727", "#1b1b1b"], ["#e4e4e7", "#f4f4f5", "#d4d4d8"])}
               delay={0.8}
             />
           </div>
@@ -213,7 +220,7 @@ export function AnimatedFeaturesSection() {
               title="GOOGLE VERIFIED"
               value="Direct to Maps"
               subtitle="No fake reviews"
-              colors={["#131313", "#232323", "#191919"]}
+              colors={getColors(["#131313", "#232323", "#191919"], ["#e4e4e7", "#f4f4f5", "#d4d4d8"])}
               delay={1.0}
             />
           </div>
@@ -222,7 +229,7 @@ export function AnimatedFeaturesSection() {
               title="GET STARTED"
               value="Starts at ₹499"
               subtitle="One-time trial, no commitment"
-              colors={["#1a1a1a", "#2a2a2a", "#1f1f1f"]}
+              colors={getColors(["#1a1a1a", "#2a2a2a", "#1f1f1f"], ["#e4e4e7", "#f4f4f5", "#d4d4d8"])}
               delay={1.2}
             />
           </div>

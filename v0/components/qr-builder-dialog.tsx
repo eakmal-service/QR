@@ -393,9 +393,9 @@ export function QRBuilderDialog({ open, onOpenChange, type, typeLabel }: QRBuild
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-4xl bg-black border-gray-800 text-gray-200">
+            <DialogContent className="max-w-4xl bg-background border-border text-foreground">
                 <DialogHeader>
-                    <DialogTitle className="text-white text-xl">Generate {typeLabel} QR Code</DialogTitle>
+                    <DialogTitle className="text-foreground text-xl">Generate {typeLabel} QR Code</DialogTitle>
                     <DialogDescription>
                         Enter the details below to generate your QR code.
                     </DialogDescription>
@@ -403,7 +403,7 @@ export function QRBuilderDialog({ open, onOpenChange, type, typeLabel }: QRBuild
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
                     {/* Left: Input Form */}
-                    <div className="bg-zinc-900/50 p-6 rounded-xl border border-gray-800">
+                    <div className="bg-card p-6 rounded-xl border border-border">
                         {renderFields()}
                     </div>
 
@@ -426,15 +426,15 @@ export function QRBuilderDialog({ open, onOpenChange, type, typeLabel }: QRBuild
                         </div>
 
                         <div className="text-center">
-                            <p className="text-sm text-gray-500 mb-4 break-all max-w-xs mx-auto">
+                            <p className="text-sm text-muted-foreground mb-4 break-all max-w-xs mx-auto">
                                 {value ? (value.length > 50 ? value.substring(0, 50) + "..." : value) : "Enter data to generate"}
                             </p>
 
                             <div className="flex gap-2 justify-center">
-                                <Button onClick={handleDownload} className="bg-white text-black hover:bg-gray-200">
+                                <Button onClick={handleDownload} className="bg-primary text-primary-foreground hover:bg-primary/90">
                                     <Download className="w-4 h-4 mr-2" /> Download
                                 </Button>
-                                <Button variant="outline" onClick={handleCopy} className="border-gray-700 hover:bg-zinc-900 text-gray-300">
+                                <Button variant="outline" onClick={handleCopy} className="border-border hover:bg-muted text-muted-foreground">
                                     {copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
                                     {copied ? "Copied" : "Copy"}
                                 </Button>

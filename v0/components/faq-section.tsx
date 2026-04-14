@@ -85,19 +85,14 @@ export function FAQSection() {
           {faqs.map((faq, index) => (
             <motion.div
               key={index}
-              className="rounded-lg backdrop-blur-xl"
-              style={{
-                background: "linear-gradient(135deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.04))",
-                border: "1px solid rgba(255, 255, 255, 0.15)",
-                boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 4px 16px rgba(0,0,0,0.15)",
-              }}
+              className="relative rounded-lg backdrop-blur-[20px] transition-all duration-300 bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/15 shadow-[0_4px_16px_rgba(0,0,0,0.05)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_4px_16px_rgba(0,0,0,0.15)]"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
               <button
-                className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-white/5 transition-colors rounded-lg"
+                className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-black/5 dark:hover:bg-white/5 transition-colors rounded-lg"
                 onClick={() => toggleFAQ(index)}
               >
                 <span className="text-lg font-medium text-foreground pr-4">{faq.question}</span>

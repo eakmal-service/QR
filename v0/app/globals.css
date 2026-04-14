@@ -4,40 +4,40 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Simplified to monochrome color scheme: black, grey, white */
-  --background: #000000;
-  --foreground: #ffffff;
-  --card: #1a1a1a;
-  --card-foreground: #ffffff;
-  --popover: #1a1a1a;
-  --popover-foreground: #ffffff;
-  --primary: #ffffff;
-  --primary-foreground: #000000;
-  --secondary: #404040;
-  --secondary-foreground: #ffffff;
-  --muted: #1a1a1a;
-  --muted-foreground: #a3a3a3;
-  --accent: #404040;
-  --accent-foreground: #ffffff;
-  --destructive: #ffffff;
-  --destructive-foreground: #000000;
-  --border: #404040;
-  --input: #1a1a1a;
-  --ring: rgba(255, 255, 255, 0.3);
-  --chart-1: #ffffff;
-  --chart-2: #a3a3a3;
-  --chart-3: #404040;
-  --chart-4: #1a1a1a;
-  --chart-5: #000000;
+  /* Light mode scheme: clean white, distinct borders */
+  --background: #ffffff;
+  --foreground: #09090b;
+  --card: #ffffff;
+  --card-foreground: #09090b;
+  --popover: #ffffff;
+  --popover-foreground: #09090b;
+  --primary: #18181b;
+  --primary-foreground: #fafafa;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #18181b;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --accent: #f4f4f5;
+  --accent-foreground: #18181b;
+  --destructive: #ef4444;
+  --destructive-foreground: #fafafa;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: #18181b;
+  --chart-1: #18181b;
+  --chart-2: #71717a;
+  --chart-3: #a1a1aa;
+  --chart-4: #d4d4d8;
+  --chart-5: #e4e4e7;
   --radius: 0.5rem;
-  --sidebar: #000000;
-  --sidebar-foreground: #ffffff;
-  --sidebar-primary: #1a1a1a;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #404040;
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #404040;
-  --sidebar-ring: rgba(255, 255, 255, 0.3);
+  --sidebar: #fafafa;
+  --sidebar-foreground: #18181b;
+  --sidebar-primary: #18181b;
+  --sidebar-primary-foreground: #fafafa;
+  --sidebar-accent: #f4f4f5;
+  --sidebar-accent-foreground: #18181b;
+  --sidebar-border: #e4e4e7;
+  --sidebar-ring: #18181b;
   --background-gradient-speed: 15s;
   --background-gradient-delay: 0s;
   --tx-1: 1;
@@ -51,7 +51,7 @@
 }
 
 .dark {
-  /* Dark mode uses same monochrome scheme */
+  /* Dark mode uses original monochrome scheme */
   --background: #000000;
   --foreground: #ffffff;
   --card: #1a1a1a;
@@ -66,8 +66,8 @@
   --muted-foreground: #a3a3a3;
   --accent: #404040;
   --accent-foreground: #ffffff;
-  --destructive: #ffffff;
-  --destructive-foreground: #000000;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
   --border: #404040;
   --input: #1a1a1a;
   --ring: rgba(255, 255, 255, 0.3);

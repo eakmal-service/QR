@@ -2,10 +2,17 @@
 
 import { useEffect, useRef } from "react"
 import QRCode from "qrcode"
+import { useTheme } from "next-themes"
 
 export function AnimatedQRCode() {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const animationRef = useRef<number>()
+    const { resolvedTheme } = useTheme()
+    const themeRef = useRef(resolvedTheme)
+
+    useEffect(() => {
+        themeRef.current = resolvedTheme
+    }, [resolvedTheme])
 
     useEffect(() => {
         const canvas = canvasRef.current
@@ -97,10 +104,16 @@ export function AnimatedQRCode() {
 
                 const pulseOpacity = particle.opacity * (0.9 + Math.sin(time * 1.5 + index * 0.05) * 0.1)
 
+                const isDark = themeRef.current !== "light"
+                
                 if (particle.isCorner) {
-                    ctx.fillStyle = `rgba(255, 255, 255, ${pulseOpacity})`
+                    ctx.fillStyle = isDark 
+                        ? `rgba(255, 255, 255, ${pulseOpacity})`
+                        : `rgba(0, 0, 0, ${pulseOpacity})`
                 } else {
-                    ctx.fillStyle = `rgba(180, 180, 190, ${pulseOpacity * 0.8})`
+                    ctx.fillStyle = isDark
+                        ? `rgba(180, 180, 190, ${pulseOpacity * 0.8})`
+                        : `rgba(80, 80, 90, ${pulseOpacity * 0.8})`
                 }
                 const half = moduleSize * 0.45
                 ctx.fillRect(particle.x - half, particle.y - half, half * 2, half * 2)

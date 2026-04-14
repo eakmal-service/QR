@@ -312,16 +312,16 @@ export function QRGeneratorModal({ isOpen, onOpenChange, initialType }: QRGenera
 
     // --- Renderers ---
     const renderContentStep = () => (
-        <div className="flex flex-col h-full bg-white text-black">
+        <div className="flex flex-col h-full bg-background text-foreground">
             {/* Header */}
-            <div className="flex items-center gap-4 p-6 border-b border-gray-100 sticky top-0 bg-white z-10">
+            <div className="flex items-center gap-4 p-6 border-b border-border sticky top-0 bg-background z-10">
                 <Button variant="ghost" size="icon" onClick={() => onOpenChange(false)}>
                     <ArrowLeft className="w-5 h-5" />
                 </Button>
                 <div className="text-lg font-semibold">Generate QR Code</div>
             </div>
 
-            <ScrollArea className="flex-1 p-6 bg-gray-50/50">
+            <ScrollArea className="flex-1 p-6 bg-muted/30">
                 <div className="max-w-2xl mx-auto space-y-8">
                     {/* Type Selector */}
                     <div className="grid grid-cols-4 sm:grid-cols-6 gap-3">
@@ -329,16 +329,16 @@ export function QRGeneratorModal({ isOpen, onOpenChange, initialType }: QRGenera
                             <button
                                 key={t.value}
                                 onClick={() => setQRType(t.value as QRType)}
-                                className={`flex flex-col items-center p-3 rounded-xl border transition-all ${qrType === t.value ? 'bg-purple-50 border-purple-200 text-purple-700' : 'bg-white border-gray-100 hover:border-gray-200 text-gray-600'}`}
+                                className={`flex flex-col items-center p-3 rounded-xl border transition-all ${qrType === t.value ? 'bg-primary/10 border-primary/30 text-primary' : 'bg-card border-border hover:border-primary/30 text-muted-foreground'}`}
                             >
-                                <t.icon className={`w-6 h-6 mb-2 ${qrType === t.value ? 'text-purple-600' : 'text-gray-400'}`} />
+                                <t.icon className={`w-6 h-6 mb-2 ${qrType === t.value ? 'text-primary' : 'text-muted-foreground/60'}`} />
                                 <span className="text-xs font-medium">{t.label}</span>
                             </button>
                         ))}
                     </div>
 
                     {/* Inputs */}
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div className="bg-card p-6 rounded-2xl shadow-sm border border-border">
                         {/* Reusing existing render logic generally, simplified here for brevity */}
                         <h3 className="text-lg font-semibold mb-4">Enter Content</h3>
                         {/* Placeholder for specific inputs based on types - In real impl, copy switch case from original file */}
@@ -352,7 +352,7 @@ export function QRGeneratorModal({ isOpen, onOpenChange, initialType }: QRGenera
                         </div>
                     </div>
 
-                    <Button size="lg" className="w-full h-12 text-base bg-purple-600 hover:bg-purple-700" onClick={() => setStep("customize")}>
+                    <Button size="lg" className="w-full h-12 text-base" onClick={() => setStep("customize")}>
                         Next: Customize Design <ChevronRight className="w-4 h-4 ml-2" />
                     </Button>
                 </div>
@@ -364,16 +364,16 @@ export function QRGeneratorModal({ isOpen, onOpenChange, initialType }: QRGenera
         const FrameComponent = getFrameComponent(selectedFrame);
 
         return (
-            <div className="flex h-full w-full bg-[#111] text-white overflow-hidden">
+            <div className="flex h-full w-full bg-background text-foreground overflow-hidden">
                 {/* 1. Sidebar Tabs */}
-                <div className="w-20 flex-shrink-0 bg-black border-r border-[#222] flex flex-col items-center py-6 gap-6 z-20">
+                <div className="w-20 flex-shrink-0 bg-card border-r border-border flex flex-col items-center py-6 gap-6 z-20">
                     {CUSTOMIZE_TABS.map(tab => (
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
-                            className={`flex flex-col items-center gap-1.5 p-2 rounded-lg transition-all ${activeTab === tab.id ? 'text-purple-400' : 'text-gray-500 hover:text-gray-300'}`}
+                            className={`flex flex-col items-center gap-1.5 p-2 rounded-lg transition-all ${activeTab === tab.id ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}`}
                         >
-                            <div className={`p-3 rounded-xl ${activeTab === tab.id ? 'bg-purple-500/10' : 'bg-transparent'}`}>
+                            <div className={`p-3 rounded-xl ${activeTab === tab.id ? 'bg-primary/10' : 'bg-transparent'}`}>
                                 <tab.icon className="w-6 h-6" />
                             </div>
                             <span className="text-[10px] font-medium">{tab.label}</span>
@@ -382,8 +382,8 @@ export function QRGeneratorModal({ isOpen, onOpenChange, initialType }: QRGenera
                 </div>
 
                 {/* 2. Options Panel */}
-                <div className="w-[320px] flex-shrink-0 bg-[#0a0a0a] border-r border-[#222] flex flex-col">
-                    <div className="p-5 border-b border-[#222]">
+                <div className="w-[320px] flex-shrink-0 bg-muted/30 border-r border-border flex flex-col">
+                    <div className="p-5 border-b border-border">
                         <h2 className="font-semibold text-lg">{CUSTOMIZE_TABS.find(t => t.id === activeTab)?.label}</h2>
                     </div>
 
@@ -396,14 +396,14 @@ export function QRGeneratorModal({ isOpen, onOpenChange, initialType }: QRGenera
                                         <button
                                             key={t.id}
                                             onClick={() => applyTemplate(t)}
-                                            className="p-3 rounded-xl border border-[#333] hover:border-purple-500/50 bg-[#151515] text-left transition-all group"
+                                            className="p-3 rounded-xl border border-border hover:border-primary/50 bg-card text-left transition-all group"
                                         >
-                                            <div className="w-full aspect-square rounded-lg mb-3" style={{ backgroundColor: t.bg }}>
+                                            <div className="w-full aspect-square rounded-lg mb-3 shadow-sm border border-border/50" style={{ backgroundColor: t.bg }}>
                                                 <div className="w-full h-full flex items-center justify-center">
                                                     <div className="w-1/2 aspect-square rounded-sm" style={{ backgroundColor: t.color }}></div>
                                                 </div>
                                             </div>
-                                            <span className="text-sm font-medium text-gray-300 group-hover:text-white">{t.label}</span>
+                                            <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground">{t.label}</span>
                                         </button>
                                     ))}
                                 </div>
@@ -417,7 +417,7 @@ export function QRGeneratorModal({ isOpen, onOpenChange, initialType }: QRGenera
                                             <button
                                                 key={f.id}
                                                 onClick={() => setSelectedFrame(f.id)}
-                                                className={`p-4 rounded-xl border bg-[#151515] text-sm font-medium transition-all ${selectedFrame === f.id ? 'border-purple-500 text-purple-400' : 'border-[#333] text-gray-400 hover:border-gray-600'}`}
+                                                className={`p-4 rounded-xl border bg-card text-sm font-medium transition-all ${selectedFrame === f.id ? 'border-primary text-primary' : 'border-border text-muted-foreground hover:border-foreground/30'}`}
                                             >
                                                 {f.label}
                                             </button>
@@ -425,17 +425,17 @@ export function QRGeneratorModal({ isOpen, onOpenChange, initialType }: QRGenera
                                     </div>
 
                                     {selectedFrame !== 'none' && (
-                                        <div className="space-y-4 pt-4 border-t border-[#333]">
+                                        <div className="space-y-4 pt-4 border-t border-border">
                                             <div>
-                                                <Label className="text-xs text-gray-400 mb-2 block">Frame Label</Label>
+                                                <Label className="text-xs text-muted-foreground mb-2 block">Frame Label</Label>
                                                 <Input
                                                     value={frameText}
                                                     onChange={e => setFrameText(e.target.value)}
-                                                    className="bg-[#151515] border-[#333]"
+                                                    className="bg-card border-border"
                                                 />
                                             </div>
                                             <div>
-                                                <Label className="text-xs text-gray-400 mb-2 block">Frame Color</Label>
+                                                <Label className="text-xs text-muted-foreground mb-2 block">Frame Color</Label>
                                                 <div className="flex gap-2">
                                                     <input
                                                         type="color"
@@ -446,7 +446,7 @@ export function QRGeneratorModal({ isOpen, onOpenChange, initialType }: QRGenera
                                                     <Input
                                                         value={frameColor}
                                                         onChange={e => setFrameColor(e.target.value)}
-                                                        className="flex-1 bg-[#151515] border-[#333]"
+                                                        className="flex-1 bg-card border-border"
                                                     />
                                                 </div>
                                             </div>
@@ -459,20 +459,20 @@ export function QRGeneratorModal({ isOpen, onOpenChange, initialType }: QRGenera
                             {activeTab === "colors" && (
                                 <div className="space-y-6">
                                     <div>
-                                        <Label className="text-xs text-gray-400 mb-3 block">Foreground Color</Label>
+                                        <Label className="text-xs text-muted-foreground mb-3 block">Foreground Color</Label>
                                         <div className="flex gap-3">
                                             <input type="color" value={dotsColor} onChange={e => { setDotsColor(e.target.value); setCornerDotColor(e.target.value); setCornerSquareColor(e.target.value) }} className="w-12 h-12 rounded cursor-pointer bg-transparent" />
                                             <div className="flex-1">
-                                                <Input value={dotsColor} onChange={e => { setDotsColor(e.target.value); setCornerDotColor(e.target.value); setCornerSquareColor(e.target.value) }} className="bg-[#151515] border-[#333] mb-2" />
-                                                <p className="text-[10px] text-gray-500">Sets dots and eyes color</p>
+                                                <Input value={dotsColor} onChange={e => { setDotsColor(e.target.value); setCornerDotColor(e.target.value); setCornerSquareColor(e.target.value) }} className="bg-card border-border mb-2" />
+                                                <p className="text-[10px] text-muted-foreground">Sets dots and eyes color</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div>
-                                        <Label className="text-xs text-gray-400 mb-3 block">Background Color</Label>
+                                        <Label className="text-xs text-muted-foreground mb-3 block">Background Color</Label>
                                         <div className="flex gap-3">
                                             <input type="color" value={bgColor} onChange={e => setBgColor(e.target.value)} className="w-12 h-12 rounded cursor-pointer bg-transparent" />
-                                            <Input value={bgColor} onChange={e => setBgColor(e.target.value)} className="flex-1 bg-[#151515] border-[#333]" />
+                                            <Input value={bgColor} onChange={e => setBgColor(e.target.value)} className="flex-1 bg-card border-border" />
                                         </div>
                                         <div className="flex items-center gap-2 mt-3">
                                             <input type="checkbox" checked={bgTransparent} onChange={e => setBgTransparent(e.target.checked)} id="bg-trans" />
@@ -489,7 +489,7 @@ export function QRGeneratorModal({ isOpen, onOpenChange, initialType }: QRGenera
                                         <button
                                             key={p.value}
                                             onClick={() => setDotsType(p.value as DotsType)}
-                                            className={`p-2 rounded-lg border flex flex-col items-center gap-2 ${dotsType === p.value ? 'border-purple-500 bg-purple-500/10' : 'border-[#333] hover:border-gray-600'}`}
+                                            className={`p-2 rounded-lg border flex flex-col items-center gap-2 ${dotsType === p.value ? 'border-primary bg-primary/10' : 'border-border hover:border-foreground/30 bg-card'}`}
                                         >
                                             <div className={`w-8 h-8 bg-current rounded-sm ${p.value === 'rounded' ? 'rounded-md' : p.value === 'dots' ? 'rounded-full' : ''}`} style={{ color: dotsColor }}></div>
                                             <span className="text-[10px]">{p.label}</span>
@@ -502,39 +502,39 @@ export function QRGeneratorModal({ isOpen, onOpenChange, initialType }: QRGenera
                             {activeTab === "eyes" && (
                                 <div className="space-y-6">
                                     <div>
-                                        <Label className="text-xs text-gray-400 mb-3 block">Outer Eye Style</Label>
+                                        <Label className="text-xs text-muted-foreground mb-3 block">Outer Eye Style</Label>
                                         <div className="grid grid-cols-3 gap-2">
                                             {CORNER_SQUARE_PATTERNS.map(p => (
                                                 <button
                                                     key={p.value}
                                                     onClick={() => setCornerSquareType(p.value as CornerSquareType)}
-                                                    className={`p-3 border rounded-lg ${cornerSquareType === p.value ? 'border-purple-500' : 'border-[#333]'}`}
+                                                    className={`p-3 border rounded-lg bg-card ${cornerSquareType === p.value ? 'border-primary' : 'border-border'}`}
                                                 >
                                                     <span className="text-[10px]">{p.label}</span>
                                                 </button>
                                             ))}
                                         </div>
                                         <div className="mt-3">
-                                            <Label className="text-[10px] text-gray-500 mb-1 block">Color</Label>
+                                            <Label className="text-[10px] text-muted-foreground mb-1 block">Color</Label>
                                             <input type="color" value={cornerSquareColor} onChange={e => setCornerSquareColor(e.target.value)} className="w-full h-8 rounded" />
                                         </div>
                                     </div>
 
                                     <div>
-                                        <Label className="text-xs text-gray-400 mb-3 block">Inner Eye Style</Label>
+                                        <Label className="text-xs text-muted-foreground mb-3 block">Inner Eye Style</Label>
                                         <div className="grid grid-cols-2 gap-2">
                                             {CORNER_DOT_PATTERNS.map(p => (
                                                 <button
                                                     key={p.value}
                                                     onClick={() => setCornerDotType(p.value as CornerDotType)}
-                                                    className={`p-3 border rounded-lg ${cornerDotType === p.value ? 'border-purple-500' : 'border-[#333]'}`}
+                                                    className={`p-3 border rounded-lg bg-card ${cornerDotType === p.value ? 'border-primary' : 'border-border'}`}
                                                 >
                                                     <span className="text-[10px]">{p.label}</span>
                                                 </button>
                                             ))}
                                         </div>
                                         <div className="mt-3">
-                                            <Label className="text-[10px] text-gray-500 mb-1 block">Color</Label>
+                                            <Label className="text-[10px] text-muted-foreground mb-1 block">Color</Label>
                                             <input type="color" value={cornerDotColor} onChange={e => setCornerDotColor(e.target.value)} className="w-full h-8 rounded" />
                                         </div>
                                     </div>
@@ -546,14 +546,14 @@ export function QRGeneratorModal({ isOpen, onOpenChange, initialType }: QRGenera
                                 <div className="space-y-4">
                                     <div
                                         onClick={() => fileInputRef.current?.click()}
-                                        className="border-2 border-dashed border-[#333] hover:border-purple-500 rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer transition-all"
+                                        className="border-2 border-dashed border-border hover:border-primary rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer transition-all bg-card"
                                     >
                                         {logoFile ? (
                                             <img src={logoFile} className="w-16 h-16 object-contain mb-2" />
                                         ) : (
-                                            <Upload className="w-8 h-8 text-gray-500 mb-2" />
+                                            <Upload className="w-8 h-8 text-muted-foreground mb-2" />
                                         )}
-                                        <span className="text-xs text-gray-400">{logoFile ? "Click to change" : "Upload Logo"}</span>
+                                        <span className="text-xs text-muted-foreground">{logoFile ? "Click to change" : "Upload Logo"}</span>
                                         <input type="file" ref={fileInputRef} className="hidden" onChange={(e) => {
                                             const file = e.target.files?.[0];
                                             if (file) {
@@ -564,7 +564,7 @@ export function QRGeneratorModal({ isOpen, onOpenChange, initialType }: QRGenera
                                         }} accept="image/*" />
                                     </div>
                                     {logoFile && (
-                                        <Button variant="outline" className="w-full border-red-900/50 text-red-500 hover:bg-red-900/10" onClick={() => setLogoFile(null)}>Remove Logo</Button>
+                                        <Button variant="outline" className="w-full border-destructive/50 text-destructive hover:bg-destructive/10" onClick={() => setLogoFile(null)}>Remove Logo</Button>
                                     )}
                                 </div>
                             )}
@@ -573,9 +573,9 @@ export function QRGeneratorModal({ isOpen, onOpenChange, initialType }: QRGenera
                 </div>
 
                 {/* 3. Preview Panel (Main Area) */}
-                <div className="flex-1 bg-[#050505] flex flex-col relative">
+                <div className="flex-1 bg-black/5 dark:bg-black flex flex-col relative">
                     <div className="absolute top-4 left-4 z-10">
-                        <Button variant="ghost" onClick={() => setStep("content")} className="text-gray-400 hover:text-white">
+                        <Button variant="ghost" onClick={() => setStep("content")} className="text-muted-foreground hover:text-foreground">
                             <ArrowLeft className="w-4 h-4 mr-2" /> Back to Edit
                         </Button>
                     </div>
@@ -586,7 +586,7 @@ export function QRGeneratorModal({ isOpen, onOpenChange, initialType }: QRGenera
                             <FrameComponent color={frameColor} textColor={"#fff"} text={frameText}>
                                 <div
                                     ref={qrRef}
-                                    className="rounded-lg overflow-hidden"
+                                    className="rounded-lg overflow-hidden flex items-center justify-center"
                                     // Make sure inner QR matches theme if no frame, else white bg often looks best inside frames
                                     style={{ backgroundColor: bgTransparent ? 'transparent' : bgColor }}
                                 />
@@ -594,16 +594,16 @@ export function QRGeneratorModal({ isOpen, onOpenChange, initialType }: QRGenera
                         </div>
                     </div>
 
-                    <div className="p-8 border-t border-[#222] bg-[#0a0a0a]">
+                    <div className="p-8 border-t border-border bg-card">
                         <div className="flex justify-between items-center max-w-2xl mx-auto w-full">
-                            <div className="text-sm text-gray-500">
-                                Generated QR for: <span className="text-gray-300">{QR_TYPES.find(t => t.value === qrType)?.label}</span>
+                            <div className="text-sm text-muted-foreground">
+                                Generated QR for: <span className="text-foreground">{QR_TYPES.find(t => t.value === qrType)?.label}</span>
                             </div>
                             <div className="flex gap-3">
                                 <Button
                                     variant="outline"
                                     onClick={() => handleDownload("png")}
-                                    className="border-[#333] hover:bg-[#222] text-white"
+                                    className="border-border hover:bg-muted"
                                     disabled={isDownloading}
                                 >
                                     {isDownloading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Download className="w-4 h-4 mr-2" />}
@@ -612,7 +612,7 @@ export function QRGeneratorModal({ isOpen, onOpenChange, initialType }: QRGenera
                                 {selectedFrame === "none" && (
                                     <Button
                                         onClick={() => handleDownload("svg")}
-                                        className="bg-purple-600 hover:bg-purple-700 text-white"
+                                        className="bg-primary hover:bg-primary/90 text-primary-foreground"
                                         disabled={isDownloading}
                                     >
                                         Download SVG
@@ -628,7 +628,7 @@ export function QRGeneratorModal({ isOpen, onOpenChange, initialType }: QRGenera
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-[100vw] w-full h-full p-0 m-0 rounded-none border-none bg-black overflow-hidden">
+            <DialogContent className="max-w-[100vw] w-full h-full p-0 m-0 rounded-none border-none bg-background overflow-hidden">
                 {step === "content" ? renderContentStep() : renderCustomizeStep()}
             </DialogContent>
         </Dialog>
