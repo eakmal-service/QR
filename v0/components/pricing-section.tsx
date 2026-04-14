@@ -40,7 +40,7 @@ const pricingPlans: {
   {
     name: "Base",
     price: "₹999",
-    period: "/month",
+    period: "/annually",
     description: "Perfect for single-location businesses, restaurants, shops, cafes",
     popular: true,
     cta: "Get Started",
@@ -48,7 +48,7 @@ const pricingPlans: {
       {
         label: "Physical Product",
         items: [
-          { text: "1 Premium QR Stand (Acrylic 6\"×4\")", included: true },
+          { text: "1 Premium QR Stand", included: true },
           { text: "Free pan India delivery (5–7 days)", included: true },
         ],
       },
@@ -58,7 +58,7 @@ const pricingPlans: {
           { text: "5,000 AI reviews per month", included: true },
           { text: "10 unique digital QR codes", included: true },
           { text: "Advanced analytics dashboard", included: true },
-          { text: "Custom Page", included: true },
+          { text: "Custom Brand Page", included: true },
           { text: "Get reports (PDF) on WhatsApp", included: true },
           { text: "4 languages support", included: true },
           { text: "Email support", included: true },
@@ -69,7 +69,7 @@ const pricingPlans: {
   {
     name: "Premium",
     price: "₹2,999",
-    period: "/month",
+    period: "/annually",
     description: "Perfect for multi-location businesses, agencies, growing brands",
     popular: false,
     cta: "Get Started",
@@ -78,15 +78,15 @@ const pricingPlans: {
         label: "Physical Product",
         items: [
           { text: "2 Premium QR Stands", included: true },
-          { text: "Priority delivery (3–5 days)", included: true },
         ],
       },
       {
         label: "Digital Features",
         items: [
+          { text: "Free pan India delivery (5–7 days)", included: true },
           { text: "10,000 AI reviews per month (2× more)", included: true },
           { text: "20 unique digital QR codes (3× more)", included: true },
-          { text: "Premium analytics (unlimited history)", included: true },
+          { text: "Advanced analytics dashboard", included: true },
           { text: "Custom brand Page", included: true },
           { text: "WhatsApp support (priority)", included: true },
           { text: "Export reports (PDF)", included: true },
