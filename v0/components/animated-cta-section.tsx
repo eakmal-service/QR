@@ -10,9 +10,9 @@ export function AnimatedCTASection() {
   const contentRef = useRef<HTMLDivElement>(null)
 
   return (
-    <section className="relative py-20 px-4 overflow-hidden">
+    <section className="relative py-20 px-4 overflow-hidden bg-transparent">
       <div className="absolute inset-0">
-        <div className="h-full w-full bg-gradient-to-br from-background via-card to-muted">
+        <div className="h-full w-full bg-gradient-to-br from-background/60 via-card/40 to-muted/40">
           <BackgroundPaths />
           <div className="absolute inset-0 opacity-20">
             <div className="absolute top-0 left-1/4 w-96 h-96 bg-zinc-500/10 rounded-full blur-3xl animate-pulse" />

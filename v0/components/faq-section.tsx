@@ -57,7 +57,7 @@ export function FAQSection() {
   }
 
   return (
-    <section id="faq" className="py-20 px-4 bg-background">
+    <section id="faq" className="py-20 px-4 bg-transparent">
       <div className="container mx-auto max-w-4xl">
         <div className="text-center mb-16">
           <motion.h2
@@ -85,7 +85,7 @@ export function FAQSection() {
           {faqs.map((faq, index) => (
             <motion.div
               key={index}
-              className="relative rounded-lg backdrop-blur-[20px] transition-all duration-300 bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/15 shadow-[0_4px_16px_rgba(0,0,0,0.05)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_4px_16px_rgba(0,0,0,0.15)]"
+              className="glass-card relative rounded-xl transition-all duration-300"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}

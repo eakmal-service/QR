@@ -100,7 +100,7 @@ const pricingPlans: {
 
 export function PricingSection() {
   return (
-    <section id="pricing" className="py-20 px-4 bg-background transition-colors duration-300">
+    <section id="pricing" className="py-20 px-4 bg-transparent transition-colors duration-300">
       <div className="container mx-auto">
         <div className="text-center mb-16">
           <motion.h2
@@ -128,10 +128,10 @@ export function PricingSection() {
           {pricingPlans.map((plan, index) => (
             <motion.div
               key={plan.name}
-              className={`relative rounded-2xl p-8 backdrop-blur-xl flex flex-col transition-all duration-300 border ${
+            className={`glass-card relative rounded-2xl p-8 flex flex-col transition-all duration-300 ${
                 plan.popular 
-                  ? "border-black/10 dark:border-white/30 bg-black/5 dark:bg-white/10 shadow-[0_4px_24px_rgba(0,0,0,0.05)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_4px_24px_rgba(0,0,0,0.2)]" 
-                  : "border-black/5 dark:border-white/15 bg-black/[0.02] dark:bg-white/[0.04] shadow-[0_4px_24px_rgba(0,0,0,0.02)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_4px_24px_rgba(0,0,0,0.2)]"
+                  ? "ring-2 ring-violet-400/30 dark:ring-white/20 shadow-[0_8px_40px_rgba(147,112,219,0.15)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_8px_32px_rgba(0,0,0,0.4)]"
+                  : ""
               }`}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}

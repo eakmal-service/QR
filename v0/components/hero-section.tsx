@@ -5,34 +5,50 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { AnimatedQRCode } from "./animated-qr-code"
 import { GenerateQRButton } from "./ui/generate-qr-button"
-import { InfiniteSlider } from "./ui/infinite-slider"
-import { ProgressiveBlur } from "./ui/progressive-blur"
 
 export function HeroSection() {
   return (
     <section className="relative overflow-hidden min-h-screen flex items-end justify-center pb-24 md:pb-32">
-      {/* QR Code Background - covers entire section */}
+      {/* Light mode: soft ambient mesh behind QR */}
+      <div className="absolute inset-0 dark:hidden pointer-events-none">
+        <div className="absolute inset-0"
+          style={{
+            backgroundImage: `
+              radial-gradient(ellipse at 30% 20%, rgba(147,112,219,0.15) 0%, transparent 55%),
+              radial-gradient(ellipse at 75% 30%, rgba(99,102,241,0.12) 0%, transparent 50%),
+              radial-gradient(ellipse at 50% 90%, rgba(167,139,250,0.10) 0%, transparent 50%)
+            `
+          }}
+        />
+      </div>
+
+      {/* QR Code Background */}
       <div className="absolute inset-0">
         <AnimatedQRCode />
       </div>
 
-      {/* Content on top of QR background - at bottom */}
+      {/* Content on top of QR background */}
       <div className="relative z-20 container mx-auto text-center max-w-4xl px-4">
-        <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8 text-balance drop-shadow-2xl">
-          You built something great. <span className="text-muted-foreground">Don't let zero reviews be the reason they walked away.</span>
-        </h2>
+        {/* Glass pill wrapping the headline + CTA */}
+        <div className="glass-card rounded-3xl px-6 py-8 sm:px-10 sm:py-10 mb-2">
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-6 text-balance">
+            You built something great.{" "}
+            <span className="text-muted-foreground">
+              Don't let zero reviews be the reason they walked away.
+            </span>
+          </h2>
 
-        <div className="flex flex-row gap-2 sm:gap-4 justify-center items-center w-full max-w-full">
-          <GenerateQRButton />
-          <Link href="/smart-review">
-            <button
-              className="relative flex items-center gap-2 px-6 py-2.5 rounded-xl font-medium transition-all duration-300 backdrop-blur-[20px] bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/25 text-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.05)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_4px_16px_rgba(0,0,0,0.3)] hover:scale-105 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_0_0_0.375rem_rgba(0,0,0,0.05)] dark:hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_0_0_0.375rem_rgba(255,255,255,0.3)]"
-            >
-              Smart Review QR
-            </button>
-          </Link>
+          <div className="flex flex-row gap-2 sm:gap-4 justify-center items-center w-full max-w-full">
+            <GenerateQRButton />
+            <Link href="/smart-review">
+              <button className="relative flex items-center gap-2 px-6 py-2.5 rounded-xl font-medium transition-all duration-300 backdrop-blur-[20px] bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/25 text-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.05)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_4px_16px_rgba(0,0,0,0.3)] hover:scale-105 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_0_0_3px_rgba(147,112,219,0.2)] dark:hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_0_0_3px_rgba(255,255,255,0.15)]">
+                Smart Review QR
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
     </section>
   )
 }
+

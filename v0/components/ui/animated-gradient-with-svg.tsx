@@ -79,7 +79,7 @@ const AnimatedGradient: React.FC<AnimatedGradientProps> = ({ colors, speed = 5, 
               height={circleSize * randomValue.heightMultiplier}
               viewBox="0 0 100 100"
             >
-              <circle cx="50" cy="50" r="50" fill={color} className="opacity-30 dark:opacity-[0.15]" />
+              <circle cx="50" cy="50" r="50" fill={color} className="opacity-50 dark:opacity-[0.15]" />
             </svg>
           )
         })}
