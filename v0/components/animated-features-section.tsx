@@ -28,7 +28,7 @@ const BentoCard: React.FC<BentoCardProps> = ({ title, value, subtitle, colors, d
 
   return (
     <motion.div
-      className="relative overflow-hidden h-full bg-black rounded-lg border border-border/20 group"
+      className="relative overflow-hidden h-full bg-white dark:bg-black rounded-lg border border-border/20 group"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, delay }}
